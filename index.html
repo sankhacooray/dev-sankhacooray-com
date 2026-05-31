@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>dev — Sankha Cooray · a small private lab</title>
+<meta name="description" content="Live view of what Sankha is making — a 365-day contribution canvas, a constellation of repos, and the daily rhythm of commits. Built from the GitHub GraphQL API.">
+<link rel="canonical" href="https://dev.sankhacooray.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="dev — Sankha Cooray">
+<meta property="og:title" content="dev — Sankha Cooray · a small private lab">
+<meta property="og:description" content="Live view of what Sankha is making — three lenses on a year of small daily experiments.">
+<meta property="og:url" content="https://dev.sankhacooray.com/">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="dev — Sankha Cooray · a small private lab">
+<meta name="twitter:description" content="Three lenses on a year of small daily experiments.">
+
+<meta name="theme-color" content="#0d0c0a">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0d0c0a;
+  --surface: #15140f;
+  --surface-2: #1f1d16;
+  --border: #2b2820;
+  --border-soft: #1c1a14;
+  --text: #f3eedf;
+  --text-dim: #b3ab92;
+  --text-muted: #6f6957;
+  --accent: #e8985c;        /* saffron */
+  --accent-dim: #a86d3d;
+  --accent-soft: rgba(232,152,92,0.10);
+  --teal: #6fb8ad;          /* muted teal */
+  --teal-dim: #4a847b;
+  --teal-soft: rgba(111,184,173,0.10);
+  --rose: #c97b7b;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --maxw: 1080px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(900px 500px at 15% -10%, rgba(232,152,92,0.06), transparent 60%),
+    radial-gradient(700px 400px at 100% 30%, rgba(111,184,173,0.04), transparent 60%);
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--text); }
+
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
+
+/* ───────── header ───────── */
+header.site {
+  padding: 3rem 0 1.5rem;
+}
+.site-id {
+  display: flex; gap: 1.25rem; align-items: flex-start;
+}
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.site-id h1 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.site-id h1 .accent { color: var(--accent); font-style: italic; }
+.site-id .sub {
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-top: 0.4rem;
+  max-width: 50ch;
+}
+.site-id .links {
+  margin-top: 0.6rem;
+  display: flex; gap: 1rem;
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+}
+.site-id .links a { color: var(--text-dim); }
+.site-id .links a:hover { color: var(--accent); }
+
+/* ───────── stats strip ───────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 2rem 0 1.5rem;
+  overflow: hidden;
+}
+.stat {
+  background: var(--surface);
+  padding: 1rem 1.25rem;
+}
+.stat .n {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.85rem;
+  line-height: 1;
+  color: var(--text);
+}
+.stat .l {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}
+@media (max-width: 640px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ───────── view switcher ───────── */
+nav.views {
+  display: flex; gap: 0.5rem;
+  margin: 1.5rem 0 2.5rem;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: fit-content;
+}
+nav.views button {
+  background: transparent; border: 0; color: var(--text-dim);
+  font: 500 0.85rem 'DM Sans', sans-serif;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: color 120ms, background 120ms;
+}
+nav.views button:hover { color: var(--text); }
+nav.views button.active {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ───────── view container ───────── */
+.view { display: none; }
+.view.active { display: block; }
+
+section.block { margin: 2.5rem 0; }
+section.block h2 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+section.block .lead {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  max-width: 55ch;
+  margin-bottom: 1.25rem;
+}
+
+/* ───────── LAB view ───────── */
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+.lab-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex; flex-direction: column;
+  min-height: 110px;
+  position: relative;
+  transition: transform 160ms, border-color 160ms, background 160ms;
+  overflow: hidden;
+}
+.lab-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-dim);
+  background: var(--surface-2);
+}
+.lab-tile .tname {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.25;
+  word-break: break-word;
+}
+.lab-tile .tdesc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 0.4rem;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lab-tile .tmeta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.lab-tile .lang-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+.lab-tile .pulse {
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent);
+}
+.lab-tile.fresh .pulse { animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(232,152,92,0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(232,152,92,0); }
+  100% { box-shadow: 0 0 0 0 rgba(232,152,92,0); }
+}
+
+/* commit feed */
+.commit-feed {
+  list-style: none;
+  border-left: 1px solid var(--border);
+  padding-left: 1rem;
+}
+.commit-feed li {
+  padding: 0.65rem 0;
+  border-bottom: 1px dashed var(--border-soft);
+  position: relative;
+}
+.commit-feed li:last-child { border-bottom: 0; }
+.commit-feed li::before {
+  content: '';
+  position: absolute;
+  left: -1.3rem;
+  top: 1.05rem;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  border: 2px solid var(--bg);
+}
+.commit-feed li.fresh::before { background: var(--accent); }
+.commit-feed .cmsg {
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+.commit-feed .cmeta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+.commit-feed .cmeta a { color: var(--text-dim); }
+.commit-feed .cmeta a:hover { color: var(--accent); }
+
+/* contribution calendar */
+.calendar-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+.calendar-svg { display: block; min-width: 100%; }
+.cal-cell { transition: fill 200ms; }
+.cal-month-label, .cal-weekday-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  fill: var(--text-muted);
+}
+
+/* ───────── COSMOS view ───────── */
+.cosmos-stage {
+  position: relative;
+  background: radial-gradient(ellipse at 50% 50%, #16140f 0%, #0a0907 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  height: clamp(420px, 60vh, 640px);
+  overflow: hidden;
+}
+#cosmos-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+#cosmos-canvas:active { cursor: grabbing; }
+.cosmos-tip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(13,12,10,0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  max-width: 240px;
+  opacity: 0;
+  transition: opacity 120ms;
+  z-index: 10;
+}
+.cosmos-tip.show { opacity: 1; }
+.cosmos-tip .tt-name { color: var(--accent); font-weight: 500; }
+.cosmos-tip .tt-meta { color: var(--text-dim); font-size: 0.72rem; margin-top: 0.25rem; }
+.cosmos-legend {
+  display: flex; gap: 1.25rem; flex-wrap: wrap;
+  margin-top: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ───────── RHYTHM view ───────── */
+.rhythm-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .rhythm-stage { grid-template-columns: 1fr; }
+}
+.rhythm-clock { width: 100%; max-width: 420px; margin: 0 auto; display: block; }
+.rhythm-clock .ring { fill: none; stroke: var(--border); stroke-width: 1; }
+.rhythm-clock .petal { fill: var(--accent); opacity: 0.85; transition: opacity 200ms; }
+.rhythm-clock .petal:hover { opacity: 1; }
+.rhythm-clock .hour-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  fill: var(--text-muted);
+  text-anchor: middle;
+}
+.rhythm-clock .center-num {
+  font-family: 'Instrument Serif', serif;
+  fill: var(--text);
+  text-anchor: middle;
+  font-size: 36px;
+}
+.rhythm-clock .center-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  fill: var(--text-muted);
+  text-anchor: middle;
+  letter-spacing: 0.1em;
+}
+.rhythm-readout p {
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+.rhythm-readout .big {
+  font-family: 'Instrument Serif', serif;
+  font-size: 2rem;
+  color: var(--text);
+  font-style: italic;
+}
+
+/* ───────── footer ───────── */
+footer.site {
+  margin: 4rem 0 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+}
+footer.site a { color: var(--text-dim); }
+footer.site a:hover { color: var(--accent); }
+
+/* ───────── loading / error ───────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.error-banner {
+  padding: 0.85rem 1rem;
+  background: rgba(201,123,123,0.08);
+  border: 1px solid rgba(201,123,123,0.3);
+  border-radius: var(--radius-sm);
+  color: var(--rose);
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 1rem 0;
+}
+.muted { color: var(--text-muted); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="site">
+    <div class="site-id">
+      <img id="avatar" class="avatar skeleton" alt="">
+      <div>
+        <h1>Sankha <span class="accent">— a small private lab.</span></h1>
+        <p class="sub" id="bio">Daily small experiments at the edges of code, music, biology, and play. Live view of what I'm making right now — three lenses, same data.</p>
+        <div class="links">
+          <a id="link-gh" href="https://github.com/bsc2fast" target="_blank" rel="noopener">github.com/bsc2fast</a>
+          <a href="https://github.com/sankhacooray" target="_blank" rel="noopener">org/sankhacooray</a>
+          <a href="https://sankhacooray.com" target="_blank" rel="noopener">sankhacooray.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat"><div class="n" id="s-contrib">—</div><div class="l">contributions · 12mo</div></div>
+      <div class="stat"><div class="n" id="s-repos">—</div><div class="l">repos touched · 12mo</div></div>
+      <div class="stat"><div class="n" id="s-streak">—</div><div class="l">current streak · days</div></div>
+      <div class="stat"><div class="n" id="s-longest">—</div><div class="l">longest streak · days</div></div>
+    </div>
+
+    <nav class="views" role="tablist" aria-label="View switcher">
+      <button class="view-btn active" data-view="lab"     role="tab">the lab</button>
+      <button class="view-btn"        data-view="cosmos"  role="tab">cosmos</button>
+      <button class="view-btn"        data-view="rhythm"  role="tab">rhythm</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ───────────── LAB ───────────── -->
+    <section class="view view-lab active" id="view-lab">
+      <section class="block">
+        <h2>the lab</h2>
+        <p class="lead">Sub-sites I'm tending. Each tile is a live sub-domain on <code>*.sankhacooray.com</code>. A pulse means I pushed in the last 7 days.</p>
+        <div class="lab-grid" id="lab-grid">
+          <div class="lab-tile skeleton" style="height:110px"></div>
+          <div class="lab-tile skeleton" style="height:110px"></div>
+          <div class="lab-tile skeleton" style="height:110px"></div>
+          <div class="lab-tile skeleton" style="height:110px"></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>recent work</h2>
+        <p class="lead">Last 25 commits across everything, freshest on top.</p>
+        <ul class="commit-feed" id="commit-feed">
+          <li class="muted">loading…</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2>one year, day by day</h2>
+        <p class="lead">Every cell is a day. Brighter = busier.</p>
+        <div class="calendar-wrap"><svg class="calendar-svg" id="calendar-svg"></svg></div>
+      </section>
+    </section>
+
+    <!-- ───────────── COSMOS ───────────── -->
+    <section class="view view-cosmos" id="view-cosmos">
+      <section class="block">
+        <h2>code cosmos</h2>
+        <p class="lead">Each star is a repo. Size = commits over the last year. Brightness = how recently it was touched. Drag to look around. Hover for details.</p>
+        <div class="cosmos-stage">
+          <canvas id="cosmos-canvas"></canvas>
+          <div class="cosmos-tip" id="cosmos-tip"></div>
+        </div>
+        <div class="cosmos-legend">
+          <span><span style="color:var(--accent)">●</span> touched this week</span>
+          <span><span style="color:var(--teal)">●</span> touched this month</span>
+          <span><span style="color:var(--text-muted)">●</span> older</span>
+        </div>
+      </section>
+    </section>
+
+    <!-- ───────────── RHYTHM ───────────── -->
+    <section class="view view-rhythm" id="view-rhythm">
+      <section class="block">
+        <h2>when sankha creates</h2>
+        <p class="lead">Hour-of-day distribution of recent commits, Singapore time. Petals bloom where I'm most active.</p>
+        <div class="rhythm-stage">
+          <svg class="rhythm-clock" viewBox="0 0 400 400" id="rhythm-svg"></svg>
+          <div class="rhythm-readout" id="rhythm-readout">
+            <p>Most makers have a shape to their day. Mine looks like <span class="big" id="peak-hour">—</span> — that's when most of my commits land.</p>
+            <p class="muted" id="rhythm-sub">based on the last <span id="rhythm-n">—</span> commits across all repos</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+  <footer class="site">
+    <div>updated <span id="generated">—</span> · source: github graphql, cached 1h</div>
+    <div><a href="https://github.com/sankhacooray/dev-sankhacooray-com" target="_blank" rel="noopener">source ↗</a></div>
+  </footer>
+
+</div>
+
+<script>
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbxJJZQ4Ufv1lcsqecirGl6-6OqhXq79hhVc0vosnQKhySrSCkFvpaf2bR-cVfWVavwMNw/exec';
+const CACHE_KEY = 'dev_sk_v1';
+const CACHE_TTL_MS = 30 * 60 * 1000;
+
+// ────────────────────────────────────────────── view routing
+const VIEWS = ['lab','cosmos','rhythm'];
+function setView(v) {
+  if (!VIEWS.includes(v)) v = 'lab';
+  document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + v));
+  document.querySelectorAll('.view-btn').forEach(el => el.classList.toggle('active', el.dataset.view === v));
+  if (location.hash.slice(1) !== v) history.replaceState(null, '', '#' + v);
+  if (v === 'cosmos') requestAnimationFrame(initCosmos);
+  if (v === 'rhythm') requestAnimationFrame(renderRhythm);
+}
+document.querySelectorAll('.view-btn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+window.addEventListener('hashchange', () => setView(location.hash.slice(1)));
+setView(location.hash.slice(1) || 'lab');
+
+// ────────────────────────────────────────────── data
+let DATA = null;
+
+async function load() {
+  try {
+    const cached = readCache();
+    if (cached) { DATA = cached; render(); }
+    const fresh = await fetch(PROXY_URL).then(r => r.json());
+    if (fresh.error) throw new Error(fresh.error);
+    DATA = fresh;
+    writeCache(fresh);
+    render();
+  } catch (err) {
+    if (!DATA) showError(err.message);
+    console.error(err);
+  }
+}
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY); if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL_MS) return null;
+    return data;
+  } catch { return null; }
+}
+function writeCache(data) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+}
+function showError(msg) {
+  const el = document.createElement('div');
+  el.className = 'error-banner';
+  el.textContent = 'Live data unavailable: ' + msg + ' — showing skeleton.';
+  document.querySelector('main').prepend(el);
+}
+
+// ────────────────────────────────────────────── render
+function render() {
+  if (!DATA) return;
+  // header
+  if (DATA.user) {
+    const a = document.getElementById('avatar');
+    a.src = DATA.user.avatar; a.classList.remove('skeleton');
+    if (DATA.user.bio) document.getElementById('bio').textContent = DATA.user.bio;
+    if (DATA.user.login) document.getElementById('link-gh').textContent = 'github.com/' + DATA.user.login;
+  }
+  // stats
+  if (DATA.totals) {
+    document.getElementById('s-contrib').textContent = fmt(DATA.totals.commitsLast12Months);
+    document.getElementById('s-repos').textContent = fmt(DATA.totals.reposWithCommits);
+    document.getElementById('s-streak').textContent = fmt(DATA.totals.currentStreak);
+    document.getElementById('s-longest').textContent = fmt(DATA.totals.longestStreak);
+  }
+  renderLab();
+  renderCommits();
+  renderCalendar();
+  if (document.getElementById('view-rhythm').classList.contains('active')) renderRhythm();
+  if (document.getElementById('view-cosmos').classList.contains('active')) initCosmos();
+  if (DATA.generatedAt) {
+    document.getElementById('generated').textContent = relTime(DATA.generatedAt);
+  }
+}
+
+function fmt(n) { return n == null ? '—' : n.toString(); }
+function relTime(iso) {
+  const d = new Date(iso); const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+function daysAgo(iso) { return Math.floor((Date.now() - new Date(iso)) / 86400000); }
+
+// ────────────────────────────────────────────── LAB · grid of repos
+function renderLab() {
+  const grid = document.getElementById('lab-grid');
+  // Show *-sankhacooray-com tiles first (the "lab"), then top user repos
+  const labRepos = (DATA.orgRepos || []).filter(r => r.name.endsWith('-sankhacooray-com') || (DATA.orgRepos || []).length < 8);
+  const others = (DATA.orgRepos || []).filter(r => !labRepos.includes(r));
+  const list = [...labRepos, ...others].slice(0, 24);
+  if (!list.length) { grid.innerHTML = '<p class="muted">no repos loaded</p>'; return; }
+  grid.innerHTML = list.map(r => {
+    const da = daysAgo(r.pushedAt);
+    const fresh = da <= 7;
+    const subdomain = r.name.replace(/-sankhacooray-com$/, '');
+    const displayName = r.name.endsWith('-sankhacooray-com')
+      ? subdomain + '<span style="color:var(--text-muted)">.sankhacooray.com</span>'
+      : r.name;
+    return `
+      <a class="lab-tile ${fresh ? 'fresh' : ''}" href="${r.url}" target="_blank" rel="noopener">
+        ${fresh ? '<span class="pulse"></span>' : ''}
+        <div class="tname">${displayName}</div>
+        <div class="tdesc">${escapeHtml(r.description || '')}</div>
+        <div class="tmeta">
+          <span>${r.language ? `<span class="lang-dot" style="background:${r.languageColor||'#888'}"></span>${r.language}` : ''}</span>
+          <span>${da === 0 ? 'today' : da + 'd'}</span>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ────────────────────────────────────────────── LAB · commit feed
+function renderCommits() {
+  const ul = document.getElementById('commit-feed');
+  const list = (DATA.recentCommits || []).slice(0, 25);
+  if (!list.length) { ul.innerHTML = '<li class="muted">no recent commits</li>'; return; }
+  ul.innerHTML = list.map(c => {
+    const da = daysAgo(c.committedDate);
+    const fresh = da <= 1;
+    return `
+      <li class="${fresh ? 'fresh' : ''}">
+        <div class="cmsg">${escapeHtml(c.messageHeadline)}</div>
+        <div class="cmeta">
+          <a href="${c.url}" target="_blank" rel="noopener">${c.repoOwner}/${c.repoName}</a>
+          · ${relTime(c.committedDate)}
+          · ${c.oid.slice(0,7)}
+        </div>
+      </li>`;
+  }).join('');
+}
+
+// ────────────────────────────────────────────── LAB · contribution calendar
+function renderCalendar() {
+  const svg = document.getElementById('calendar-svg');
+  const days = (DATA.contributionCalendar && DATA.contributionCalendar.days) || [];
+  if (!days.length) { svg.innerHTML = ''; return; }
+  const cell = 11, gap = 2;
+  const weeks = Math.ceil(days.length / 7);
+  const w = weeks * (cell + gap) + 30, h = 7 * (cell + gap) + 20;
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+
+  // colour ramp — saffron scale
+  const max = Math.max(1, ...days.map(d => d.contributionCount));
+  function color(n) {
+    if (n === 0) return '#1c1a14';
+    const t = Math.min(1, n / Math.max(4, max * 0.6));
+    // interpolate from dim accent to bright accent
+    const dim = [50, 33, 22], bright = [232, 152, 92];
+    const c = dim.map((d, i) => Math.round(d + (bright[i] - d) * t));
+    return `rgb(${c.join(',')})`;
+  }
+
+  const firstWeekday = new Date(days[0].date).getDay(); // 0=Sun
+  let svgChildren = '';
+  // weekday labels
+  ['Mon','Wed','Fri'].forEach((lbl, i) => {
+    const wIdx = [1,3,5][i];
+    const y = 12 + wIdx * (cell + gap) + cell - 2;
+    svgChildren += `<text class="cal-weekday-label" x="0" y="${y}">${lbl}</text>`;
+  });
+  // month labels
+  let lastMonth = -1;
+  days.forEach((d, i) => {
+    const date = new Date(d.date);
+    const wIdx = Math.floor((i + firstWeekday) / 7);
+    const dIdx = (i + firstWeekday) % 7;
+    if (date.getDate() <= 7 && date.getMonth() !== lastMonth) {
+      lastMonth = date.getMonth();
+      const x = 22 + wIdx * (cell + gap);
+      svgChildren += `<text class="cal-month-label" x="${x}" y="9">${date.toLocaleString('en',{month:'short'}).toLowerCase()}</text>`;
+    }
+    const x = 22 + wIdx * (cell + gap);
+    const y = 12 + dIdx * (cell + gap);
+    svgChildren += `<rect class="cal-cell" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${color(d.contributionCount)}"><title>${d.date} · ${d.contributionCount}</title></rect>`;
+  });
+  svg.innerHTML = svgChildren;
+}
+
+// ────────────────────────────────────────────── COSMOS · canvas starfield
+let cosmosInited = false;
+let cosmosState = null;
+function initCosmos() {
+  const canvas = document.getElementById('cosmos-canvas');
+  const tip = document.getElementById('cosmos-tip');
+  if (!canvas || !DATA) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // build stars from all repos
+  const all = [...(DATA.orgRepos || []), ...(DATA.userRepos || [])];
+  const max = Math.max(1, ...all.map(r => (r.recentCommits||[]).length + (r.stars || 0)));
+  const stars = all.map((r, i) => {
+    const angle = (i / all.length) * Math.PI * 2 + (hash(r.name) % 100) / 100 * 0.5;
+    const da = daysAgo(r.pushedAt);
+    const importance = ((r.recentCommits||[]).length * 4 + (r.stars||0) + 1) / (max + 1);
+    const distFactor = 0.35 + (1 - importance) * 0.55;
+    const radius = 4 + importance * 14;
+    let color;
+    if (da <= 7) color = '#e8985c';
+    else if (da <= 30) color = '#6fb8ad';
+    else color = '#6f6957';
+    return { r, angle, distFactor, radius, color, da, jitter: (hash(r.name + 'j') % 200 - 100) / 1000 };
+  });
+  // background pixie stars (decorative)
+  const pixies = [];
+  for (let i = 0; i < 120; i++) {
+    pixies.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.2, a: Math.random() * 0.5 + 0.1 });
+  }
+
+  cosmosState = { canvas, ctx, tip, stars, pixies, dpr, rect, t: 0, dragging: false, ox: 0, oy: 0, cx: rect.width/2, cy: rect.height/2 };
+  bindCosmosInput();
+  if (!cosmosInited) { cosmosInited = true; loopCosmos(); }
+}
+
+function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
+
+function bindCosmosInput() {
+  const { canvas, tip } = cosmosState;
+  canvas.onmousedown = e => { cosmosState.dragging = true; cosmosState._lx = e.clientX; cosmosState._ly = e.clientY; };
+  canvas.onmouseup   = () => { cosmosState.dragging = false; };
+  canvas.onmouseleave = () => { cosmosState.dragging = false; tip.classList.remove('show'); };
+  canvas.onmousemove = e => {
+    const r = canvas.getBoundingClientRect();
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    if (cosmosState.dragging) {
+      cosmosState.ox += (e.clientX - cosmosState._lx);
+      cosmosState.oy += (e.clientY - cosmosState._ly);
+      cosmosState._lx = e.clientX; cosmosState._ly = e.clientY;
+    }
+    // hover detection
+    const hit = pickStar(mx, my);
+    if (hit) {
+      tip.classList.add('show');
+      tip.style.left = (mx + 14) + 'px';
+      tip.style.top = (my + 14) + 'px';
+      const da = hit.da;
+      tip.innerHTML = `<div class="tt-name">${hit.r.name}</div><div class="tt-meta">${escapeHtml(hit.r.description || '—')}</div><div class="tt-meta">${da === 0 ? 'pushed today' : 'pushed ' + da + 'd ago'} · ${hit.r.language || 'n/a'}</div>`;
+      canvas.style.cursor = 'pointer';
+    } else {
+      tip.classList.remove('show');
+      canvas.style.cursor = cosmosState.dragging ? 'grabbing' : 'grab';
+    }
+  };
+  canvas.onclick = e => {
+    const r = canvas.getBoundingClientRect();
+    const hit = pickStar(e.clientX - r.left, e.clientY - r.top);
+    if (hit) window.open(hit.r.url, '_blank', 'noopener');
+  };
+}
+
+function pickStar(mx, my) {
+  const { stars, cx, cy, ox, oy, rect, t } = cosmosState;
+  const baseR = Math.min(rect.width, rect.height) * 0.42;
+  for (let i = 0; i < stars.length; i++) {
+    const s = stars[i];
+    const a = s.angle + t * (0.0003 + s.jitter * 0.001);
+    const sx = cx + ox + Math.cos(a) * baseR * s.distFactor;
+    const sy = cy + oy + Math.sin(a) * baseR * s.distFactor;
+    const dx = sx - mx, dy = sy - my;
+    if (dx*dx + dy*dy < (s.radius + 4) * (s.radius + 4)) return s;
+  }
+  return null;
+}
+
+function loopCosmos() {
+  if (!cosmosState) return;
+  const { ctx, rect, stars, pixies, cx, cy, ox, oy } = cosmosState;
+  cosmosState.t = (cosmosState.t || 0) + 1;
+  ctx.clearRect(0, 0, rect.width, rect.height);
+  // pixies
+  ctx.fillStyle = '#f3eedf';
+  pixies.forEach(p => {
+    ctx.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(cosmosState.t * 0.01 + p.x * 30));
+    ctx.beginPath(); ctx.arc(p.x * rect.width, p.y * rect.height, p.r, 0, Math.PI * 2); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  // stars
+  const baseR = Math.min(rect.width, rect.height) * 0.42;
+  stars.forEach(s => {
+    const a = s.angle + cosmosState.t * (0.0003 + s.jitter * 0.001);
+    const sx = cx + ox + Math.cos(a) * baseR * s.distFactor;
+    const sy = cy + oy + Math.sin(a) * baseR * s.distFactor;
+    // glow
+    const grd = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.radius * 3);
+    grd.addColorStop(0, s.color);
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = 0.45;
+    ctx.fillStyle = grd;
+    ctx.beginPath(); ctx.arc(sx, sy, s.radius * 3, 0, Math.PI * 2); ctx.fill();
+    // core
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = s.color;
+    ctx.beginPath(); ctx.arc(sx, sy, s.radius, 0, Math.PI * 2); ctx.fill();
+  });
+  requestAnimationFrame(loopCosmos);
+}
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('view-cosmos').classList.contains('active')) {
+    cosmosInited = false; cosmosState = null; initCosmos();
+  }
+});
+
+// ────────────────────────────────────────────── RHYTHM · polar clock
+function renderRhythm() {
+  const svg = document.getElementById('rhythm-svg');
+  if (!DATA || !DATA.hoursOfDay) return;
+  const h = DATA.hoursOfDay;
+  const total = h.reduce((a,b) => a+b, 0);
+  const peakIdx = h.indexOf(Math.max(...h));
+  const cx = 200, cy = 200, rIn = 50, rMax = 160;
+  const maxV = Math.max(1, ...h);
+  let svgStr = '';
+  // outer ring
+  svgStr += `<circle class="ring" cx="${cx}" cy="${cy}" r="${rMax}"/>`;
+  svgStr += `<circle class="ring" cx="${cx}" cy="${cy}" r="${(rIn + rMax) / 2}"/>`;
+  svgStr += `<circle class="ring" cx="${cx}" cy="${cy}" r="${rIn}"/>`;
+  // 24 petals
+  for (let i = 0; i < 24; i++) {
+    const v = h[i] / maxV;
+    const a0 = (i / 24) * Math.PI * 2 - Math.PI/2 - (Math.PI/24);
+    const a1 = ((i+1) / 24) * Math.PI * 2 - Math.PI/2 - (Math.PI/24);
+    const rOut = rIn + v * (rMax - rIn);
+    const p0x = cx + Math.cos(a0) * rIn, p0y = cy + Math.sin(a0) * rIn;
+    const p1x = cx + Math.cos(a1) * rIn, p1y = cy + Math.sin(a1) * rIn;
+    const p2x = cx + Math.cos(a1) * rOut, p2y = cy + Math.sin(a1) * rOut;
+    const p3x = cx + Math.cos(a0) * rOut, p3y = cy + Math.sin(a0) * rOut;
+    svgStr += `<path class="petal" d="M ${p0x} ${p0y} L ${p1x} ${p1y} A ${rOut} ${rOut} 0 0 1 ${p2x} ${p2y} L ${p3x} ${p3y} A ${rIn} ${rIn} 0 0 0 ${p0x} ${p0y} Z" opacity="${0.25 + v * 0.65}"><title>${i}:00 — ${h[i]} commits</title></path>`;
+  }
+  // hour labels (0, 6, 12, 18)
+  [[0,'00'],[6,'06'],[12,'12'],[18,'18']].forEach(([i, lbl]) => {
+    const a = (i / 24) * Math.PI * 2 - Math.PI/2;
+    const x = cx + Math.cos(a) * (rMax + 14);
+    const y = cy + Math.sin(a) * (rMax + 14) + 3;
+    svgStr += `<text class="hour-label" x="${x}" y="${y}">${lbl}</text>`;
+  });
+  // center
+  svgStr += `<text class="center-num" x="${cx}" y="${cy - 2}">${formatHour(peakIdx)}</text>`;
+  svgStr += `<text class="center-sub" x="${cx}" y="${cy + 16}">PEAK HOUR · SGT</text>`;
+  svg.innerHTML = svgStr;
+
+  document.getElementById('peak-hour').textContent = formatHour(peakIdx) + ' SGT';
+  document.getElementById('rhythm-n').textContent = total;
+}
+function formatHour(h) {
+  if (h === 0) return 'midnight';
+  if (h === 12) return 'noon';
+  return (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
+}
+
+// ────────────────────────────────────────────── boot
+load();
+</script>
+</body>
+</html>
