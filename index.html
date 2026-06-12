@@ -394,6 +394,55 @@ footer.site {
 footer.site a { color: var(--text-dim); }
 footer.site a:hover { color: var(--accent); }
 
+/* ───────── claude · "developing now" ───────── */
+.claude-card {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+.claude-status {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  flex: 1 1 auto;
+}
+.claude-status .claude-state { color: var(--text); }
+.claude-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--text-muted);
+  flex: 0 0 auto;
+}
+.claude-card.live .claude-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent);
+  animation: pulse 1.8s ease-out infinite;
+}
+.claude-card.live .claude-state { color: var(--accent); }
+.claude-metrics {
+  display: flex; gap: 1.75rem;
+  flex: 0 0 auto;
+}
+.claude-metrics .cm-n {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.5rem; line-height: 1;
+  color: var(--text);
+}
+.claude-metrics .cm-l {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+@media (max-width: 520px) {
+  .claude-metrics { gap: 1.25rem; }
+  .claude-metrics .cm-n { font-size: 1.25rem; }
+}
+
 /* ───────── loading / error ───────── */
 .skeleton {
   background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%);
@@ -453,6 +502,22 @@ footer.site a:hover { color: var(--accent); }
 
     <!-- ───────────── LAB ───────────── -->
     <section class="view view-lab active" id="view-lab">
+      <section class="block" id="claude-block" hidden>
+        <h2>building with claude</h2>
+        <p class="lead">My daily AI pair. The dot is live when a Claude Code session is actively running on my machine right now.</p>
+        <div class="claude-card" id="claude-card">
+          <div class="claude-status">
+            <span class="claude-dot"></span>
+            <span class="claude-state" id="claude-state">checking…</span>
+          </div>
+          <div class="claude-metrics">
+            <div><div class="cm-n" id="claude-tok-today">—</div><div class="cm-l">tokens · today</div></div>
+            <div><div class="cm-n" id="claude-tok-week">—</div><div class="cm-l">tokens · 7d</div></div>
+            <div><div class="cm-n" id="claude-sess-week">—</div><div class="cm-l">sessions · 7d</div></div>
+          </div>
+        </div>
+      </section>
+
       <section class="block">
         <h2>the lab</h2>
         <p class="lead">Sub-sites I'm tending. Each tile is a live sub-domain on <code>*.sankhacooray.com</code>. A pulse means I pushed in the last 7 days.</p>
@@ -521,9 +586,14 @@ footer.site a:hover { color: var(--accent); }
 </div>
 
 <script>
-const PROXY_URL = 'https://script.google.com/macros/s/AKfycbxJJZQ4Ufv1lcsqecirGl6-6OqhXq79hhVc0vosnQKhySrSCkFvpaf2bR-cVfWVavwMNw/exec';
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbwE3X7K81BpihyxwlXHO_xvJJGVFLUbTS1eZH5slQAi_v7f0B51PYZqeymjnM_nfoBFow/exec';
 const CACHE_KEY = 'dev_sk_v1';
 const CACHE_TTL_MS = 30 * 60 * 1000;
+
+// Claude "developing now" status — the analytics proxy's /exec URL
+// (analytics-sankhacooray-com). Leave '' to keep the panel hidden until
+// the proxy is deployed. The ?source=claude slice is appended below.
+const CLAUDE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwvNZxtG3yOd2YUCDjRxUt9x9BcDP2St-ywC8WcecI_TcqirM3crgTW0qaR_712JTdhdw/exec';
 
 // ────────────────────────────────────────────── view routing
 const VIEWS = ['lab','cosmos','rhythm'];
@@ -888,8 +958,47 @@ function formatHour(h) {
   return (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
 }
 
+// ────────────────────────────────────────────── claude · developing now
+function fmtCompact(n) {
+  if (n == null) return '—';
+  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'k';
+  return String(n);
+}
+
+async function loadClaude() {
+  if (!CLAUDE_PROXY_URL) return;
+  try {
+    const sep = CLAUDE_PROXY_URL.includes('?') ? '&' : '?';
+    const d = await fetch(CLAUDE_PROXY_URL + sep + 'source=claude', { cache: 'no-store' }).then(r => r.json());
+    if (!d || d.error) return;
+    renderClaude(d);
+  } catch (err) {
+    console.error('claude status', err);
+  }
+}
+
+function renderClaude(d) {
+  const block = document.getElementById('claude-block');
+  const card = document.getElementById('claude-card');
+  block.hidden = false;
+
+  const live = !!d.activeNow;
+  card.classList.toggle('live', live);
+  document.getElementById('claude-state').textContent =
+    live ? 'coding right now'
+         : (d.lastActiveAt ? 'last active ' + relTime(d.lastActiveAt) : 'idle');
+
+  document.getElementById('claude-tok-today').textContent = fmtCompact(d.tokens && d.tokens.today);
+  document.getElementById('claude-tok-week').textContent  = fmtCompact(d.tokens && d.tokens.week);
+  document.getElementById('claude-sess-week').textContent = fmt(d.sessions && d.sessions.week);
+}
+
 // ────────────────────────────────────────────── boot
 load();
+loadClaude();
+setInterval(loadClaude, 60 * 1000);   // keep the live dot honest
 </script>
+<script async src="https://sankhacooray.com/js/sankha-analytics.js"></script>
 </body>
 </html>
