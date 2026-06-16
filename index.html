@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>dev — Sankha Cooray · a small private lab</title>
-<meta name="description" content="Live view of what Sankha is making — a 365-day contribution canvas, a constellation of repos, and the daily rhythm of commits. Built from the GitHub GraphQL API.">
+<meta name="description" content="Live view of what Sankha is making — a 365-day contribution canvas, the daily rhythm of commits, and a full-screen 360° cosmos of repos. Built from the GitHub GraphQL API.">
 <link rel="canonical" href="https://dev.sankhacooray.com/">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="dev — Sankha Cooray">
 <meta property="og:title" content="dev — Sankha Cooray · a small private lab">
-<meta property="og:description" content="Live view of what Sankha is making — three lenses on a year of small daily experiments.">
+<meta property="og:description" content="Live view of what Sankha is making — a year of small daily experiments, with a 360° cosmos of every repo you can fly through.">
 <meta property="og:url" content="https://dev.sankhacooray.com/">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="dev — Sankha Cooray · a small private lab">
-<meta name="twitter:description" content="Three lenses on a year of small daily experiments.">
+<meta name="twitter:description" content="A year of small daily experiments — with a 360° cosmos of every repo.">
 
 <meta name="theme-color" content="#0d0c0a">
 
@@ -133,31 +133,6 @@ header.site {
 }
 @media (max-width: 640px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* ───────── view switcher ───────── */
-nav.views {
-  display: flex; gap: 0.5rem;
-  margin: 1.5rem 0 2.5rem;
-  padding: 0.35rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  width: fit-content;
-}
-nav.views button {
-  background: transparent; border: 0; color: var(--text-dim);
-  font: 500 0.85rem 'DM Sans', sans-serif;
-  padding: 0.55rem 1.1rem;
-  border-radius: 999px;
-  cursor: pointer;
-  letter-spacing: 0.01em;
-  transition: color 120ms, background 120ms;
-}
-nav.views button:hover { color: var(--text); }
-nav.views button.active {
-  background: var(--accent);
-  color: var(--bg);
 }
 
 /* ───────── view container ───────── */
@@ -299,87 +274,165 @@ section.block .lead {
   fill: var(--text-muted);
 }
 
-/* ───────── COSMOS view ───────── */
-.cosmos-stage {
-  position: relative;
-  background: radial-gradient(ellipse at 50% 50%, #16140f 0%, #0a0907 100%);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  height: clamp(420px, 60vh, 640px);
-  overflow: hidden;
+/* ───────── RHYTHM · flattened summary ───────── */
+.rhythm-line {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  max-width: 56ch;
+  margin-bottom: 0.6rem;
 }
-#cosmos-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
-#cosmos-canvas:active { cursor: grabbing; }
-.cosmos-tip {
-  position: absolute;
-  pointer-events: none;
-  background: rgba(13,12,10,0.92);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0.6rem 0.75rem;
-  font-size: 0.78rem;
-  color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
-  max-width: 240px;
-  opacity: 0;
-  transition: opacity 120ms;
-  z-index: 10;
-}
-.cosmos-tip.show { opacity: 1; }
-.cosmos-tip .tt-name { color: var(--accent); font-weight: 500; }
-.cosmos-tip .tt-meta { color: var(--text-dim); font-size: 0.72rem; margin-top: 0.25rem; }
-.cosmos-legend {
-  display: flex; gap: 1.25rem; flex-wrap: wrap;
-  margin-top: 1rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--text-muted);
+.rhythm-line .big {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.9rem;
+  color: var(--accent);
+  font-style: italic;
+  line-height: 1;
 }
 
-/* ───────── RHYTHM view ───────── */
-.rhythm-stage {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: center;
-}
-@media (max-width: 720px) {
-  .rhythm-stage { grid-template-columns: 1fr; }
-}
-.rhythm-clock { width: 100%; max-width: 420px; margin: 0 auto; display: block; }
-.rhythm-clock .ring { fill: none; stroke: var(--border); stroke-width: 1; }
-.rhythm-clock .petal { fill: var(--accent); opacity: 0.85; transition: opacity 200ms; }
-.rhythm-clock .petal:hover { opacity: 1; }
-.rhythm-clock .hour-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-}
-.rhythm-clock .center-num {
-  font-family: 'Instrument Serif', serif;
-  fill: var(--text);
-  text-anchor: middle;
-  font-size: 36px;
-}
-.rhythm-clock .center-sub {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  fill: var(--text-muted);
-  text-anchor: middle;
-  letter-spacing: 0.1em;
-}
-.rhythm-readout p {
+/* ───────── "Browse Code Cosmic" feature button ───────── */
+.cosmic-fab {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 200;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.7rem 1.1rem;
+  background: rgba(21,20,15,0.55);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   color: var(--text-dim);
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  opacity: 0.62;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  transition: opacity 200ms, border-color 200ms, color 200ms, transform 160ms, box-shadow 200ms;
 }
-.rhythm-readout .big {
-  font-family: 'Instrument Serif', serif;
-  font-size: 2rem;
+.cosmic-fab:hover {
+  opacity: 1;
   color: var(--text);
-  font-style: italic;
+  border-color: var(--accent-dim);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(232,152,92,0.18);
 }
+.cosmic-fab .fab-spark { width: 15px; height: 15px; color: var(--accent); flex: 0 0 auto; }
+.cosmic-fab .fab-spark { animation: fab-twinkle 3.2s ease-in-out infinite; }
+@keyframes fab-twinkle {
+  0%, 100% { opacity: 0.55; transform: scale(0.92) rotate(0deg); }
+  50%      { opacity: 1;    transform: scale(1.08) rotate(8deg); }
+}
+@media (max-width: 520px) {
+  .cosmic-fab .fab-label { display: none; }
+  .cosmic-fab { padding: 0.7rem; }
+}
+
+/* ───────── COSMIC · full-screen 360° overlay ───────── */
+.cosmic-overlay {
+  position: fixed; inset: 0;
+  z-index: 1000;
+  background: radial-gradient(ellipse at 50% 45%, #14120d 0%, #060504 70%, #000 100%);
+  overflow: hidden;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+.cosmic-overlay[hidden] { display: none; }
+.cosmic-overlay.show { opacity: 1; }
+#cosmic-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* center reticle — the "you are looking here" focus ring */
+.cosmic-reticle {
+  position: absolute; left: 50%; top: 50%;
+  width: 46px; height: 46px; margin: -23px 0 0 -23px;
+  border: 1px solid rgba(243,238,223,0.22);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: border-color 160ms, transform 160ms;
+}
+.cosmic-reticle::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%; background: rgba(243,238,223,0.45);
+}
+.cosmic-overlay.locked .cosmic-reticle {
+  border-color: var(--accent);
+  transform: scale(1.12);
+}
+
+/* floating tooltip / label for the focused star */
+.cosmic-tip {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -140%);
+  background: rgba(8,7,5,0.86);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--text);
+  max-width: 260px;
+  opacity: 0;
+  transition: opacity 140ms;
+  z-index: 1010;
+  white-space: nowrap;
+}
+.cosmic-tip.show { opacity: 1; }
+.cosmic-tip .tt-name { color: var(--accent); font-weight: 500; }
+.cosmic-tip .tt-meta { color: var(--text-dim); font-size: 0.7rem; margin-top: 0.25rem; white-space: normal; }
+.cosmic-tip .tt-open { color: var(--teal); font-size: 0.66rem; margin-top: 0.4rem; letter-spacing: 0.05em; }
+
+/* overlay chrome */
+.cosmic-ui {
+  position: absolute; left: 1.5rem; bottom: 1.4rem;
+  z-index: 1010; pointer-events: none;
+  max-width: min(70vw, 460px);
+}
+.cosmic-ui .cosmic-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.7rem; color: var(--text); line-height: 1;
+}
+.cosmic-ui .cosmic-hint {
+  margin-top: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--text-muted); line-height: 1.5;
+}
+.cosmic-legend {
+  position: absolute; right: 1.5rem; bottom: 1.4rem;
+  z-index: 1010; pointer-events: none;
+  display: flex; flex-direction: column; gap: 0.35rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--text-muted);
+  text-align: right;
+}
+@media (max-width: 640px) { .cosmic-legend { display: none; } }
+.cosmic-close {
+  position: absolute; right: 1.1rem; top: 1.1rem;
+  z-index: 1010;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(8,7,5,0.6);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem; cursor: pointer;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: color 160ms, border-color 160ms, transform 160ms;
+}
+.cosmic-close:hover { color: var(--text); border-color: var(--accent-dim); transform: rotate(90deg); }
+.cosmic-motion {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 1020;
+  padding: 0.85rem 1.4rem;
+  background: var(--accent); color: var(--bg);
+  border: 0; border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem; letter-spacing: 0.02em; cursor: pointer;
+  box-shadow: 0 8px 30px rgba(232,152,92,0.3);
+}
+.cosmic-motion[hidden] { display: none; }
 
 /* ───────── footer ───────── */
 footer.site {
@@ -518,11 +571,6 @@ footer.site a:hover { color: var(--accent); }
       <div class="stat"><div class="n" id="s-longest">—</div><div class="l">longest streak · days</div></div>
     </div>
 
-    <nav class="views" role="tablist" aria-label="View switcher">
-      <button class="view-btn active" data-view="lab"     role="tab">the lab</button>
-      <button class="view-btn"        data-view="cosmos"  role="tab">cosmos</button>
-      <button class="view-btn"        data-view="rhythm"  role="tab">rhythm</button>
-    </nav>
   </header>
 
   <main>
@@ -543,6 +591,12 @@ footer.site a:hover { color: var(--accent); }
             <div><div class="cm-n" id="claude-sess-week">—</div><div class="cm-l">sessions · 7d</div></div>
           </div>
         </div>
+      </section>
+
+      <section class="block" id="rhythm-block">
+        <h2>the shape of a day</h2>
+        <p class="rhythm-line">Most makers have a shape to their day. Mine looks like <span class="big" id="peak-hour">—</span> — that's when most of my commits land.</p>
+        <p class="muted">based on the last <span id="rhythm-n">—</span> commits across all repos</p>
       </section>
 
       <section class="block">
@@ -671,38 +725,6 @@ footer.site a:hover { color: var(--accent); }
 
     </section>
 
-    <!-- ───────────── COSMOS ───────────── -->
-    <section class="view view-cosmos" id="view-cosmos">
-      <section class="block">
-        <h2>code cosmos</h2>
-        <p class="lead">Each star is a repo. Size = commits over the last year. Brightness = how recently it was touched. Drag to look around. Hover for details.</p>
-        <div class="cosmos-stage">
-          <canvas id="cosmos-canvas"></canvas>
-          <div class="cosmos-tip" id="cosmos-tip"></div>
-        </div>
-        <div class="cosmos-legend">
-          <span><span style="color:var(--accent)">●</span> touched this week</span>
-          <span><span style="color:var(--teal)">●</span> touched this month</span>
-          <span><span style="color:var(--text-muted)">●</span> older</span>
-        </div>
-      </section>
-    </section>
-
-    <!-- ───────────── RHYTHM ───────────── -->
-    <section class="view view-rhythm" id="view-rhythm">
-      <section class="block">
-        <h2>when sankha creates</h2>
-        <p class="lead">Hour-of-day distribution of recent commits, Singapore time. Petals bloom where I'm most active.</p>
-        <div class="rhythm-stage">
-          <svg class="rhythm-clock" viewBox="0 0 400 400" id="rhythm-svg"></svg>
-          <div class="rhythm-readout" id="rhythm-readout">
-            <p>Most makers have a shape to their day. Mine looks like <span class="big" id="peak-hour">—</span> — that's when most of my commits land.</p>
-            <p class="muted" id="rhythm-sub">based on the last <span id="rhythm-n">—</span> commits across all repos</p>
-          </div>
-        </div>
-      </section>
-    </section>
-
   </main>
 
   <footer class="site">
@@ -710,6 +732,33 @@ footer.site a:hover { color: var(--accent); }
     <div><a href="https://github.com/sankhacooray/dev-sankhacooray-com" target="_blank" rel="noopener">source ↗</a></div>
   </footer>
 
+</div>
+
+<!-- ───────── "Browse Code Cosmic" feature button ───────── -->
+<button class="cosmic-fab" id="cosmicFab" type="button" aria-label="Browse Code Cosmic — open the full-screen 360° cosmos">
+  <svg class="fab-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 2l1.6 5.4L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.6L12 2z"/>
+    <circle cx="19" cy="4" r="1.1"/><circle cx="5.5" cy="18" r="1.4"/>
+  </svg>
+  <span class="fab-label">Browse Code Cosmic</span>
+</button>
+
+<!-- ───────── full-screen 360° cosmos ───────── -->
+<div class="cosmic-overlay" id="cosmicOverlay" hidden aria-hidden="true">
+  <canvas id="cosmic-canvas"></canvas>
+  <div class="cosmic-reticle" aria-hidden="true"></div>
+  <div class="cosmic-tip" id="cosmic-tip"></div>
+  <div class="cosmic-ui">
+    <div class="cosmic-title">code cosmos</div>
+    <p class="cosmic-hint" id="cosmic-hint">move your cursor to any edge to fly across the 360° · centre a star, then click to open it</p>
+  </div>
+  <div class="cosmic-legend">
+    <span><span style="color:var(--accent)">●</span> touched this week</span>
+    <span><span style="color:var(--teal)">●</span> touched this month</span>
+    <span><span style="color:var(--text-muted)">●</span> older</span>
+  </div>
+  <button class="cosmic-close" id="cosmicClose" type="button" aria-label="Close cosmos">✕</button>
+  <button class="cosmic-motion" id="cosmicMotion" type="button" hidden>Enable motion to look around</button>
 </div>
 
 <script>
@@ -721,20 +770,6 @@ const CACHE_TTL_MS = 30 * 60 * 1000;
 // (analytics-sankhacooray-com). Leave '' to keep the panel hidden until
 // the proxy is deployed. The ?source=claude slice is appended below.
 const CLAUDE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwvNZxtG3yOd2YUCDjRxUt9x9BcDP2St-ywC8WcecI_TcqirM3crgTW0qaR_712JTdhdw/exec';
-
-// ────────────────────────────────────────────── view routing
-const VIEWS = ['lab','cosmos','rhythm'];
-function setView(v) {
-  if (!VIEWS.includes(v)) v = 'lab';
-  document.querySelectorAll('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + v));
-  document.querySelectorAll('.view-btn').forEach(el => el.classList.toggle('active', el.dataset.view === v));
-  if (location.hash.slice(1) !== v) history.replaceState(null, '', '#' + v);
-  if (v === 'cosmos') requestAnimationFrame(initCosmos);
-  if (v === 'rhythm') requestAnimationFrame(renderRhythm);
-}
-document.querySelectorAll('.view-btn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
-window.addEventListener('hashchange', () => setView(location.hash.slice(1)));
-setView(location.hash.slice(1) || 'lab');
 
 // ────────────────────────────────────────────── data
 let DATA = null;
@@ -791,8 +826,8 @@ function render() {
   renderLab();
   renderCommits();
   renderCalendar();
-  if (document.getElementById('view-rhythm').classList.contains('active')) renderRhythm();
-  if (document.getElementById('view-cosmos').classList.contains('active')) initCosmos();
+  renderRhythmSummary();
+  if (cosmicOpen) buildCosmicStars();   // refresh the cosmos if it's open when fresh data lands
   if (DATA.generatedAt) {
     document.getElementById('generated').textContent = relTime(DATA.generatedAt);
   }
@@ -909,173 +944,12 @@ function renderCalendar() {
   svg.innerHTML = svgChildren;
 }
 
-// ────────────────────────────────────────────── COSMOS · canvas starfield
-let cosmosInited = false;
-let cosmosState = null;
-function initCosmos() {
-  const canvas = document.getElementById('cosmos-canvas');
-  const tip = document.getElementById('cosmos-tip');
-  if (!canvas || !DATA) return;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  // build stars from all repos
-  const all = [...(DATA.orgRepos || []), ...(DATA.userRepos || [])];
-  const max = Math.max(1, ...all.map(r => (r.recentCommits||[]).length + (r.stars || 0)));
-  const stars = all.map((r, i) => {
-    const angle = (i / all.length) * Math.PI * 2 + (hash(r.name) % 100) / 100 * 0.5;
-    const da = daysAgo(r.pushedAt);
-    const importance = ((r.recentCommits||[]).length * 4 + (r.stars||0) + 1) / (max + 1);
-    const distFactor = 0.35 + (1 - importance) * 0.55;
-    const radius = 4 + importance * 14;
-    let color;
-    if (da <= 7) color = '#e8985c';
-    else if (da <= 30) color = '#6fb8ad';
-    else color = '#6f6957';
-    return { r, angle, distFactor, radius, color, da, jitter: (hash(r.name + 'j') % 200 - 100) / 1000 };
-  });
-  // background pixie stars (decorative)
-  const pixies = [];
-  for (let i = 0; i < 120; i++) {
-    pixies.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.2, a: Math.random() * 0.5 + 0.1 });
-  }
-
-  cosmosState = { canvas, ctx, tip, stars, pixies, dpr, rect, t: 0, dragging: false, ox: 0, oy: 0, cx: rect.width/2, cy: rect.height/2 };
-  bindCosmosInput();
-  if (!cosmosInited) { cosmosInited = true; loopCosmos(); }
-}
-
-function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
-
-function bindCosmosInput() {
-  const { canvas, tip } = cosmosState;
-  canvas.onmousedown = e => { cosmosState.dragging = true; cosmosState._lx = e.clientX; cosmosState._ly = e.clientY; };
-  canvas.onmouseup   = () => { cosmosState.dragging = false; };
-  canvas.onmouseleave = () => { cosmosState.dragging = false; tip.classList.remove('show'); };
-  canvas.onmousemove = e => {
-    const r = canvas.getBoundingClientRect();
-    const mx = e.clientX - r.left, my = e.clientY - r.top;
-    if (cosmosState.dragging) {
-      cosmosState.ox += (e.clientX - cosmosState._lx);
-      cosmosState.oy += (e.clientY - cosmosState._ly);
-      cosmosState._lx = e.clientX; cosmosState._ly = e.clientY;
-    }
-    // hover detection
-    const hit = pickStar(mx, my);
-    if (hit) {
-      tip.classList.add('show');
-      tip.style.left = (mx + 14) + 'px';
-      tip.style.top = (my + 14) + 'px';
-      const da = hit.da;
-      tip.innerHTML = `<div class="tt-name">${hit.r.name}</div><div class="tt-meta">${escapeHtml(hit.r.description || '—')}</div><div class="tt-meta">${da === 0 ? 'pushed today' : 'pushed ' + da + 'd ago'} · ${hit.r.language || 'n/a'}</div>`;
-      canvas.style.cursor = 'pointer';
-    } else {
-      tip.classList.remove('show');
-      canvas.style.cursor = cosmosState.dragging ? 'grabbing' : 'grab';
-    }
-  };
-  canvas.onclick = e => {
-    const r = canvas.getBoundingClientRect();
-    const hit = pickStar(e.clientX - r.left, e.clientY - r.top);
-    if (hit) window.open(hit.r.url, '_blank', 'noopener');
-  };
-}
-
-function pickStar(mx, my) {
-  const { stars, cx, cy, ox, oy, rect, t } = cosmosState;
-  const baseR = Math.min(rect.width, rect.height) * 0.42;
-  for (let i = 0; i < stars.length; i++) {
-    const s = stars[i];
-    const a = s.angle + t * (0.0003 + s.jitter * 0.001);
-    const sx = cx + ox + Math.cos(a) * baseR * s.distFactor;
-    const sy = cy + oy + Math.sin(a) * baseR * s.distFactor;
-    const dx = sx - mx, dy = sy - my;
-    if (dx*dx + dy*dy < (s.radius + 4) * (s.radius + 4)) return s;
-  }
-  return null;
-}
-
-function loopCosmos() {
-  if (!cosmosState) return;
-  const { ctx, rect, stars, pixies, cx, cy, ox, oy } = cosmosState;
-  cosmosState.t = (cosmosState.t || 0) + 1;
-  ctx.clearRect(0, 0, rect.width, rect.height);
-  // pixies
-  ctx.fillStyle = '#f3eedf';
-  pixies.forEach(p => {
-    ctx.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(cosmosState.t * 0.01 + p.x * 30));
-    ctx.beginPath(); ctx.arc(p.x * rect.width, p.y * rect.height, p.r, 0, Math.PI * 2); ctx.fill();
-  });
-  ctx.globalAlpha = 1;
-  // stars
-  const baseR = Math.min(rect.width, rect.height) * 0.42;
-  stars.forEach(s => {
-    const a = s.angle + cosmosState.t * (0.0003 + s.jitter * 0.001);
-    const sx = cx + ox + Math.cos(a) * baseR * s.distFactor;
-    const sy = cy + oy + Math.sin(a) * baseR * s.distFactor;
-    // glow
-    const grd = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.radius * 3);
-    grd.addColorStop(0, s.color);
-    grd.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.globalAlpha = 0.45;
-    ctx.fillStyle = grd;
-    ctx.beginPath(); ctx.arc(sx, sy, s.radius * 3, 0, Math.PI * 2); ctx.fill();
-    // core
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = s.color;
-    ctx.beginPath(); ctx.arc(sx, sy, s.radius, 0, Math.PI * 2); ctx.fill();
-  });
-  requestAnimationFrame(loopCosmos);
-}
-
-window.addEventListener('resize', () => {
-  if (document.getElementById('view-cosmos').classList.contains('active')) {
-    cosmosInited = false; cosmosState = null; initCosmos();
-  }
-});
-
-// ────────────────────────────────────────────── RHYTHM · polar clock
-function renderRhythm() {
-  const svg = document.getElementById('rhythm-svg');
+// ────────────────────────────────────────────── RHYTHM · flattened summary
+function renderRhythmSummary() {
   if (!DATA || !DATA.hoursOfDay) return;
   const h = DATA.hoursOfDay;
-  const total = h.reduce((a,b) => a+b, 0);
+  const total = h.reduce((a, b) => a + b, 0);
   const peakIdx = h.indexOf(Math.max(...h));
-  const cx = 200, cy = 200, rIn = 50, rMax = 160;
-  const maxV = Math.max(1, ...h);
-  let svgStr = '';
-  // outer ring
-  svgStr += `<circle class="ring" cx="${cx}" cy="${cy}" r="${rMax}"/>`;
-  svgStr += `<circle class="ring" cx="${cx}" cy="${cy}" r="${(rIn + rMax) / 2}"/>`;
-  svgStr += `<circle class="ring" cx="${cx}" cy="${cy}" r="${rIn}"/>`;
-  // 24 petals
-  for (let i = 0; i < 24; i++) {
-    const v = h[i] / maxV;
-    const a0 = (i / 24) * Math.PI * 2 - Math.PI/2 - (Math.PI/24);
-    const a1 = ((i+1) / 24) * Math.PI * 2 - Math.PI/2 - (Math.PI/24);
-    const rOut = rIn + v * (rMax - rIn);
-    const p0x = cx + Math.cos(a0) * rIn, p0y = cy + Math.sin(a0) * rIn;
-    const p1x = cx + Math.cos(a1) * rIn, p1y = cy + Math.sin(a1) * rIn;
-    const p2x = cx + Math.cos(a1) * rOut, p2y = cy + Math.sin(a1) * rOut;
-    const p3x = cx + Math.cos(a0) * rOut, p3y = cy + Math.sin(a0) * rOut;
-    svgStr += `<path class="petal" d="M ${p0x} ${p0y} L ${p1x} ${p1y} A ${rOut} ${rOut} 0 0 1 ${p2x} ${p2y} L ${p3x} ${p3y} A ${rIn} ${rIn} 0 0 0 ${p0x} ${p0y} Z" opacity="${0.25 + v * 0.65}"><title>${i}:00 — ${h[i]} commits</title></path>`;
-  }
-  // hour labels (0, 6, 12, 18)
-  [[0,'00'],[6,'06'],[12,'12'],[18,'18']].forEach(([i, lbl]) => {
-    const a = (i / 24) * Math.PI * 2 - Math.PI/2;
-    const x = cx + Math.cos(a) * (rMax + 14);
-    const y = cy + Math.sin(a) * (rMax + 14) + 3;
-    svgStr += `<text class="hour-label" x="${x}" y="${y}">${lbl}</text>`;
-  });
-  // center
-  svgStr += `<text class="center-num" x="${cx}" y="${cy - 2}">${formatHour(peakIdx)}</text>`;
-  svgStr += `<text class="center-sub" x="${cx}" y="${cy + 16}">PEAK HOUR · SGT</text>`;
-  svg.innerHTML = svgStr;
-
   document.getElementById('peak-hour').textContent = formatHour(peakIdx) + ' SGT';
   document.getElementById('rhythm-n').textContent = total;
 }
@@ -1084,6 +958,345 @@ function formatHour(h) {
   if (h === 12) return 'noon';
   return (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// COSMIC · full-screen 360° starfield
+// Every repo is a star fixed on a unit sphere around the viewer. You navigate
+// by rotating the camera: on desktop, push the cursor to a screen edge to fly
+// along that bearing (auto-scroll); on mobile, the device-orientation sensors
+// steer the camera so you physically point the phone around the room. The
+// camera orientation is held as a QUATERNION end-to-end, so the device path
+// never gimbal-locks (no Euler-angle singularity at the poles).
+// ════════════════════════════════════════════════════════════════════════
+function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
+
+// ---- tiny quaternion / vector kit (components ordered x,y,z,w) ----
+function qMul(a, b) {
+  return [
+    a[3]*b[0] + a[0]*b[3] + a[1]*b[2] - a[2]*b[1],
+    a[3]*b[1] - a[0]*b[2] + a[1]*b[3] + a[2]*b[0],
+    a[3]*b[2] + a[0]*b[1] - a[1]*b[0] + a[2]*b[3],
+    a[3]*b[3] - a[0]*b[0] - a[1]*b[1] - a[2]*b[2]
+  ];
+}
+function qConj(q) { return [-q[0], -q[1], -q[2], q[3]]; }
+function qAxisAngle(ax, ay, az, ang) {
+  const h = ang / 2, s = Math.sin(h);
+  return [ax*s, ay*s, az*s, Math.cos(h)];
+}
+function qRotate(q, v) {                 // rotate vector v by quaternion q
+  const x = v[0], y = v[1], z = v[2];
+  const qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+  const tx = 2*(qy*z - qz*y);
+  const ty = 2*(qz*x - qx*z);
+  const tz = 2*(qx*y - qy*x);
+  return [
+    x + qw*tx + (qy*tz - qz*ty),
+    y + qw*ty + (qz*tx - qx*tz),
+    z + qw*tz + (qx*ty - qy*tx)
+  ];
+}
+// Euler (YXZ order) → quaternion — the convention the orientation sensors use.
+function qFromEulerYXZ(x, y, z) {
+  const c1 = Math.cos(x/2), c2 = Math.cos(y/2), c3 = Math.cos(z/2);
+  const s1 = Math.sin(x/2), s2 = Math.sin(y/2), s3 = Math.sin(z/2);
+  return [
+    s1*c2*c3 + c1*s2*s3,
+    c1*s2*c3 - s1*c2*s3,
+    c1*c2*s3 - s1*s2*c3,
+    c1*c2*c3 + s1*s2*s3
+  ];
+}
+const DEG = Math.PI / 180;
+const Q_SCREEN = [-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)];   // tip camera to look out the back of the device
+
+// ---- module state ----
+let cosmicOpen = false;
+let cosmicRAF = 0;
+let cosmic = null;
+
+const overlayEl = document.getElementById('cosmicOverlay');
+const fabEl     = document.getElementById('cosmicFab');
+const closeEl   = document.getElementById('cosmicClose');
+const motionEl  = document.getElementById('cosmicMotion');
+
+function buildCosmicStars() {
+  if (!cosmic || !DATA) return;
+  const all = [...(DATA.orgRepos || []), ...(DATA.userRepos || [])];
+  if (!all.length) { cosmic.stars = []; }
+  const max = Math.max(1, ...all.map(r => (r.recentCommits||[]).length + (r.stars || 0)));
+  const n = all.length;
+  // Fibonacci sphere — scatter repos evenly across the full 360° × 180°.
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  cosmic.stars = all.map((r, i) => {
+    const y = n > 1 ? 1 - (i / (n - 1)) * 2 : 0;       // -1 … 1 (pole to pole)
+    const rad = Math.sqrt(Math.max(0, 1 - y*y));
+    const theta = i * golden + (hash(r.name) % 360) * DEG * 0.05;
+    const dir = [Math.cos(theta) * rad, y, Math.sin(theta) * rad];
+    const da = daysAgo(r.pushedAt);
+    const importance = ((r.recentCommits||[]).length * 4 + (r.stars||0) + 1) / (max + 1);
+    let color;
+    if (da <= 7)       color = '#e8985c';
+    else if (da <= 30) color = '#6fb8ad';
+    else               color = '#6f6957';
+    return { r, dir, da, color, size: 1.6 + importance * 4.4, tw: (hash(r.name + 't') % 100) / 100 };
+  });
+  // decorative background field, also distributed across the sphere
+  const pix = [];
+  for (let i = 0; i < 320; i++) {
+    const y = 1 - (i / 319) * 2;
+    const rad = Math.sqrt(Math.max(0, 1 - y*y));
+    const theta = i * golden;
+    pix.push({ dir: [Math.cos(theta) * rad, y, Math.sin(theta) * rad],
+               s: 0.4 + (i % 7) / 7 * 1.1, a: 0.16 + (i % 5) / 5 * 0.42, tw: (i % 13) / 13 });
+  }
+  cosmic.pixies = pix;
+}
+
+function sizeCosmicCanvas() {
+  if (!cosmic) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = window.innerWidth, h = window.innerHeight;
+  cosmic.canvas.width = w * dpr;
+  cosmic.canvas.height = h * dpr;
+  cosmic.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cosmic.w = w; cosmic.h = h; cosmic.dpr = dpr;
+  cosmic.focal = (h / 2) / Math.tan((cosmic.fov * DEG) / 2);
+}
+
+function openCosmic() {
+  if (cosmicOpen) return;
+  const canvas = document.getElementById('cosmic-canvas');
+  const ctx = canvas.getContext('2d');
+  cosmic = {
+    canvas, ctx, tip: document.getElementById('cosmic-tip'),
+    stars: [], pixies: [],
+    yaw: 0, pitch: 0,                  // free-look camera (radians)
+    camQ: [0, 0, 0, 1],
+    mode: 'free',                      // 'free' (mouse/touch) | 'motion' (sensors)
+    mouse: { x: -1, y: -1, inside: false },
+    focused: null, t: 0, fov: 72
+  };
+  buildCosmicStars();
+  sizeCosmicCanvas();
+
+  overlayEl.hidden = false;
+  overlayEl.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => overlayEl.classList.add('show'));
+  cosmicOpen = true;
+  document.body.style.overflow = 'hidden';
+  if (location.hash !== '#cosmic') history.pushState(null, '', '#cosmic');
+
+  bindCosmicInput();
+  maybeOfferMotion();
+  cancelAnimationFrame(cosmicRAF);
+  cosmicLoop();
+}
+
+function closeCosmic(fromPop) {
+  if (!cosmicOpen) return;
+  cosmicOpen = false;
+  cancelAnimationFrame(cosmicRAF);
+  overlayEl.classList.remove('show');
+  document.body.style.overflow = '';
+  unbindCosmicInput();
+  setTimeout(() => { if (!cosmicOpen) { overlayEl.hidden = true; overlayEl.setAttribute('aria-hidden', 'true'); } }, 340);
+  if (!fromPop && location.hash === '#cosmic') history.replaceState(null, '', location.pathname + location.search);
+}
+
+// ---- input: mouse (desktop) + touch fallback ----
+function cosmicPointerMove(e) { cosmic.mouse.x = e.clientX; cosmic.mouse.y = e.clientY; cosmic.mouse.inside = true; }
+function cosmicPointerLeave() { cosmic.mouse.inside = false; }
+function cosmicClick() { if (cosmic.focused) window.open(cosmic.focused.r.url, '_blank', 'noopener'); }
+function cosmicKey(e) { if (e.key === 'Escape') closeCosmic(); }
+function cosmicTouchStart(e) { if (e.touches.length) { cosmic._tx = e.touches[0].clientX; cosmic._ty = e.touches[0].clientY; } }
+function cosmicTouchMove(e) {
+  if (cosmic.mode === 'motion' || !e.touches.length) return;   // sensors win when active
+  const tx = e.touches[0].clientX, ty = e.touches[0].clientY;
+  cosmic.yaw   -= (tx - cosmic._tx) * 0.004;
+  cosmic.pitch += (ty - cosmic._ty) * 0.004;
+  cosmic._tx = tx; cosmic._ty = ty;
+  e.preventDefault();
+}
+function bindCosmicInput() {
+  cosmic.canvas.addEventListener('mousemove', cosmicPointerMove);
+  cosmic.canvas.addEventListener('mouseleave', cosmicPointerLeave);
+  cosmic.canvas.addEventListener('click', cosmicClick);
+  cosmic.canvas.addEventListener('touchstart', cosmicTouchStart, { passive: true });
+  cosmic.canvas.addEventListener('touchmove', cosmicTouchMove, { passive: false });
+  window.addEventListener('keydown', cosmicKey);
+  window.addEventListener('resize', sizeCosmicCanvas);
+}
+function unbindCosmicInput() {
+  if (!cosmic) return;
+  cosmic.canvas.removeEventListener('mousemove', cosmicPointerMove);
+  cosmic.canvas.removeEventListener('mouseleave', cosmicPointerLeave);
+  cosmic.canvas.removeEventListener('click', cosmicClick);
+  cosmic.canvas.removeEventListener('touchstart', cosmicTouchStart);
+  cosmic.canvas.removeEventListener('touchmove', cosmicTouchMove);
+  window.removeEventListener('keydown', cosmicKey);
+  window.removeEventListener('resize', sizeCosmicCanvas);
+  if (cosmic._orient) window.removeEventListener('deviceorientation', cosmic._orient, true);
+}
+
+// ---- device orientation (mobile) — gimbal-lock-free via quaternion compose ----
+function deviceCamQuat(alpha, beta, gamma, orient) {
+  let q = qFromEulerYXZ(beta, alpha, -gamma);   // raw sensor frame
+  q = qMul(q, Q_SCREEN);                          // look out through the screen
+  q = qMul(q, qAxisAngle(0, 0, 1, -orient));      // correct for screen rotation
+  return q;
+}
+function startMotion() {
+  const handler = (e) => {
+    if (e.alpha == null && e.beta == null && e.gamma == null) return;
+    const orient = (screen.orientation && screen.orientation.angle != null
+                    ? screen.orientation.angle : (window.orientation || 0)) * DEG;
+    cosmic.camQ = deviceCamQuat((e.alpha||0)*DEG, (e.beta||0)*DEG, (e.gamma||0)*DEG, orient);
+    cosmic.mode = 'motion';
+    document.getElementById('cosmic-hint').textContent =
+      'point your phone around the room to look across the cosmos · tap a centred star to open it';
+  };
+  cosmic._orient = handler;
+  window.addEventListener('deviceorientation', handler, true);
+}
+function maybeOfferMotion() {
+  const hasOrient = 'DeviceOrientationEvent' in window;
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  motionEl.hidden = true;
+  if (!hasOrient || !coarse) return;             // desktop: edge-pan only
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    // iOS 13+ needs an explicit permission request triggered by a user gesture.
+    motionEl.hidden = false;
+    motionEl.onclick = () => {
+      DeviceOrientationEvent.requestPermission()
+        .then((res) => { motionEl.hidden = true; if (res === 'granted') startMotion(); })
+        .catch(() => { motionEl.hidden = true; });
+    };
+  } else {
+    startMotion();                               // Android / older iOS: just listen
+  }
+}
+
+// ---- per-frame camera update (desktop edge-pan + touch free-look) ----
+function updateFreeCamera() {
+  if (cosmic.mode === 'motion') return;
+  const { mouse, w, h } = cosmic;
+  if (mouse.inside) {
+    // auto-scroll along the 360° while the cursor sits in an edge band
+    const band = Math.max(64, Math.min(w, h) * 0.16);
+    const maxSpeed = 0.026;                       // rad / frame at the very edge
+    let dx = 0, dy = 0;
+    if (mouse.x < band)          dx = -(1 - mouse.x / band);
+    else if (mouse.x > w - band) dx =  (1 - (w - mouse.x) / band);
+    if (mouse.y < band)          dy = -(1 - mouse.y / band);
+    else if (mouse.y > h - band) dy =  (1 - (h - mouse.y) / band);
+    cosmic.yaw   += dx * maxSpeed;
+    cosmic.pitch += dy * maxSpeed;
+  }
+  const lim = 80 * DEG;                            // stay shy of the poles
+  cosmic.pitch = Math.max(-lim, Math.min(lim, cosmic.pitch));
+  cosmic.camQ = qMul(qAxisAngle(0, 1, 0, cosmic.yaw), qAxisAngle(1, 0, 0, cosmic.pitch));
+}
+
+// ---- render ----
+function projectDir(dir) {
+  const v = qRotate(qConj(cosmic.camQ), dir);     // world → camera space
+  if (v[2] >= -0.05) return null;                 // behind / >~87° off-axis
+  const f = cosmic.focal;
+  return { x: cosmic.w/2 + (v[0] / -v[2]) * f, y: cosmic.h/2 - (v[1] / -v[2]) * f, depth: -v[2] };
+}
+function cosmicLoop() {
+  if (!cosmicOpen || !cosmic) return;
+  cosmic.t++;
+  if (cosmic.mode !== 'motion') updateFreeCamera();
+  const { ctx, w, h, t } = cosmic;
+  ctx.clearRect(0, 0, w, h);
+
+  // background field
+  ctx.fillStyle = '#f3eedf';
+  for (const p of cosmic.pixies) {
+    const s = projectDir(p.dir);
+    if (!s) continue;
+    ctx.globalAlpha = p.a * (0.55 + 0.45 * Math.sin(t * 0.02 + p.tw * 30));
+    ctx.beginPath(); ctx.arc(s.x, s.y, p.s, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // repo stars
+  const cx = w/2, cy = h/2;
+  const drawn = [];
+  let focus = null, focusD = 1e9;
+  for (const st of cosmic.stars) {
+    const s = projectDir(st.dir);
+    if (!s) continue;
+    if (s.x < -120 || s.x > w + 120 || s.y < -120 || s.y > h + 120) continue;
+    const pr = Math.max(1.5, st.size * (0.7 + 0.55 * s.depth));
+    const dd = Math.hypot(s.x - cx, s.y - cy);
+    if (dd < 90 && dd < focusD) { focusD = dd; focus = { st, s, pr }; }   // reticle focus
+    drawn.push({ st, s, pr });
+  }
+  drawn.sort((a, b) => b.s.depth - a.s.depth);     // far → near
+  for (const d of drawn) {
+    const { st, s, pr } = d;
+    const tw = 0.75 + 0.25 * Math.sin(t * 0.03 + st.tw * 30);
+    const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, pr * 4);
+    grd.addColorStop(0, st.color); grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = 0.4 * tw; ctx.fillStyle = grd;
+    ctx.beginPath(); ctx.arc(s.x, s.y, pr * 4, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = tw; ctx.fillStyle = st.color;
+    ctx.beginPath(); ctx.arc(s.x, s.y, pr, 0, Math.PI*2); ctx.fill();
+    if (pr > 3.4 || (focus && focus.st === st)) {
+      ctx.globalAlpha = (focus && focus.st === st) ? 1 : 0.5;
+      ctx.fillStyle = '#f3eedf';
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(shortRepo(st.r.name), s.x, s.y - pr - 6);
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  // desktop: prefer the star under the cursor over the reticle pick
+  if (cosmic.mode === 'free' && cosmic.mouse.inside) {
+    let best = null, bestD = 26*26;
+    for (const d of drawn) {
+      const dx = d.s.x - cosmic.mouse.x, dy = d.s.y - cosmic.mouse.y, dd = dx*dx + dy*dy;
+      if (dd < bestD) { bestD = dd; best = d; }
+    }
+    if (best) focus = best;
+  }
+
+  cosmic.focused = focus ? focus.st : null;
+  overlayEl.classList.toggle('locked', !!cosmic.focused);
+  cosmic.canvas.style.cursor = cosmic.focused ? 'pointer' : 'default';
+  updateCosmicTip(focus);
+
+  cosmicRAF = requestAnimationFrame(cosmicLoop);
+}
+
+function updateCosmicTip(focus) {
+  const tip = cosmic.tip;
+  if (!focus) { tip.classList.remove('show'); return; }
+  const st = focus.st, da = st.da;
+  tip.style.left = focus.s.x + 'px';
+  tip.style.top  = (focus.s.y - focus.pr - 8) + 'px';
+  tip.innerHTML =
+    '<div class="tt-name">' + escapeHtml(st.r.name) + '</div>' +
+    '<div class="tt-meta">' + escapeHtml(st.r.description || '—') + '</div>' +
+    '<div class="tt-meta">' + (da === 0 ? 'pushed today' : 'pushed ' + da + 'd ago') +
+      ' · ' + escapeHtml(st.r.language || 'n/a') + '</div>' +
+    '<div class="tt-open">' + (cosmic.mode === 'motion' ? 'tap to open ↗' : 'click to open ↗') + '</div>';
+  tip.classList.add('show');
+}
+function shortRepo(name) { return name.replace(/-sankhacooray-com$/, ' ·sc').replace(/-/g, ' '); }
+
+// ---- wiring ----
+fabEl.addEventListener('click', openCosmic);
+closeEl.addEventListener('click', () => closeCosmic());
+window.addEventListener('popstate', () => {
+  if (location.hash === '#cosmic') openCosmic();
+  else if (cosmicOpen) closeCosmic(true);
+});
+if (location.hash === '#cosmic') requestAnimationFrame(openCosmic);
 
 // ────────────────────────────────────────────── claude · developing now
 function fmtCompact(n) {
