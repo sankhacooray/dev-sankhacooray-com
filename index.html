@@ -464,6 +464,33 @@ footer.site a:hover { color: var(--accent); }
   margin: 1rem 0;
 }
 .muted { color: var(--text-muted); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; }
+
+/* ───────── contact form ───────── */
+.cf-wrap { max-width: 560px; }
+.cf-form[hidden] { display: none; }
+.cf-form fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.cf-form fieldset[disabled] { opacity: .55; }
+.cf-field { display: grid; gap: 0.4rem; }
+.cf-field label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.cf-field input, .cf-field textarea { width: 100%; box-sizing: border-box; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 0.7rem 0.85rem; resize: vertical; transition: border-color .18s ease, box-shadow .18s ease; }
+.cf-field input:focus, .cf-field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.cf-field input::placeholder, .cf-field textarea::placeholder { color: var(--text-muted); }
+.cf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.cf-submit { margin-top: 1.1rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; background: var(--accent); color: var(--bg); border: 0; border-radius: var(--radius-sm); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.8rem 1.3rem; transition: opacity .18s ease, transform .12s ease; }
+.cf-submit:hover { opacity: .9; }
+.cf-submit:active { transform: translateY(1px); }
+.cf-submit.is-loading { pointer-events: none; opacity: .85; }
+.cf-spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,.3); border-top-color: var(--bg); border-radius: 50%; animation: cf-spin .7s linear infinite; }
+.cf-submit.is-loading .cf-spinner { display: inline-block; }
+@keyframes cf-spin { to { transform: rotate(360deg); } }
+.cf-status { min-height: 18px; margin: 0.8rem 0 0; font-size: 0.85rem; color: #ef6b6b; }
+.cf-success { padding: 0.5rem 0; }
+.cf-success[hidden] { display: none; }
+.cf-check { width: 50px; height: 50px; margin-bottom: 1rem; display: grid; place-items: center; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+.cf-success h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.5rem; }
+.cf-success p { color: var(--text-dim); margin: 0.4rem 0 0; font-size: 0.95rem; }
+.cf-again { margin-top: 1.2rem; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: var(--radius-sm); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.6rem 1rem; transition: border-color .18s ease, color .18s ease; }
+.cf-again:hover { border-color: var(--accent); color: var(--text); }
 </style>
 </head>
 <body>
@@ -542,6 +569,106 @@ footer.site a:hover { color: var(--accent); }
         <p class="lead">Every cell is a day. Brighter = busier.</p>
         <div class="calendar-wrap"><svg class="calendar-svg" id="calendar-svg"></svg></div>
       </section>
+
+      <section class="block" id="contact">
+        <h2>get in touch</h2>
+        <p class="lead">Working on something, hiring, or just want to compare notes? Send a note &mdash; it reaches me directly.</p>
+        <div class="cf-wrap">
+          <form class="cf-form" id="cfForm" novalidate>
+            <fieldset id="cfFields">
+              <div class="cf-field">
+                <label for="cf-name">name</label>
+                <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="200" placeholder="your name" />
+              </div>
+              <div class="cf-field">
+                <label for="cf-email">email</label>
+                <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@example.com" />
+              </div>
+              <div class="cf-field">
+                <label for="cf-message">message</label>
+                <textarea id="cf-message" name="message" rows="5" required maxlength="5000" placeholder="what's on your mind?"></textarea>
+              </div>
+              <div class="cf-hp" aria-hidden="true">
+                <label for="cf-company">company</label>
+                <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+            </fieldset>
+            <button class="cf-submit" id="cfSubmit" type="submit">
+              <span class="cf-label">send message</span>
+              <span class="cf-spinner" aria-hidden="true"></span>
+            </button>
+            <p class="cf-status" id="cfStatus" role="status" aria-live="polite"></p>
+          </form>
+          <div class="cf-success" id="cfSuccess" hidden>
+            <div class="cf-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3>message sent</h3>
+            <p>Thanks for reaching out &mdash; I'll get back to you soon.</p>
+            <button class="cf-again" id="cfAgain" type="button">send another</button>
+          </div>
+        </div>
+      </section>
+
+      <script>
+      (function () {
+        "use strict";
+        var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVh7KHZDVkO29XaSiF1zP7LqvwzPy_5yPs4GN4aAofezUaaWaSt36MAwxty_CXe_aSlQ/exec";
+        var form = document.getElementById("cfForm");
+        if (!form) return;
+        var fields = document.getElementById("cfFields");
+        var btn = document.getElementById("cfSubmit");
+        var statusEl = document.getElementById("cfStatus");
+        var success = document.getElementById("cfSuccess");
+        var again = document.getElementById("cfAgain");
+        var label = btn.querySelector(".cf-label");
+        var labelText = label ? label.textContent : "send message";
+        function setLoading(loading) {
+          fields.disabled = loading; btn.disabled = loading;
+          btn.classList.toggle("is-loading", loading);
+          btn.setAttribute("aria-busy", loading ? "true" : "false");
+          if (label) label.textContent = loading ? "sending…" : labelText;
+        }
+        function showError(msg) { statusEl.style.color = "#ef6b6b"; statusEl.textContent = msg; }
+        function showSuccess() {
+          statusEl.textContent = ""; form.hidden = true;
+          if (success) { success.hidden = false; success.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        }
+        function resetToForm() {
+          if (success) success.hidden = true; form.reset(); form.hidden = false; statusEl.textContent = "";
+          var first = document.getElementById("cf-name");
+          if (first) setTimeout(function () { first.focus(); }, 150);
+        }
+        if (again) again.addEventListener("click", resetToForm);
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); statusEl.textContent = "";
+          if (!form.checkValidity()) { form.reportValidity(); return; }
+          var payload = {
+            name: form.elements["name"].value,
+            email: form.elements["email"].value,
+            message: form.elements["message"].value,
+            company: form.elements["company"].value,
+            userAgent: navigator.userAgent,
+            source: "dev.sankhacooray.com"
+          };
+          setLoading(true);
+          fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload),
+            redirect: "follow"
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              if (data && data.ok) showSuccess();
+              else showError((data && data.message) || "Something went wrong. Please try again.");
+            })
+            .catch(function () { showError("Network error — please try again, or reach me on LinkedIn."); })
+            .finally(function () { setLoading(false); });
+        });
+      })();
+      </script>
+
     </section>
 
     <!-- ───────────── COSMOS ───────────── -->
