@@ -70,7 +70,9 @@ header.site {
 }
 .site-id {
   display: flex; gap: 1.25rem; align-items: flex-start;
+  flex-wrap: wrap;
 }
+.site-id > div { min-width: 0; flex: 1 1 240px; }
 .avatar {
   width: 64px; height: 64px; border-radius: 50%;
   background: var(--surface-2);
@@ -95,11 +97,12 @@ header.site {
 }
 .site-id .links {
   margin-top: 0.6rem;
-  display: flex; gap: 1rem;
+  display: flex; gap: 0.5rem 1rem; flex-wrap: wrap;
   font-size: 0.85rem;
   font-family: 'JetBrains Mono', monospace;
   color: var(--text-muted);
 }
+.site-id .sub { overflow-wrap: anywhere; }
 .site-id .links a { color: var(--text-dim); }
 .site-id .links a:hover { color: var(--accent); }
 
@@ -289,44 +292,47 @@ section.block .lead {
   line-height: 1;
 }
 
-/* ───────── "Browse Code Cosmic" feature button ───────── */
-.cosmic-fab {
-  position: fixed;
-  right: 1.25rem;
-  bottom: 1.25rem;
-  z-index: 200;
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  padding: 0.7rem 1.1rem;
-  background: rgba(21,20,15,0.55);
-  border: 1px solid var(--border);
+/* ───────── "Browse Code Cosmic" feature button (centered CTA) ───────── */
+.cosmic-cta {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  margin: 3rem 0 2.5rem;
+}
+.cosmic-launch {
+  display: inline-flex; align-items: center; gap: 0.65rem;
+  padding: 0.9rem 1.7rem;
+  background: linear-gradient(180deg, rgba(232,152,92,0.16), rgba(232,152,92,0.06));
+  border: 1px solid var(--accent-dim);
   border-radius: 999px;
-  color: var(--text-dim);
+  color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   letter-spacing: 0.02em;
   cursor: pointer;
-  opacity: 0.62;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
-  transition: opacity 200ms, border-color 200ms, color 200ms, transform 160ms, box-shadow 200ms;
+  box-shadow: 0 6px 26px rgba(232,152,92,0.16);
+  transition: border-color 200ms, color 200ms, transform 160ms, box-shadow 200ms, background 200ms;
 }
-.cosmic-fab:hover {
-  opacity: 1;
-  color: var(--text);
-  border-color: var(--accent-dim);
+.cosmic-launch:hover {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(232,152,92,0.18);
+  box-shadow: 0 10px 34px rgba(232,152,92,0.32);
 }
-.cosmic-fab .fab-spark { width: 15px; height: 15px; color: var(--accent); flex: 0 0 auto; }
-.cosmic-fab .fab-spark { animation: fab-twinkle 3.2s ease-in-out infinite; }
+.cosmic-launch .fab-spark {
+  width: 16px; height: 16px; color: var(--accent); flex: 0 0 auto;
+  animation: fab-twinkle 3.2s ease-in-out infinite;
+}
+.cosmic-launch:hover .fab-spark { color: var(--bg); }
 @keyframes fab-twinkle {
-  0%, 100% { opacity: 0.55; transform: scale(0.92) rotate(0deg); }
-  50%      { opacity: 1;    transform: scale(1.08) rotate(8deg); }
+  0%, 100% { opacity: 0.6; transform: scale(0.92) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.08) rotate(8deg); }
 }
-@media (max-width: 520px) {
-  .cosmic-fab .fab-label { display: none; }
-  .cosmic-fab { padding: 0.7rem; }
+.cosmic-cta-sub {
+  margin-top: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
 /* ───────── COSMIC · full-screen 360° overlay ───────── */
@@ -599,6 +605,17 @@ footer.site a:hover { color: var(--accent); }
         <p class="muted">based on the last <span id="rhythm-n">—</span> commits across all repos</p>
       </section>
 
+      <section class="cosmic-cta">
+        <button class="cosmic-launch" id="cosmicFab" type="button" aria-label="Browse Code Cosmic — open the full-screen 360° cosmos">
+          <svg class="fab-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l1.6 5.4L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.6L12 2z"/>
+            <circle cx="19" cy="4" r="1.1"/><circle cx="5.5" cy="18" r="1.4"/>
+          </svg>
+          <span class="fab-label">Browse Code Cosmic</span>
+        </button>
+        <p class="cosmic-cta-sub">a full-screen 360° flythrough of every repo</p>
+      </section>
+
       <section class="block">
         <h2>the lab</h2>
         <p class="lead">Sub-sites I'm tending. Each tile is a live sub-domain on <code>*.sankhacooray.com</code>. A pulse means I pushed in the last 7 days.</p>
@@ -734,15 +751,6 @@ footer.site a:hover { color: var(--accent); }
 
 </div>
 
-<!-- ───────── "Browse Code Cosmic" feature button ───────── -->
-<button class="cosmic-fab" id="cosmicFab" type="button" aria-label="Browse Code Cosmic — open the full-screen 360° cosmos">
-  <svg class="fab-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M12 2l1.6 5.4L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.6L12 2z"/>
-    <circle cx="19" cy="4" r="1.1"/><circle cx="5.5" cy="18" r="1.4"/>
-  </svg>
-  <span class="fab-label">Browse Code Cosmic</span>
-</button>
-
 <!-- ───────── full-screen 360° cosmos ───────── -->
 <div class="cosmic-overlay" id="cosmicOverlay" hidden aria-hidden="true">
   <canvas id="cosmic-canvas"></canvas>
@@ -750,7 +758,7 @@ footer.site a:hover { color: var(--accent); }
   <div class="cosmic-tip" id="cosmic-tip"></div>
   <div class="cosmic-ui">
     <div class="cosmic-title">code cosmos</div>
-    <p class="cosmic-hint" id="cosmic-hint">move your cursor to any edge to fly across the 360° · centre a star, then click to open it</p>
+    <p class="cosmic-hint" id="cosmic-hint">swipe on your trackpad — or drag — to glide across the 360° · click a star to open it</p>
   </div>
   <div class="cosmic-legend">
     <span><span style="color:var(--accent)">●</span> touched this week</span>
@@ -1104,10 +1112,37 @@ function closeCosmic(fromPop) {
   if (!fromPop && location.hash === '#cosmic') history.replaceState(null, '', location.pathname + location.search);
 }
 
-// ---- input: mouse (desktop) + touch fallback ----
-function cosmicPointerMove(e) { cosmic.mouse.x = e.clientX; cosmic.mouse.y = e.clientY; cosmic.mouse.inside = true; }
-function cosmicPointerLeave() { cosmic.mouse.inside = false; }
-function cosmicClick() { if (cosmic.focused) window.open(cosmic.focused.r.url, '_blank', 'noopener'); }
+// ---- input: trackpad wheel + mouse drag (desktop) + touch (mobile) ----
+const COSMIC_DRAG_THRESH = 5;   // px moved before a press counts as a drag, not a click
+function cosmicPointerMove(e) {
+  cosmic.mouse.x = e.clientX; cosmic.mouse.y = e.clientY; cosmic.mouse.inside = true;
+  if (cosmic._drag) {
+    const dx = e.clientX - cosmic._dx, dy = e.clientY - cosmic._dy;
+    cosmic.yaw   -= dx * 0.0042;        // drag-the-sky: content follows the cursor
+    cosmic.pitch -= dy * 0.0042;
+    cosmic._dx = e.clientX; cosmic._dy = e.clientY;
+    if (Math.abs(e.clientX - cosmic._d0x) + Math.abs(e.clientY - cosmic._d0y) > COSMIC_DRAG_THRESH) cosmic._moved = true;
+  }
+}
+function cosmicPointerLeave() { cosmic.mouse.inside = false; cosmic._drag = false; }
+function cosmicMouseDown(e) {
+  if (e.button !== 0) return;
+  cosmic._drag = true; cosmic._moved = false;
+  cosmic._dx = cosmic._d0x = e.clientX; cosmic._dy = cosmic._d0y = e.clientY;
+}
+function cosmicMouseUp() { cosmic._drag = false; }
+// Trackpad two-finger swipe (and mouse wheel) → glide across the 360° in any direction.
+function cosmicWheel(e) {
+  if (cosmic.mode === 'motion') return;
+  e.preventDefault();
+  const k = 0.0024;
+  cosmic.yaw   += e.deltaX * k;
+  cosmic.pitch += e.deltaY * k;
+}
+function cosmicClick() {
+  if (cosmic._moved) { cosmic._moved = false; return; }   // swallow the click that ends a drag
+  if (cosmic.focused) window.open(cosmic.focused.r.url, '_blank', 'noopener');
+}
 function cosmicKey(e) { if (e.key === 'Escape') closeCosmic(); }
 function cosmicTouchStart(e) { if (e.touches.length) { cosmic._tx = e.touches[0].clientX; cosmic._ty = e.touches[0].clientY; } }
 function cosmicTouchMove(e) {
@@ -1121,6 +1156,9 @@ function cosmicTouchMove(e) {
 function bindCosmicInput() {
   cosmic.canvas.addEventListener('mousemove', cosmicPointerMove);
   cosmic.canvas.addEventListener('mouseleave', cosmicPointerLeave);
+  cosmic.canvas.addEventListener('mousedown', cosmicMouseDown);
+  window.addEventListener('mouseup', cosmicMouseUp);
+  cosmic.canvas.addEventListener('wheel', cosmicWheel, { passive: false });
   cosmic.canvas.addEventListener('click', cosmicClick);
   cosmic.canvas.addEventListener('touchstart', cosmicTouchStart, { passive: true });
   cosmic.canvas.addEventListener('touchmove', cosmicTouchMove, { passive: false });
@@ -1131,6 +1169,9 @@ function unbindCosmicInput() {
   if (!cosmic) return;
   cosmic.canvas.removeEventListener('mousemove', cosmicPointerMove);
   cosmic.canvas.removeEventListener('mouseleave', cosmicPointerLeave);
+  cosmic.canvas.removeEventListener('mousedown', cosmicMouseDown);
+  window.removeEventListener('mouseup', cosmicMouseUp);
+  cosmic.canvas.removeEventListener('wheel', cosmicWheel);
   cosmic.canvas.removeEventListener('click', cosmicClick);
   cosmic.canvas.removeEventListener('touchstart', cosmicTouchStart);
   cosmic.canvas.removeEventListener('touchmove', cosmicTouchMove);
@@ -1177,22 +1218,9 @@ function maybeOfferMotion() {
   }
 }
 
-// ---- per-frame camera update (desktop edge-pan + touch free-look) ----
+// ---- per-frame camera update (free-look driven by trackpad / drag / touch) ----
 function updateFreeCamera() {
   if (cosmic.mode === 'motion') return;
-  const { mouse, w, h } = cosmic;
-  if (mouse.inside) {
-    // auto-scroll along the 360° while the cursor sits in an edge band
-    const band = Math.max(64, Math.min(w, h) * 0.16);
-    const maxSpeed = 0.026;                       // rad / frame at the very edge
-    let dx = 0, dy = 0;
-    if (mouse.x < band)          dx = -(1 - mouse.x / band);
-    else if (mouse.x > w - band) dx =  (1 - (w - mouse.x) / band);
-    if (mouse.y < band)          dy = -(1 - mouse.y / band);
-    else if (mouse.y > h - band) dy =  (1 - (h - mouse.y) / band);
-    cosmic.yaw   += dx * maxSpeed;
-    cosmic.pitch += dy * maxSpeed;
-  }
   const lim = 80 * DEG;                            // stay shy of the poles
   cosmic.pitch = Math.max(-lim, Math.min(lim, cosmic.pitch));
   cosmic.camQ = qMul(qAxisAngle(0, 1, 0, cosmic.yaw), qAxisAngle(1, 0, 0, cosmic.pitch));
@@ -1267,7 +1295,7 @@ function cosmicLoop() {
 
   cosmic.focused = focus ? focus.st : null;
   overlayEl.classList.toggle('locked', !!cosmic.focused);
-  cosmic.canvas.style.cursor = cosmic.focused ? 'pointer' : 'default';
+  cosmic.canvas.style.cursor = cosmic._drag ? 'grabbing' : (cosmic.focused ? 'pointer' : 'grab');
   updateCosmicTip(focus);
 
   cosmicRAF = requestAnimationFrame(cosmicLoop);
