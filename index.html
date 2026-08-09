@@ -164,6 +164,7 @@ section.block .lead {
   gap: 0.75rem;
 }
 .lab-tile {
+  --card-glow: rgba(232,152,92,0.18);   /* saffron (default) */
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -171,12 +172,29 @@ section.block .lead {
   display: flex; flex-direction: column;
   min-height: 110px;
   position: relative;
-  transition: transform 160ms, border-color 160ms, background 160ms;
+  transition: border-color 160ms, background 160ms;
   overflow: hidden;
 }
+/* cycle the brand palette across the grid */
+.lab-tile:nth-child(3n+2) { --card-glow: rgba(111,184,173,0.18); } /* teal */
+.lab-tile:nth-child(3n)   { --card-glow: rgba(201,123,123,0.20); } /* rose */
+/* imbalanced gradient wash — anchored off-corner, revealed on hover */
+.lab-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(135% 105% at 12% 0%, var(--card-glow), transparent 58%),
+    radial-gradient(90% 80% at 108% 112%, var(--card-glow), transparent 62%);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.lab-tile > * { position: relative; z-index: 1; }
+.lab-tile:hover::before { opacity: 1; }
 .lab-tile:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-dim);
   background: var(--surface-2);
 }
 .lab-tile .tname {
@@ -316,7 +334,6 @@ section.block .lead {
   color: var(--bg);
   background: var(--accent);
   border-color: var(--accent);
-  transform: translateY(-2px);
   box-shadow: 0 10px 34px rgba(232,152,92,0.32);
 }
 .cosmic-launch .fab-spark {
