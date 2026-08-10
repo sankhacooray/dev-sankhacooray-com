@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0d0c0a;
+    color: #f3eedf;
+    background-image:
+      radial-gradient(900px 460px at 16% -8%, rgba(232,152,92,0.13), transparent 60%),
+      radial-gradient(820px 560px at 104% 18%, rgba(111,184,173,0.11), transparent 60%);
+    padding: 72px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500;
+    color: #e8985c; text-transform: uppercase; letter-spacing: 4px;
+  }
+  h1 {
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: 96px; line-height: 1.02; letter-spacing: -2px; margin-top: 28px;
+  }
+  h1 em { color: #e8985c; font-style: italic; }
+  .lede {
+    font-size: 25px; color: #6f6957; max-width: 720px; margin-top: 30px; line-height: 1.45;
+  }
+  .foot { display: flex; align-items: baseline; gap: 18px; }
+  .mark { font-family: 'Instrument Serif', serif; font-size: 40px; color: #e8985c; letter-spacing: -0.5px; }
+  .by { font-family: 'JetBrains Mono', monospace; font-size: 17px; color: #6f6957; letter-spacing: 1px; }
+  .url { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 17px; color: #6f6957; letter-spacing: 1px; }
+  .grid { position: absolute; right: 70px; top: 84px; opacity: 0.9; }
+</style>
+</head>
+<body>
+  <svg class="grid" width="286" height="118" viewBox="0 0 286 118">
+    <g fill="#e8985c">
+      <rect x="0"   y="0"  width="24" height="24" rx="6" opacity="0.4"/>
+      <rect x="34"  y="0"  width="24" height="24" rx="6" opacity="0.55"/>
+      <rect x="68"  y="0"  width="24" height="24" rx="6" opacity="1"/>
+      <rect x="102" y="0"  width="24" height="24" rx="6" opacity="0.5"/>
+      <rect x="136" y="0"  width="24" height="24" rx="6" opacity="0.7"/>
+      <rect x="170" y="0"  width="24" height="24" rx="6" opacity="0.45"/>
+      <rect x="204" y="0"  width="24" height="24" rx="6" opacity="0.6"/>
+      <rect x="238" y="0"  width="24" height="24" rx="6" opacity="0.5"/>
+      <rect x="0"   y="34" width="24" height="24" rx="6" opacity="0.6"/>
+      <rect x="34"  y="34" width="24" height="24" rx="6" opacity="1"/>
+      <rect x="68"  y="34" width="24" height="24" rx="6" opacity="0.5"/>
+      <rect x="102" y="34" width="24" height="24" rx="6" opacity="0.7"/>
+      <rect x="136" y="34" width="24" height="24" rx="6" opacity="0.45"/>
+      <rect x="170" y="34" width="24" height="24" rx="6" opacity="0.65"/>
+      <rect x="204" y="34" width="24" height="24" rx="6" opacity="1"/>
+      <rect x="238" y="34" width="24" height="24" rx="6" opacity="0.55"/>
+      <rect x="0"   y="68" width="24" height="24" rx="6" opacity="0.5"/>
+      <rect x="34"  y="68" width="24" height="24" rx="6" opacity="0.6"/>
+      <rect x="68"  y="68" width="24" height="24" rx="6" opacity="0.7"/>
+      <rect x="102" y="68" width="24" height="24" rx="6" opacity="1"/>
+      <rect x="136" y="68" width="24" height="24" rx="6" opacity="0.5"/>
+      <rect x="170" y="68" width="24" height="24" rx="6" opacity="0.6"/>
+      <rect x="204" y="68" width="24" height="24" rx="6" opacity="0.45"/>
+      <rect x="238" y="68" width="24" height="24" rx="6" opacity="0.7"/>
+    </g>
+  </svg>
+
+  <div>
+    <div class="eyebrow">a small private lab</div>
+    <h1>A year of small<br><em>daily experiments</em>.</h1>
+    <div class="lede">A 365-day contribution canvas, the daily rhythm of commits, and a 360° cosmos of every repo — built from the GitHub API.</div>
+  </div>
+
+  <div class="foot">
+    <span class="mark">dev</span>
+    <span class="by">Sankha Cooray</span>
+    <span class="url">dev.sankhacooray.com</span>
+  </div>
+</body>
+</html>
