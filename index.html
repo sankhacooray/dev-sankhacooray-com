@@ -3,1404 +3,425 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>dev — Sankha Cooray · a small private lab</title>
-<meta name="description" content="Live view of what Sankha is making — a 365-day contribution canvas, the daily rhythm of commits, and a full-screen 360° cosmos of repos. Built from the GitHub GraphQL API.">
+<title>dev — Sankha Cooray · developer tools</title>
+<meta name="description" content="Developer tools by Sankha Cooray: Chrome extensions, a Claude usage meter, Shotlink and MCP servers, plus the shared plumbing behind sankhacooray.com.">
 <link rel="canonical" href="https://dev.sankhacooray.com/">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="dev — Sankha Cooray">
-<meta property="og:title" content="dev — Sankha Cooray · a small private lab">
-<meta property="og:description" content="Live view of what Sankha is making — a year of small daily experiments, with a 360° cosmos of every repo you can fly through.">
+<meta property="og:site_name" content="dev · Sankha Cooray">
+<meta property="og:title" content="dev — Sankha Cooray · developer tools">
+<meta property="og:description" content="Developer tools by Sankha Cooray: Chrome extensions, a Claude usage meter, Shotlink and MCP servers, plus the shared plumbing behind sankhacooray.com.">
 <meta property="og:url" content="https://dev.sankhacooray.com/">
-<meta property="og:image" content="https://dev.sankhacooray.com/assets/og-image.png">
+<meta property="og:image" content="https://dev.sankhacooray.com/og.png?v=1">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="dev — a live view of what Sankha Cooray is making, from the GitHub API">
-<meta property="og:locale" content="en_US">
-
+<meta property="og:image:alt" content="dev.sankhacooray.com: developer tools, with Claude Meter, Shotlink, Config Copilot and Export Tabs">
+<meta property="og:locale" content="en_SG">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="dev — Sankha Cooray · a small private lab">
-<meta name="twitter:description" content="A year of small daily experiments — with a 360° cosmos of every repo.">
-<meta name="twitter:image" content="https://dev.sankhacooray.com/assets/og-image.png">
-<meta name="twitter:image:alt" content="dev — a live view of what Sankha Cooray is making, from the GitHub API">
+<meta name="twitter:title" content="dev — Sankha Cooray · developer tools">
+<meta name="twitter:description" content="Developer tools by Sankha Cooray: Chrome extensions, a Claude usage meter, Shotlink and MCP servers, plus the shared plumbing behind sankhacooray.com.">
+<meta name="twitter:image" content="https://dev.sankhacooray.com/og.png?v=1">
+<meta name="twitter:image:alt" content="dev.sankhacooray.com: developer tools, with Claude Meter, Shotlink, Config Copilot and Export Tabs">
 
-<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0d0c0a">
+<link rel="icon" type="image/svg+xml" href="/icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0c1411">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="dev">
 
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>(function(){try{var t=localStorage.getItem("sc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <style>
-:root {
-  --bg: #0d0c0a;
-  --surface: #15140f;
-  --surface-2: #1f1d16;
-  --border: #2b2820;
-  --border-soft: #1c1a14;
-  --text: #f3eedf;
-  --text-dim: #b3ab92;
-  --text-muted: #6f6957;
-  --accent: #e8985c;        /* saffron */
-  --accent-dim: #a86d3d;
-  --accent-soft: rgba(232,152,92,0.10);
-  --teal: #6fb8ad;          /* muted teal */
-  --teal-dim: #4a847b;
-  --teal-soft: rgba(111,184,173,0.10);
-  --rose: #c97b7b;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --maxw: 1080px;
+/* Terminal palette: near-black green app bar, cool paper page, one phosphor-green accent */
+:root{
+  --bg:#f1f4f2; --surface:#ffffff; --surface2:#e5ebe7; --line:#d5dfd9;
+  --text:#0f1d17; --dim:#43564d; --muted:#76887f;
+  --accent:#0b7a55; --accent-hi:#0e8f64; --accent-soft:#0b7a5514; --mark:#3ddc97;
+  --bar:#0c1411; --bar-text:#e8f1ec; --bar-dim:#9cb2a7;
+  --cta-text:#ffffff; --card-hover:#f2f8f4; --mine:#0b7a55; --android:#2e8b57;
+  --serif:"Instrument Serif",Georgia,serif; --sans:"DM Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --page-bg:#f1f4f2; --maxw:1180px;
 }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a100d; --surface:#111a16; --surface2:#17231e; --line:#24332c;
+  --text:#e6efea; --dim:#b3c3bb; --muted:#81958b;
+  --accent:#4fd9a0; --accent-hi:#6be6b3; --accent-soft:#4fd9a01f; --mark:#3ddc97;
+  --bar:#060a08; --bar-text:#e6efea; --bar-dim:#8fa69a;
+  --cta-text:#06140e; --card-hover:#16211c; --mine:#4fd9a0; --android:#5fcf8f; --page-bg:#0a100d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a100d; --surface:#111a16; --surface2:#17231e; --line:#24332c;
+  --text:#e6efea; --dim:#b3c3bb; --muted:#81958b;
+  --accent:#4fd9a0; --accent-hi:#6be6b3; --accent-soft:#4fd9a01f; --mark:#3ddc97;
+  --bar:#060a08; --bar-text:#e6efea; --bar-dim:#8fa69a;
+  --cta-text:#06140e; --card-hover:#16211c; --mine:#4fd9a0; --android:#5fcf8f; --page-bg:#0a100d; color-scheme:dark}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+/* rule 14: body is the scroller, no bounce, no white edge */
+html{height:100%;overflow:hidden;background:var(--page-bg);overscroll-behavior:none}
+body{height:100%;margin:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:none;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 
-body {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  background-image:
-    radial-gradient(900px 500px at 15% -10%, rgba(232,152,92,0.06), transparent 60%),
-    radial-gradient(700px 400px at 100% 30%, rgba(111,184,173,0.04), transparent 60%);
-}
+/* ambient particle field behind everything (pointer-events off) */
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
+main{position:relative;z-index:1}
+/* app bar (rule 7: no bottom border) */
+.topbar{position:sticky;top:0;z-index:20;background:var(--bar);color:var(--bar-text);padding-top:env(safe-area-inset-top,0px)}
+.topbar .wrap{max-width:none;display:flex;align-items:center;gap:18px;height:60px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--bar-text)}
+.hubchip{font-family:var(--mono);font-size:17px;font-weight:500;line-height:1;padding:7px 13px;border-radius:999px;background:var(--mark);color:#06140e;letter-spacing:0}
+.brand .lbl{font-size:14.5px;font-weight:500;color:var(--bar-text)}
+.chev{width:18px;height:18px;color:var(--bar-dim)}
+.nav{margin-left:2px}
+.nav{display:flex;gap:4px}
+.nav a{color:var(--bar-dim);text-decoration:none;font-size:14px;padding:6px 10px;border-radius:999px}
+.nav a:hover{color:var(--bar-text);background:#ffffff14}
+.nav a{display:inline-flex;align-items:center;gap:7px;transition:background-color .25s ease,color .25s ease}
+.nav a[aria-current="true"]{color:var(--bar-text);background:#ffffff1f;font-weight:600}
+.spacer{flex:1}
+.iconbtn{all:unset;cursor:pointer;width:36px;height:36px;border-radius:999px;display:grid;place-items:center;color:var(--bar-dim)}
+.iconbtn:hover{color:var(--bar-text);background:#ffffff14}
+/* the toggle shows the theme it switches TO: moon on light, sun on dark */
+.ico-sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ico-sun{display:block}:root:not([data-theme="light"]) .ico-moon{display:none}}
+:root[data-theme="dark"] .ico-sun{display:block}:root[data-theme="dark"] .ico-moon{display:none}
+.iconbtn:focus-visible,.cta:focus-visible,.card a:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+/* rule 10/12: one primary CTA, theme colour, named for the task */
+.cta{display:inline-flex;align-items:center;gap:0;background:var(--accent);color:var(--cta-text);text-decoration:none;font-weight:600;font-size:14px;padding:9px 18px;border-radius:999px;white-space:nowrap;transition:background .15s,box-shadow .15s}
+.cta:hover{background:var(--accent-hi);box-shadow:0 0 0 4px var(--accent-soft),0 6px 20px -6px var(--accent)}
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--text); }
+/* groups (rules 1, 4, 5) */
+main{display:block}
+.group{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding-block:clamp(18px,3.4vh,48px);scroll-margin-top:var(--bar-h,60px)}
+.group > .wrap{width:100%;box-sizing:border-box}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(64px,13vh,132px);line-height:.92;margin:.08em 0 .05em;letter-spacing:-.02em}
+h1 .dot{color:var(--accent);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sub{font-family:var(--serif);font-size:clamp(26px,4.2vh,40px);line-height:1.15;margin:0;color:var(--dim)}
+.lede{font-size:clamp(16px,2.25vh,19px);color:var(--dim);max-width:58ch;margin:clamp(12px,2.2vh,22px) 0 0}
+.role-line{font-size:14.5px;color:var(--muted);max-width:60ch;margin-top:10px}
+.role-line b{color:var(--text);font-weight:600}
+.role-line a{color:var(--accent);text-decoration:none;font-weight:600}
+.role-line a:hover{text-decoration:underline}
 
-.container { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
+.hero > *{min-width:0}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,56px);align-items:center}
+.collage{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shot{margin:0;border-radius:12px;overflow:hidden;background:var(--surface);box-shadow:0 1px 2px #0000000d,0 14px 34px -18px #0c141180,inset 0 0 0 1px var(--line);aspect-ratio:1200/630}
+.shot img{display:block;width:100%;height:100%;object-fit:contain}
+/* rule 6/16: the SPARK pipeline, one line */
+.strip{display:flex;flex-wrap:nowrap;align-items:stretch;gap:5px;margin-top:clamp(16px,3vh,30px)}
+.step{flex:1 1 auto;min-width:max-content;justify-content:center;display:flex;align-items:center;gap:6px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:999px;padding:6px 10px;font-size:13px;white-space:nowrap}
+.step svg{width:16px;height:16px;flex:none;color:var(--accent)}
+.step span{overflow:hidden;text-overflow:ellipsis}
+.arrow{align-self:center;color:var(--muted);flex:none}
+.strip-cap{font-size:12.5px;color:var(--muted);margin-top:6px}
 
-/* ───────── header ───────── */
-header.site {
-  padding: 3rem 0 1.5rem;
-}
-.site-id {
-  display: flex; gap: 1.25rem; align-items: flex-start;
-  flex-wrap: wrap;
-}
-.site-id > div { min-width: 0; flex: 1 1 240px; }
-.avatar {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  object-fit: cover;
-  flex-shrink: 0;
-}
-.site-id h1 {
-  font-family: 'Instrument Serif', serif;
-  font-weight: 400;
-  font-size: clamp(2.2rem, 5vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  color: var(--text);
-}
-.site-id h1 .accent { color: var(--accent); font-style: italic; }
-.site-id .sub {
-  color: var(--text-dim);
-  font-size: 1rem;
-  margin-top: 0.4rem;
-  max-width: 50ch;
-}
-.site-id .links {
-  margin-top: 0.6rem;
-  display: flex; gap: 0.5rem 1rem; flex-wrap: wrap;
-  font-size: 0.85rem;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-muted);
-}
-.site-id .sub { overflow-wrap: anywhere; }
-.site-id .links a { color: var(--text-dim); }
-.site-id .links a:hover { color: var(--accent); }
+.ghead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:end;margin-bottom:clamp(14px,2.6vh,26px)}
+.ghead h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vh,46px);line-height:1.05;margin:0}
+.ghead p{margin:6px 0 0;color:var(--dim);max-width:62ch;font-size:clamp(15px,2.1vh,17.5px)}
+.ctx{font-family:var(--mono);font-size:12.5px;color:var(--muted);white-space:nowrap}
+.ctx .n{color:var(--text)}
 
-/* ───────── stats strip ───────── */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin: 2rem 0 1.5rem;
-  overflow: hidden;
-}
-.stat {
-  background: var(--surface);
-  padding: 1rem 1.25rem;
-}
-.stat .n {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.85rem;
-  line-height: 1;
-  color: var(--text);
-}
-.stat .l {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-top: 0.4rem;
-}
-@media (max-width: 640px) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
-}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+/* parts: a product's components (backends, earlier versions), listed on hover or tap */
+.card{position:relative}
+.parts{all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--dim);padding:2px 9px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);cursor:help;white-space:nowrap}
+.parts svg{width:13px;height:13px;color:var(--accent)}
+.parts:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+.pop{position:absolute;top:0;left:0;right:0;aspect-ratio:1200/630;z-index:5;display:flex;flex-direction:column;justify-content:center;padding:12px 16px;box-sizing:border-box;overflow:hidden;background:color-mix(in srgb,var(--surface) 62%,transparent);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s linear .3s;pointer-events:none;white-space:normal}
+.parts:hover + .pop,.parts:focus + .pop,.parts.on + .pop{opacity:1;visibility:visible;transition:opacity .3s ease .25s,visibility 0s linear .25s}
+.pop b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.pop ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.pop li{font-size:13.5px;line-height:1.3;color:var(--text);font-weight:500}
+.pop li span{display:block;font-size:12px;color:var(--muted)}
+.pop code{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
+.pop .k{font-style:normal}
+/* narrow cards: names and repos only; the list may run past the thumbnail */
+.subgroup .pop{aspect-ratio:auto;min-height:calc(100% * 0 + 1px);padding:10px 14px}
+.subgroup .pop .k{display:none}
+.subgroup .pop ul{gap:5px}
+.subgroup .pop li{font-size:13px}
+/* rows that share one screen between small groups (rule 3); headings share one top line (symmetry) */
+.row{display:grid;grid-template-rows:auto auto;column-gap:28px;row-gap:0;align-items:start}
+.subgroup{min-width:0;scroll-margin-top:var(--bar-h,60px);display:grid;grid-row:span 2;grid-template-rows:subgrid}
+.subgroup .ghead{align-self:start;grid-template-columns:minmax(0,1fr)}
+.subgroup .ghead h2{font-size:clamp(26px,4vh,36px)}
+.subgroup .ghead p{font-size:clamp(14px,1.9vh,16px)}
+.subgroup .cards,.solo .cards{grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.card{display:flex;flex-direction:column;background:var(--surface);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px #0000000d,0 10px 28px -20px #0c141166,inset 0 0 0 1px var(--line);transition:background-color .2s}
+.card:hover{background:var(--card-hover)}
+.card:hover .art.blank{background:linear-gradient(140deg,var(--accent-soft),transparent 70%),var(--card-hover)}
+.art{aspect-ratio:1200/630;background:var(--surface2);position:relative;overflow:hidden}
+.art img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.art.fallback{display:grid;place-items:center;background:radial-gradient(120% 90% at 20% 0%,var(--accent-soft),transparent 60%),linear-gradient(140deg,var(--surface2),var(--bg))}
+.art.fallback svg{width:clamp(44px,8vh,72px);height:auto;color:var(--accent);opacity:.55;transition:opacity .45s ease}
+.art.fallback .live-og{position:absolute;inset:0;opacity:0;transition:opacity .45s ease}
+.art.fallback.loaded .live-og{opacity:1}
+.art.fallback.loaded svg{opacity:0}
+.yrs{position:absolute;top:10px;left:10px;z-index:1;font-family:var(--mono);font-size:11.5px;font-weight:500;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--bar) 82%,transparent);color:var(--bar-text);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.art.blank{display:grid;place-items:center;background:linear-gradient(140deg,var(--accent-soft),transparent 70%),var(--surface2)}
+.art.blank svg{width:clamp(44px,8vh,72px);height:auto;color:var(--accent);opacity:.75}
+.cbody{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.ctop{display:flex;align-items:center;gap:8px}
+.card h3{margin:0;font-size:16.5px;font-weight:600;line-height:1.25}
+.role{margin-left:auto;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.role.mine{background:var(--accent);color:var(--cta-text)}
+.role.co{background:var(--accent-soft);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.role.contrib{background:var(--surface2);color:var(--dim)}
+.card p{margin:0;color:var(--dim);font-size:14.5px;line-height:1.5}
+.cfoot{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.plats{display:inline-flex;gap:4px}
+.pi{width:14px;height:14px}
+.pi-android{color:var(--android)}.pi-web,.pi-chrome{color:var(--accent)}.pi-mac,.pi-term{color:var(--text)}
+.org{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.cfoot .parts{margin-left:4px}
+.open{margin-left:auto;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap}
+.open:hover{text-decoration:underline}
 
-/* ───────── view container ───────── */
-.view { display: none; }
-.view.active { display: block; }
+.connect{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.panel{background:var(--surface);border-radius:14px;padding:clamp(16px,3vh,26px) 22px;box-shadow:inset 0 0 0 1px var(--line)}
+.panel h3{margin:0 0 4px;font-size:15px;font-weight:600}
+.panel .hint{margin:0 0 12px;font-size:13.5px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:13.5px;padding:5px 12px;border-radius:999px;line-height:1.3}
+.chip.core{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.chip.rel{box-shadow:inset 0 0 0 1px var(--line);color:var(--dim)}
+.chip.ven{font-family:var(--mono);font-size:13px;background:var(--surface2);color:var(--dim);cursor:help}
+.chip.ven.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.ven.ok::before{content:"✓ "}
 
-section.block { margin: 2.5rem 0; }
-section.block h2 {
-  font-family: 'Instrument Serif', serif;
-  font-weight: 400;
-  font-size: 1.6rem;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-}
-section.block .lead {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  max-width: 55ch;
-  margin-bottom: 1.25rem;
-}
+/* rules 5, 18: footer, one line, pinned to the bottom of the last screen */
+.last{justify-content:flex-start}
+.last > .wrap:first-child{margin-top:auto}
+.footer{margin-top:auto;padding-top:clamp(18px,4vh,40px)}
+.footer .wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;font-size:13.5px;color:var(--muted)}
+.footer a{text-decoration:none;color:var(--dim)}
+.footer a:hover{color:var(--accent)}
+.info{all:unset;cursor:help;width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;font-size:12px;box-shadow:inset 0 0 0 1px var(--line);color:var(--dim);position:relative;z-index:41}
+.glass{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s linear .45s;pointer-events:none;padding:24px}
+.glass.on{opacity:1;visibility:visible;transition:opacity .45s ease,visibility 0s}
+.glass .msg{max-width:52ch;font-size:17px;line-height:1.6;color:var(--text);text-align:left}
+.glass .msg b{font-weight:600}
 
-/* ───────── LAB view ───────── */
-.lab-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 0.75rem;
+@media (max-width:900px){
+  .nav,.brand .lbl,.chev{display:none}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .connect{grid-template-columns:minmax(0,1fr)}
+  .ghead{grid-template-columns:minmax(0,1fr)}
+  .row{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none;row-gap:28px}
+  .subgroup{grid-row:auto;grid-template-rows:auto auto}
+  .subgroup .cards,.solo .cards{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .strip{overflow-x:auto;scrollbar-width:none}
+  .step{flex:0 0 auto}
 }
-.lab-tile {
-  --card-glow: rgba(232,152,92,0.18);   /* saffron (default) */
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  display: flex; flex-direction: column;
-  min-height: 110px;
-  position: relative;
-  transition: border-color 160ms, background 160ms;
-  overflow: hidden;
+@media (max-width:520px){
+  .cta .long{display:none}
 }
-/* cycle the brand palette across the grid */
-.lab-tile:nth-child(3n+2) { --card-glow: rgba(111,184,173,0.18); } /* teal */
-.lab-tile:nth-child(3n)   { --card-glow: rgba(201,123,123,0.20); } /* rose */
-/* imbalanced gradient wash — anchored off-corner, revealed on hover */
-.lab-tile::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background:
-    radial-gradient(135% 105% at 12% 0%, var(--card-glow), transparent 58%),
-    radial-gradient(90% 80% at 108% 112%, var(--card-glow), transparent 62%);
-  opacity: 0;
-  transition: opacity 200ms ease;
-  pointer-events: none;
-}
-.lab-tile > * { position: relative; z-index: 1; }
-.lab-tile:hover::before { opacity: 1; }
-.lab-tile:hover {
-  background: var(--surface-2);
-}
-.lab-tile .tname {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  color: var(--text);
-  font-weight: 500;
-  line-height: 1.25;
-  word-break: break-word;
-}
-.lab-tile .tdesc {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  margin-top: 0.4rem;
-  flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.lab-tile .tmeta {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-.lab-tile .lang-dot {
-  display: inline-block;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  margin-right: 0.4rem;
-  vertical-align: middle;
-}
-.lab-tile .pulse {
-  position: absolute; top: 0.6rem; right: 0.6rem;
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 0 var(--accent);
-}
-.lab-tile.fresh .pulse { animation: pulse 1.8s ease-out infinite; }
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(232,152,92,0.55); }
-  70%  { box-shadow: 0 0 0 10px rgba(232,152,92,0); }
-  100% { box-shadow: 0 0 0 0 rgba(232,152,92,0); }
-}
-
-/* commit feed */
-.commit-feed {
-  list-style: none;
-  border-left: 1px solid var(--border);
-  padding-left: 1rem;
-}
-.commit-feed li {
-  padding: 0.65rem 0;
-  border-bottom: 1px dashed var(--border-soft);
-  position: relative;
-}
-.commit-feed li:last-child { border-bottom: 0; }
-.commit-feed li::before {
-  content: '';
-  position: absolute;
-  left: -1.3rem;
-  top: 1.05rem;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  border: 2px solid var(--bg);
-}
-.commit-feed li.fresh::before { background: var(--accent); }
-.commit-feed .cmsg {
-  color: var(--text);
-  font-size: 0.92rem;
-  line-height: 1.4;
-}
-.commit-feed .cmeta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin-top: 0.2rem;
-}
-.commit-feed .cmeta a { color: var(--text-dim); }
-.commit-feed .cmeta a:hover { color: var(--accent); }
-
-/* contribution calendar */
-.calendar-wrap {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  overflow-x: auto;
-}
-.calendar-svg { display: block; min-width: 100%; }
-.cal-cell { transition: fill 200ms; }
-.cal-month-label, .cal-weekday-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  fill: var(--text-muted);
-}
-
-/* ───────── RHYTHM · flattened summary ───────── */
-.rhythm-line {
-  color: var(--text-dim);
-  font-size: 1.05rem;
-  max-width: 56ch;
-  margin-bottom: 0.6rem;
-}
-.rhythm-line .big {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.9rem;
-  color: var(--accent);
-  font-style: italic;
-  line-height: 1;
-}
-
-/* ───────── "Browse Code Cosmic" feature button (centered CTA) ───────── */
-.cosmic-cta {
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center;
-  margin: 3rem 0 2.5rem;
-}
-.cosmic-launch {
-  display: inline-flex; align-items: center; gap: 0.65rem;
-  padding: 0.9rem 1.7rem;
-  background: linear-gradient(180deg, rgba(232,152,92,0.16), rgba(232,152,92,0.06));
-  border: 1px solid var(--accent-dim);
-  border-radius: 999px;
-  color: var(--text);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.86rem;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  box-shadow: 0 6px 26px rgba(232,152,92,0.16);
-  transition: border-color 200ms, color 200ms, transform 160ms, box-shadow 200ms, background 200ms;
-}
-.cosmic-launch:hover {
-  color: var(--bg);
-  background: var(--accent);
-  border-color: var(--accent);
-  box-shadow: 0 10px 34px rgba(232,152,92,0.32);
-}
-.cosmic-launch .fab-spark {
-  width: 16px; height: 16px; color: var(--accent); flex: 0 0 auto;
-  animation: fab-twinkle 3.2s ease-in-out infinite;
-}
-.cosmic-launch:hover .fab-spark { color: var(--bg); }
-@keyframes fab-twinkle {
-  0%, 100% { opacity: 0.6; transform: scale(0.92) rotate(0deg); }
-  50%      { opacity: 1;   transform: scale(1.08) rotate(8deg); }
-}
-.cosmic-cta-sub {
-  margin-top: 0.7rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-}
-
-/* ───────── COSMIC · full-screen 360° overlay ───────── */
-.cosmic-overlay {
-  position: fixed; inset: 0;
-  z-index: 1000;
-  background: radial-gradient(ellipse at 50% 45%, #14120d 0%, #060504 70%, #000 100%);
-  overflow: hidden;
-  touch-action: none;
-  opacity: 0;
-  transition: opacity 320ms ease;
-}
-.cosmic-overlay[hidden] { display: none; }
-.cosmic-overlay.show { opacity: 1; }
-#cosmic-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-/* center reticle — the "you are looking here" focus ring */
-.cosmic-reticle {
-  position: absolute; left: 50%; top: 50%;
-  width: 46px; height: 46px; margin: -23px 0 0 -23px;
-  border: 1px solid rgba(243,238,223,0.22);
-  border-radius: 50%;
-  pointer-events: none;
-  transition: border-color 160ms, transform 160ms;
-}
-.cosmic-reticle::after {
-  content: ''; position: absolute; left: 50%; top: 50%;
-  width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px;
-  border-radius: 50%; background: rgba(243,238,223,0.45);
-}
-.cosmic-overlay.locked .cosmic-reticle {
-  border-color: var(--accent);
-  transform: scale(1.12);
-}
-
-/* floating tooltip / label for the focused star */
-.cosmic-tip {
-  position: absolute;
-  pointer-events: none;
-  transform: translate(-50%, -140%);
-  background: rgba(8,7,5,0.86);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0.55rem 0.7rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.76rem;
-  color: var(--text);
-  max-width: 260px;
-  opacity: 0;
-  transition: opacity 140ms;
-  z-index: 1010;
-  white-space: nowrap;
-}
-.cosmic-tip.show { opacity: 1; }
-.cosmic-tip .tt-name { color: var(--accent); font-weight: 500; }
-.cosmic-tip .tt-meta { color: var(--text-dim); font-size: 0.7rem; margin-top: 0.25rem; white-space: normal; }
-.cosmic-tip .tt-open { color: var(--teal); font-size: 0.66rem; margin-top: 0.4rem; letter-spacing: 0.05em; }
-
-/* overlay chrome */
-.cosmic-ui {
-  position: absolute; left: 1.5rem; bottom: 1.4rem;
-  z-index: 1010; pointer-events: none;
-  max-width: min(70vw, 460px);
-}
-.cosmic-ui .cosmic-title {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.7rem; color: var(--text); line-height: 1;
-}
-.cosmic-ui .cosmic-hint {
-  margin-top: 0.5rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem; color: var(--text-muted); line-height: 1.5;
-}
-.cosmic-legend {
-  position: absolute; right: 1.5rem; bottom: 1.4rem;
-  z-index: 1010; pointer-events: none;
-  display: flex; flex-direction: column; gap: 0.35rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem; color: var(--text-muted);
-  text-align: right;
-}
-@media (max-width: 640px) { .cosmic-legend { display: none; } }
-.cosmic-close {
-  position: absolute; right: 1.1rem; top: 1.1rem;
-  z-index: 1010;
-  width: 42px; height: 42px; border-radius: 50%;
-  display: grid; place-items: center;
-  background: rgba(8,7,5,0.6);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  font-size: 1.1rem; cursor: pointer;
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  transition: color 160ms, border-color 160ms, transform 160ms;
-}
-.cosmic-close:hover { color: var(--text); border-color: var(--accent-dim); transform: rotate(90deg); }
-.cosmic-motion {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  z-index: 1020;
-  padding: 0.85rem 1.4rem;
-  background: var(--accent); color: var(--bg);
-  border: 0; border-radius: 999px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82rem; letter-spacing: 0.02em; cursor: pointer;
-  box-shadow: 0 8px 30px rgba(232,152,92,0.3);
-}
-.cosmic-motion[hidden] { display: none; }
-
-/* ───────── footer ───────── */
-footer.site {
-  margin: 4rem 0 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-soft);
-  color: var(--text-muted);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
-}
-footer.site a { color: var(--text-dim); }
-footer.site a:hover { color: var(--accent); }
-
-/* ───────── claude · "developing now" ───────── */
-.claude-card {
-  display: flex; align-items: center; flex-wrap: wrap;
-  gap: 1.25rem 2rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-}
-.claude-status {
-  display: flex; align-items: center; gap: 0.6rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  flex: 1 1 auto;
-}
-.claude-status .claude-state { color: var(--text); }
-.claude-dot {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: var(--text-muted);
-  flex: 0 0 auto;
-}
-.claude-card.live .claude-dot {
-  background: var(--accent);
-  box-shadow: 0 0 0 0 var(--accent);
-  animation: pulse 1.8s ease-out infinite;
-}
-.claude-card.live .claude-state { color: var(--accent); }
-.claude-metrics {
-  display: flex; gap: 1.75rem;
-  flex: 0 0 auto;
-}
-.claude-metrics .cm-n {
-  font-family: 'Instrument Serif', serif;
-  font-size: 1.5rem; line-height: 1;
-  color: var(--text);
-}
-.claude-metrics .cm-l {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-top: 0.35rem;
-}
-@media (max-width: 520px) {
-  .claude-metrics { gap: 1.25rem; }
-  .claude-metrics .cm-n { font-size: 1.25rem; }
-}
-
-/* ───────── loading / error ───────── */
-.skeleton {
-  background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-}
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.error-banner {
-  padding: 0.85rem 1rem;
-  background: rgba(201,123,123,0.08);
-  border: 1px solid rgba(201,123,123,0.3);
-  border-radius: var(--radius-sm);
-  color: var(--rose);
-  font-size: 0.85rem;
-  font-family: 'JetBrains Mono', monospace;
-  margin: 1rem 0;
-}
-.muted { color: var(--text-muted); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; }
-
-/* ───────── contact form ───────── */
-.cf-wrap { max-width: 560px; }
-.cf-form[hidden] { display: none; }
-.cf-form fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
-.cf-form fieldset[disabled] { opacity: .55; }
-.cf-field { display: grid; gap: 0.4rem; }
-.cf-field label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
-.cf-field input, .cf-field textarea { width: 100%; box-sizing: border-box; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 0.7rem 0.85rem; resize: vertical; transition: border-color .18s ease, box-shadow .18s ease; }
-.cf-field input:focus, .cf-field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-.cf-field input::placeholder, .cf-field textarea::placeholder { color: var(--text-muted); }
-.cf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-.cf-submit { margin-top: 1.1rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; background: var(--accent); color: var(--bg); border: 0; border-radius: var(--radius-sm); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.8rem 1.3rem; transition: opacity .18s ease, transform .12s ease; }
-.cf-submit:hover { opacity: .9; }
-.cf-submit:active { transform: translateY(1px); }
-.cf-submit.is-loading { pointer-events: none; opacity: .85; }
-.cf-spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,.3); border-top-color: var(--bg); border-radius: 50%; animation: cf-spin .7s linear infinite; }
-.cf-submit.is-loading .cf-spinner { display: inline-block; }
-@keyframes cf-spin { to { transform: rotate(360deg); } }
-.cf-status { min-height: 18px; margin: 0.8rem 0 0; font-size: 0.85rem; color: #ef6b6b; }
-.cf-success { padding: 0.5rem 0; }
-.cf-success[hidden] { display: none; }
-.cf-check { width: 50px; height: 50px; margin-bottom: 1rem; display: grid; place-items: center; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
-.cf-success h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.5rem; }
-.cf-success p { color: var(--text-dim); margin: 0.4rem 0 0; font-size: 0.95rem; }
-.cf-again { margin-top: 1.2rem; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: var(--radius-sm); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.6rem 1rem; transition: border-color .18s ease, color .18s ease; }
-.cf-again:hover { border-color: var(--accent); color: var(--text); }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="/" aria-label="dev, developer tools"><span class="hubchip">~/dev</span><span class="lbl">Developer tools</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"/></svg></a>
+  <nav class="nav" aria-label="Sections"><a href="#extensions">Extensions</a><a href="#tools">Mac & MCP</a><a href="#network">Network</a><a href="#activity">Activity</a></nav>
+  <div class="spacer"></div>
+  <button class="iconbtn" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
+  <a class="cta" href="https://sankhacooray.com/#contact"><span>Collaborate<span class="long"> on developer tools</span></span></a>
+</div></header>
 
-<div class="container">
-
-  <header class="site">
-    <div class="site-id">
-      <img id="avatar" class="avatar skeleton" alt="">
-      <div>
-        <h1>Sankha <span class="accent">— a small private lab.</span></h1>
-        <p class="sub" id="bio">Daily small experiments at the edges of code, music, biology, and play. Live view of what I'm making right now — three lenses, same data.</p>
-        <div class="links">
-          <a id="link-gh" href="https://github.com/bsc2fast" target="_blank" rel="noopener">github.com/bsc2fast</a>
-          <a href="https://github.com/sankhacooray" target="_blank" rel="noopener">org/sankhacooray</a>
-          <a href="https://sankhacooray.com" target="_blank" rel="noopener">sankhacooray.com</a>
-        </div>
+<main id="home">
+  <section class="group" data-solo id="top"><div class="wrap hero">
+    <div>
+      <div class="eyebrow">Tools by Sankha Cooray</div>
+      <h1>dev<span class="dot">_</span></h1>
+      <p class="sub">Small tools for people who build</p>
+      <p class="lede">Chrome extensions that take the chores out of web consoles, Mac and Android utilities that feed Claude what it needs, and the shared plumbing that keeps every sankhacooray.com site in step.</p>
+      <p class="role-line">All of it is <b>mine</b>, built and run under BSCLab and sankhacooray. The live GitHub activity view now sits under <a href="/activity/">Activity</a>.</p>
+    </div>
+    <div>
+      <div class="collage">
+        <figure class="shot"><img src="/thumbs/claude-meter.jpg" alt="Claude Meter in the Mac menu bar" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/shotlink.jpg" alt="Shotlink, phone screenshots on the Mac" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/config-copilot.jpg" alt="Config Copilot side panel" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/tab-export.jpg" alt="Export Tabs as Shortcuts" width="800" height="420"></figure>
       </div>
+      <div class="strip" aria-label="How Shotlink gets a phone screenshot to Claude">
+        <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2"/><path d="M10.5 18.5h3"/></svg><span>Screenshot</span></div>
+        <span class="arrow">→</span>
+        <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span>Encrypted</span></div>
+        <span class="arrow">→</span>
+        <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6.5a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>~/PhoneShots</span></div>
+        <span class="arrow">→</span>
+        <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6-6-6M12 19h8"/></svg><span>Claude via MCP</span></div>
+      </div>
+      <div class="strip-cap">How Shotlink gets a phone screenshot to Claude</div>
     </div>
+  </div></section>
 
-    <div class="stats" id="stats">
-      <div class="stat"><div class="n" id="s-contrib">—</div><div class="l">contributions · 12mo</div></div>
-      <div class="stat"><div class="n" id="s-repos">—</div><div class="l">repos touched · 12mo</div></div>
-      <div class="stat"><div class="n" id="s-streak">—</div><div class="l">current streak · days</div></div>
-      <div class="stat"><div class="n" id="s-longest">—</div><div class="l">longest streak · days</div></div>
-    </div>
-
-  </header>
-
-  <main>
-
-    <!-- ───────────── LAB ───────────── -->
-    <section class="view view-lab active" id="view-lab">
-      <section class="block" id="claude-block" hidden>
-        <h2>building with claude</h2>
-        <p class="lead">My daily AI pair. The dot is live when a Claude Code session is actively running on my machine right now.</p>
-        <div class="claude-card" id="claude-card">
-          <div class="claude-status">
-            <span class="claude-dot"></span>
-            <span class="claude-state" id="claude-state">checking…</span>
-          </div>
-          <div class="claude-metrics">
-            <div><div class="cm-n" id="claude-tok-today">—</div><div class="cm-l">tokens · today</div></div>
-            <div><div class="cm-n" id="claude-tok-week">—</div><div class="cm-l">tokens · 7d</div></div>
-            <div><div class="cm-n" id="claude-sess-week">—</div><div class="cm-l">sessions · 7d</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="block" id="rhythm-block">
-        <h2>the shape of a day</h2>
-        <p class="rhythm-line">Most makers have a shape to their day. Mine looks like <span class="big" id="peak-hour">—</span> — that's when most of my commits land.</p>
-        <p class="muted">based on the last <span id="rhythm-n">—</span> commits across all repos</p>
-      </section>
-
-      <section class="cosmic-cta">
-        <button class="cosmic-launch" id="cosmicFab" type="button" aria-label="Browse Code Cosmic — open the full-screen 360° cosmos">
-          <svg class="fab-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2l1.6 5.4L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.6L12 2z"/>
-            <circle cx="19" cy="4" r="1.1"/><circle cx="5.5" cy="18" r="1.4"/>
-          </svg>
-          <span class="fab-label">Browse Code Cosmic</span>
-        </button>
-        <p class="cosmic-cta-sub">a full-screen 360° flythrough of every repo</p>
-      </section>
-
-      <section class="block">
-        <h2>the lab</h2>
-        <p class="lead">Sub-sites I'm tending. Each tile is a live sub-domain on <code>*.sankhacooray.com</code>. A pulse means I pushed in the last 7 days.</p>
-        <div class="lab-grid" id="lab-grid">
-          <div class="lab-tile skeleton" style="height:110px"></div>
-          <div class="lab-tile skeleton" style="height:110px"></div>
-          <div class="lab-tile skeleton" style="height:110px"></div>
-          <div class="lab-tile skeleton" style="height:110px"></div>
-        </div>
-      </section>
-
-      <section class="block">
-        <h2>recent work</h2>
-        <p class="lead">Last 25 commits across everything, freshest on top.</p>
-        <ul class="commit-feed" id="commit-feed">
-          <li class="muted">loading…</li>
-        </ul>
-      </section>
-
-      <section class="block">
-        <h2>one year, day by day</h2>
-        <p class="lead">Every cell is a day. Brighter = busier.</p>
-        <div class="calendar-wrap"><svg class="calendar-svg" id="calendar-svg"></svg></div>
-      </section>
-
-      <section class="block" id="contact">
-        <h2>get in touch</h2>
-        <p class="lead">Working on something, hiring, or just want to compare notes? Send a note &mdash; it reaches me directly.</p>
-        <div class="cf-wrap">
-          <form class="cf-form" id="cfForm" novalidate>
-            <fieldset id="cfFields">
-              <div class="cf-field">
-                <label for="cf-name">name</label>
-                <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="200" placeholder="your name" />
-              </div>
-              <div class="cf-field">
-                <label for="cf-email">email</label>
-                <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@example.com" />
-              </div>
-              <div class="cf-field">
-                <label for="cf-message">message</label>
-                <textarea id="cf-message" name="message" rows="5" required maxlength="5000" placeholder="what's on your mind?"></textarea>
-              </div>
-              <div class="cf-hp" aria-hidden="true">
-                <label for="cf-company">company</label>
-                <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
-              </div>
-            </fieldset>
-            <button class="cf-submit" id="cfSubmit" type="submit">
-              <span class="cf-label">send message</span>
-              <span class="cf-spinner" aria-hidden="true"></span>
-            </button>
-            <p class="cf-status" id="cfStatus" role="status" aria-live="polite"></p>
-          </form>
-          <div class="cf-success" id="cfSuccess" hidden>
-            <div class="cf-check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <h3>message sent</h3>
-            <p>Thanks for reaching out &mdash; I'll get back to you soon.</p>
-            <button class="cf-again" id="cfAgain" type="button">send another</button>
-          </div>
-        </div>
-      </section>
-
-      <script>
-      (function () {
-        "use strict";
-        var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVh7KHZDVkO29XaSiF1zP7LqvwzPy_5yPs4GN4aAofezUaaWaSt36MAwxty_CXe_aSlQ/exec";
-        var form = document.getElementById("cfForm");
-        if (!form) return;
-        var fields = document.getElementById("cfFields");
-        var btn = document.getElementById("cfSubmit");
-        var statusEl = document.getElementById("cfStatus");
-        var success = document.getElementById("cfSuccess");
-        var again = document.getElementById("cfAgain");
-        var label = btn.querySelector(".cf-label");
-        var labelText = label ? label.textContent : "send message";
-        function setLoading(loading) {
-          fields.disabled = loading; btn.disabled = loading;
-          btn.classList.toggle("is-loading", loading);
-          btn.setAttribute("aria-busy", loading ? "true" : "false");
-          if (label) label.textContent = loading ? "sending…" : labelText;
-        }
-        function showError(msg) { statusEl.style.color = "#ef6b6b"; statusEl.textContent = msg; }
-        function showSuccess() {
-          statusEl.textContent = ""; form.hidden = true;
-          if (success) { success.hidden = false; success.scrollIntoView({ behavior: "smooth", block: "center" }); }
-        }
-        function resetToForm() {
-          if (success) success.hidden = true; form.reset(); form.hidden = false; statusEl.textContent = "";
-          var first = document.getElementById("cf-name");
-          if (first) setTimeout(function () { first.focus(); }, 150);
-        }
-        if (again) again.addEventListener("click", resetToForm);
-        form.addEventListener("submit", function (e) {
-          e.preventDefault(); statusEl.textContent = "";
-          if (!form.checkValidity()) { form.reportValidity(); return; }
-          var payload = {
-            name: form.elements["name"].value,
-            email: form.elements["email"].value,
-            message: form.elements["message"].value,
-            company: form.elements["company"].value,
-            userAgent: navigator.userAgent,
-            source: "dev.sankhacooray.com"
-          };
-          setLoading(true);
-          fetch(APPS_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload),
-            redirect: "follow"
-          })
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
-              if (data && data.ok) showSuccess();
-              else showError((data && data.message) || "Something went wrong. Please try again.");
-            })
-            .catch(function () { showError("Network error — please try again, or reach me on LinkedIn."); })
-            .finally(function () { setLoading(false); });
-        });
-      })();
-      </script>
-
-    </section>
-
-  </main>
-
-  <footer class="site">
-    <div>updated <span id="generated">—</span> · source: github graphql, cached 1h</div>
-    <div><a href="https://github.com/sankhacooray/dev-sankhacooray-com" target="_blank" rel="noopener">source ↗</a></div>
-  </footer>
-
-</div>
-
-<!-- ───────── full-screen 360° cosmos ───────── -->
-<div class="cosmic-overlay" id="cosmicOverlay" hidden aria-hidden="true">
-  <canvas id="cosmic-canvas"></canvas>
-  <div class="cosmic-reticle" aria-hidden="true"></div>
-  <div class="cosmic-tip" id="cosmic-tip"></div>
-  <div class="cosmic-ui">
-    <div class="cosmic-title">code cosmos</div>
-    <p class="cosmic-hint" id="cosmic-hint">swipe on your trackpad — or drag — to glide across the 360° · click a star to open it</p>
+  <section class="group row-group"><div class="wrap"><div class="row" style="grid-template-columns:2fr 3fr"><div class="subgroup" id="extensions" style="--n:2"><div class="ghead"><div><h2>Browser extensions</h2><p>Side panels and one-click helpers for browser chores.</p></div><div class="ctx">Chrome · Manifest V3</div></div><div class="cards"><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/config-copilot.jpg" alt="Config Copilot" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Config Copilot</h3><span class="role mine">Mine</span></div><p>Fill web console forms from one config JSON, value by value or in one learned click.</p><div class="cfoot"><span class="plats"><svg class="pi pi-chrome" viewBox="0 0 16 16" role="img" aria-label="Chrome extension"><title>Chrome extension</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.3"/><path d="M8 5.7h5.6M6 9.2L3.2 4.3M10 9.2l-2.8 4.8"/></g></svg></span></div></div></article><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/tab-export.jpg" alt="Tab Export" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Tab Export</h3><span class="role mine">Mine</span></div><p>One click saves every open tab in the window as a .webloc or .url shortcut file.</p><div class="cfoot"><span class="plats"><svg class="pi pi-chrome" viewBox="0 0 16 16" role="img" aria-label="Chrome extension"><title>Chrome extension</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.3"/><path d="M8 5.7h5.6M6 9.2L3.2 4.3M10 9.2l-2.8 4.8"/></g></svg></span><a class="open" href="https://github.com/bsc2fast/tab-export-mv3" target="_blank" rel="noopener">GitHub</a></div></div></article></div></div><div class="subgroup" id="tools" style="--n:3"><div class="ghead"><div><h2>Mac, Android &amp; MCP</h2><p>Small native utilities and MCP servers that put the right data next to Claude.</p></div><div class="ctx">Swift · Kotlin · Node</div></div><div class="cards"><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/claude-meter.jpg" alt="Claude Meter" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Claude Meter</h3><span class="role mine">Mine</span></div><p>Claude plan usage in the Mac menu bar: session, weekly and model limits at a glance.</p><div class="cfoot"><span class="plats"><svg class="pi pi-mac" viewBox="0 0 16 16" role="img" aria-label="macOS"><title>macOS</title><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="3" y="3.5" width="10" height="7" rx="1"/><path d="M1.5 12.5h13"/></g></svg></span><button class="parts" type="button" aria-label="2 parts: Claude Meter, aimeter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>2 parts</button><div class="pop" role="tooltip"><b>Built from</b><ul><li>Claude Meter<span><i class="k">macOS menu bar app, Swift · </i><code>claude-meter-macos</code></span></li><li>aimeter<span><i class="k">Download page on a Cloudflare Worker · </i><code>aimeter-sankhacooray-com</code></span></li></ul></div><a class="open" href="https://aimeter.sankhacooray.com/" target="_blank" rel="noopener">Download</a></div></div></article><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/shotlink.jpg" alt="Shotlink" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Shotlink</h3><span class="role mine">Mine</span></div><p>Phone screenshots reach the Mac in seconds, encrypted, ready for Claude over MCP.</p><div class="cfoot"><span class="plats"><svg class="pi pi-android" viewBox="0 0 16 16" role="img" aria-label="Android"><title>Android</title><path fill="currentColor" d="M5.2 2.1a.4.4 0 01.55.13l.7 1.12A5 5 0 018 3.1c.55 0 1.07.09 1.55.25l.7-1.12a.4.4 0 11.68.42l-.66 1.06A4.4 4.4 0 0112.5 7H3.5a4.4 4.4 0 012.23-3.29l-.66-1.06a.4.4 0 01.13-.55zM6 5.4a.55.55 0 100 1.1.55.55 0 000-1.1zm4 0a.55.55 0 100 1.1.55.55 0 000-1.1zM3.5 8h9v4.5a1 1 0 01-1 1h-7a1 1 0 01-1-1V8z"/></svg><svg class="pi pi-mac" viewBox="0 0 16 16" role="img" aria-label="macOS"><title>macOS</title><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="3" y="3.5" width="10" height="7" rx="1"/><path d="M1.5 12.5h13"/></g></svg></span><button class="parts" type="button" aria-label="3 parts: Shotlink for Android, Mac receiver + MCP server, Relay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>3 parts</button><div class="pop" role="tooltip"><b>Built from</b><ul><li>Shotlink for Android<span><i class="k">Phone app, Kotlin · </i><code>shotlink-android</code></span></li><li>Mac receiver + MCP server<span><i class="k">Node daemon, launchd agent · </i><code>shotlink-server</code></span></li><li>Relay<span><i class="k">Cloudflare Worker + Durable Object · </i><code>shotlink-server/relay</code></span></li></ul></div><a class="open" href="https://shotlink.sankhacooray.com/" target="_blank" rel="noopener">Open</a></div></div></article><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/outlook-mcp.jpg" alt="Outlook MCP" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Outlook MCP</h3><span class="role mine">Mine</span></div><p>A local MCP server that lets Claude Code search, read and draft Outlook.com mail.</p><div class="cfoot"><span class="plats"><svg class="pi pi-term" viewBox="0 0 16 16" role="img" aria-label="Command line"><title>Command line</title><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1.8" y="2.8" width="12.4" height="10.4" rx="1.6"/><path d="M4.6 6.2l2 1.8-2 1.8M8.4 10.2h3"/></g></svg></span></div></div></article></div></div></div></div>
+  </section>
+  <section class="group solo" id="network"><div class="wrap">
+    <div class="ghead"><div><h2>The network&#x27;s own plumbing</h2><p>Shared pieces every *.sankhacooray.com site loads, so a fix in one place reaches them all.</p></div><div class="ctx">cdn · meta · analytics</div></div>
+    <div class="cards" style="--n:3"><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/cdn.jpg" alt="Shared components" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Shared components</h3><span class="role mine">Mine</span></div><p>Drop-in front-end modules every sub-site loads: the auto-theming footer, the analytics loader and chat.</p><div class="cfoot"><span class="plats"><svg class="pi pi-web" viewBox="0 0 16 16" role="img" aria-label="Web"><title>Web</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c1.7 1.8 2.5 3.8 2.5 6S9.7 12.2 8 14M8 2C6.3 3.8 5.5 5.8 5.5 8s.8 4.2 2.5 6"/></g></svg></span><button class="parts" type="button" aria-label="3 parts: Components, Site assistant, Contact form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>3 parts</button><div class="pop" role="tooltip"><b>Built from</b><ul><li>Components<span><i class="k">Footer, analytics, chat and weather scripts · </i><code>cdn-sankhacooray-com</code></span></li><li>Site assistant<span><i class="k">Cloudflare Worker behind the chat widget · </i><code>chat-sankhacooray-com</code></span></li><li>Contact form<span><i class="k">Apps Script backend · </i><code>contact-sankhacooray-com</code></span></li></ul></div><a class="open" href="https://cdn.sankhacooray.com/" target="_blank" rel="noopener">Open</a></div></div></article><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/meta.jpg" alt="Link previews" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Link previews</h3><span class="role mine">Mine</span></div><p>Every sub-site as the share card you see when its link is pasted into WhatsApp, iMessage or Slack.</p><div class="cfoot"><span class="plats"><svg class="pi pi-web" viewBox="0 0 16 16" role="img" aria-label="Web"><title>Web</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c1.7 1.8 2.5 3.8 2.5 6S9.7 12.2 8 14M8 2C6.3 3.8 5.5 5.8 5.5 8s.8 4.2 2.5 6"/></g></svg></span><a class="open" href="https://meta.sankhacooray.com/" target="_blank" rel="noopener">Open</a></div></div></article><article class="card"><div class="art"><span class="yrs" title="Active years, from the project's commit history">2026</span><img src="/thumbs/analytics.jpg" alt="Visitor badge" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Visitor badge</h3><span class="role mine">Mine</span></div><p>One GA4 property for the whole network; each page shows its own visitors and its rank among siblings.</p><div class="cfoot"><span class="plats"><svg class="pi pi-web" viewBox="0 0 16 16" role="img" aria-label="Web"><title>Web</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c1.7 1.8 2.5 3.8 2.5 6S9.7 12.2 8 14M8 2C6.3 3.8 5.5 5.8 5.5 8s.8 4.2 2.5 6"/></g></svg></span><button class="parts" type="button" aria-label="2 parts: Analytics proxy, sankha-analytics.js"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>2 parts</button><div class="pop" role="tooltip"><b>Built from</b><ul><li>Analytics proxy<span><i class="k">Apps Script over the GA4 Data API · </i><code>analytics-sankhacooray-com</code></span></li><li>sankha-analytics.js<span><i class="k">Page beacon and badge · </i><code>cdn-sankhacooray-com</code></span></li></ul></div><a class="open" href="https://github.com/sankhacooray/analytics-sankhacooray-com" target="_blank" rel="noopener">GitHub</a></div></div></article></div>
   </div>
-  <div class="cosmic-legend">
-    <span><span style="color:var(--accent)">●</span> touched this week</span>
-    <span><span style="color:var(--teal)">●</span> touched this month</span>
-    <span><span style="color:var(--text-muted)">●</span> older</span>
+  </section>
+  <section class="group last solo" id="activity"><div class="wrap">
+    <div class="ghead"><div><h2>Activity</h2><p>A live view of what I&#x27;m building, drawn from the GitHub API and refreshed every hour.</p></div><div class="ctx">GitHub GraphQL · cached 1 h</div></div>
+    <div class="cards" style="--n:3"><article class="card"><div class="art"><img src="/thumbs/activity-lab.jpg" alt="The lab" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>The lab</h3></div><p>Every live sub-site as a tile, with a pulse on the ones pushed to in the last seven days.</p><div class="cfoot"><span class="plats"><svg class="pi pi-web" viewBox="0 0 16 16" role="img" aria-label="Web"><title>Web</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c1.7 1.8 2.5 3.8 2.5 6S9.7 12.2 8 14M8 2C6.3 3.8 5.5 5.8 5.5 8s.8 4.2 2.5 6"/></g></svg></span><button class="parts" type="button" aria-label="2 parts: Activity page, GitHub proxy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>2 parts</button><div class="pop" role="tooltip"><b>Built from</b><ul><li>Activity page<span><i class="k">Static page, vanilla JS · </i><code>dev-sankhacooray-com</code></span></li><li>GitHub proxy<span><i class="k">Apps Script, caches GraphQL for 1 h · </i><code>dev-sankhacooray-com-proxy</code></span></li></ul></div><a class="open" href="/activity/">Open</a></div></div></article><article class="card"><div class="art"><img src="/thumbs/activity-cosmos.jpg" alt="Code cosmos" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>Code cosmos</h3></div><p>Each repository as a star in a 360° sky: brighter for recent work, bigger for more activity.</p><div class="cfoot"><span class="plats"><svg class="pi pi-web" viewBox="0 0 16 16" role="img" aria-label="Web"><title>Web</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c1.7 1.8 2.5 3.8 2.5 6S9.7 12.2 8 14M8 2C6.3 3.8 5.5 5.8 5.5 8s.8 4.2 2.5 6"/></g></svg></span><a class="open" href="/activity/#cosmic">Open</a></div></div></article><article class="card"><div class="art"><img src="/thumbs/activity-year.jpg" alt="One year, day by day" loading="lazy" width="800" height="420"></div><div class="cbody"><div class="ctop"><h3>One year, day by day</h3></div><p>A 365-day contribution canvas and the latest commits across every repository, freshest first.</p><div class="cfoot"><span class="plats"><svg class="pi pi-web" viewBox="0 0 16 16" role="img" aria-label="Web"><title>Web</title><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c1.7 1.8 2.5 3.8 2.5 6S9.7 12.2 8 14M8 2C6.3 3.8 5.5 5.8 5.5 8s.8 4.2 2.5 6"/></g></svg></span><a class="open" href="/activity/">Open</a></div></div></article></div>
   </div>
-  <button class="cosmic-close" id="cosmicClose" type="button" aria-label="Close cosmos">✕</button>
-  <button class="cosmic-motion" id="cosmicMotion" type="button" hidden>Enable motion to look around</button>
-</div>
+    <footer class="footer"><div class="wrap">
+      <span>dev · tools by Sankha Cooray</span>
+      <a href="https://sankhacooray.com">sankhacooray.com</a>
+      <a href="https://github.com/sankhacooray/dev-sankhacooray-com">Source</a>
+      <button class="info" id="roles-info" type="button" aria-label="About roles and links" aria-describedby="roles-msg">i</button>
+    </div></footer>
+  </section>
+
+</main>
+
+<div class="glass" id="glass" role="tooltip"><div class="msg" id="roles-msg"><b>Mine</b>: I built and run it. Everything on this page is mine, made under BSCLab and the sankhacooray network. Several repositories are private, so only live sites and public repositories are linked; the parts chip on a card names the repositories behind it. Years come from each project's commit history.</div></div>
 
 <script>
-const PROXY_URL = 'https://script.google.com/macros/s/AKfycbwE3X7K81BpihyxwlXHO_xvJJGVFLUbTS1eZH5slQAi_v7f0B51PYZqeymjnM_nfoBFow/exec';
-const CACHE_KEY = 'dev_sk_v1';
-const CACHE_TTL_MS = 30 * 60 * 1000;
-
-// Claude "developing now" status — the analytics proxy's /exec URL
-// (analytics-sankhacooray-com). Leave '' to keep the panel hidden until
-// the proxy is deployed. The ?source=claude slice is appended below.
-const CLAUDE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwvNZxtG3yOd2YUCDjRxUt9x9BcDP2St-ywC8WcecI_TcqirM3crgTW0qaR_712JTdhdw/exec';
-
-// ────────────────────────────────────────────── data
-let DATA = null;
-
-async function load() {
-  try {
-    const cached = readCache();
-    if (cached) { DATA = cached; render(); }
-    const fresh = await fetch(PROXY_URL).then(r => r.json());
-    if (fresh.error) throw new Error(fresh.error);
-    DATA = fresh;
-    writeCache(fresh);
-    render();
-  } catch (err) {
-    if (!DATA) showError(err.message);
-    console.error(err);
+/* screen-fit + ↑/↓ paging (ui-ux-style rules 1, 2), scrollspy (22), deep links */
+(function(){
+  "use strict";
+  var scroller=document.body,topbar=document.querySelector(".topbar"),root=document.getElementById("home");
+  function barH(){return topbar?topbar.offsetHeight:0}
+  if(topbar&&window.ResizeObserver)new ResizeObserver(function(){document.documentElement.style.setProperty("--bar-h",barH()+"px")}).observe(topbar);
+  var natural=[];
+  function layout(){
+    var gs=[].slice.call(root.querySelectorAll(".group")),avail=scroller.clientHeight-barH();
+    /* hold the page height while re-measuring, so the reader's scroll position can't be clamped */
+    var keep=scroller.scrollTop;root.style.minHeight=root.offsetHeight+"px";
+    gs.forEach(function(g){g.style.minHeight=""});
+    if(window.innerWidth<=900){gs.forEach(function(g){g.classList.add("screen")});root.style.minHeight="";return}
+    var hs=gs.map(function(g){return g.getBoundingClientRect().height}),screens=[],cur=null;natural=hs;
+    gs.forEach(function(g,i){var solo=g.hasAttribute("data-solo")||(cur&&cur.solo);
+      if(cur&&!solo&&cur.sum+hs[i]<=avail+1){cur.items.push(i);cur.sum+=hs[i]}else{cur={items:[i],sum:hs[i],solo:g.hasAttribute("data-solo")};screens.push(cur)}});
+    screens.forEach(function(sc){var extra=Math.max(0,avail-sc.sum)/sc.items.length;sc.items.forEach(function(i,k){gs[i].style.minHeight=(hs[i]+extra)+"px";gs[i].classList.toggle("screen",k===0)})});
+    root.style.minHeight="";if(scroller.scrollTop!==keep)scroller.scrollTop=keep;
+    if(hashUntil&&!userMoved&&Date.now()<hashUntil)toHash();
   }
-}
-function readCache() {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY); if (!raw) return null;
-    const { ts, data } = JSON.parse(raw);
-    if (Date.now() - ts > CACHE_TTL_MS) return null;
-    return data;
-  } catch { return null; }
-}
-function writeCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
-}
-function showError(msg) {
-  const el = document.createElement('div');
-  el.className = 'error-banner';
-  el.textContent = 'Live data unavailable: ' + msg + ' — showing skeleton.';
-  document.querySelector('main').prepend(el);
-}
-
-// ────────────────────────────────────────────── render
-function render() {
-  if (!DATA) return;
-  // header
-  if (DATA.user) {
-    const a = document.getElementById('avatar');
-    a.src = DATA.user.avatar; a.classList.remove('skeleton');
-    if (DATA.user.bio) document.getElementById('bio').textContent = DATA.user.bio;
-    if (DATA.user.login) document.getElementById('link-gh').textContent = 'github.com/' + DATA.user.login;
-  }
-  // stats
-  if (DATA.totals) {
-    document.getElementById('s-contrib').textContent = fmt(DATA.totals.commitsLast12Months);
-    document.getElementById('s-repos').textContent = fmt(DATA.totals.reposWithCommits);
-    document.getElementById('s-streak').textContent = fmt(DATA.totals.currentStreak);
-    document.getElementById('s-longest').textContent = fmt(DATA.totals.longestStreak);
-  }
-  renderLab();
-  renderCommits();
-  renderCalendar();
-  renderRhythmSummary();
-  if (cosmicOpen) buildCosmicStars();   // refresh the cosmos if it's open when fresh data lands
-  if (DATA.generatedAt) {
-    document.getElementById('generated').textContent = relTime(DATA.generatedAt);
-  }
-}
-
-function fmt(n) { return n == null ? '—' : n.toString(); }
-function relTime(iso) {
-  const d = new Date(iso); const s = Math.floor((Date.now() - d) / 1000);
-  if (s < 60) return s + 's ago';
-  if (s < 3600) return Math.floor(s/60) + 'm ago';
-  if (s < 86400) return Math.floor(s/3600) + 'h ago';
-  return Math.floor(s/86400) + 'd ago';
-}
-function daysAgo(iso) { return Math.floor((Date.now() - new Date(iso)) / 86400000); }
-
-// ────────────────────────────────────────────── LAB · grid of repos
-function renderLab() {
-  const grid = document.getElementById('lab-grid');
-  // Show *-sankhacooray-com tiles first (the "lab"), then top user repos
-  const labRepos = (DATA.orgRepos || []).filter(r => r.name.endsWith('-sankhacooray-com') || (DATA.orgRepos || []).length < 8);
-  const others = (DATA.orgRepos || []).filter(r => !labRepos.includes(r));
-  const list = [...labRepos, ...others].slice(0, 24);
-  if (!list.length) { grid.innerHTML = '<p class="muted">no repos loaded</p>'; return; }
-  grid.innerHTML = list.map(r => {
-    const da = daysAgo(r.pushedAt);
-    const fresh = da <= 7;
-    const subdomain = r.name.replace(/-sankhacooray-com$/, '');
-    const displayName = r.name.endsWith('-sankhacooray-com')
-      ? subdomain + '<span style="color:var(--text-muted)">.sankhacooray.com</span>'
-      : r.name;
-    return `
-      <a class="lab-tile ${fresh ? 'fresh' : ''}" href="${r.url}" target="_blank" rel="noopener">
-        ${fresh ? '<span class="pulse"></span>' : ''}
-        <div class="tname">${displayName}</div>
-        <div class="tdesc">${escapeHtml(r.description || '')}</div>
-        <div class="tmeta">
-          <span>${r.language ? `<span class="lang-dot" style="background:${r.languageColor||'#888'}"></span>${r.language}` : ''}</span>
-          <span>${da === 0 ? 'today' : da + 'd'}</span>
-        </div>
-      </a>`;
-  }).join('');
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-// ────────────────────────────────────────────── LAB · commit feed
-function renderCommits() {
-  const ul = document.getElementById('commit-feed');
-  const list = (DATA.recentCommits || []).slice(0, 25);
-  if (!list.length) { ul.innerHTML = '<li class="muted">no recent commits</li>'; return; }
-  ul.innerHTML = list.map(c => {
-    const da = daysAgo(c.committedDate);
-    const fresh = da <= 1;
-    return `
-      <li class="${fresh ? 'fresh' : ''}">
-        <div class="cmsg">${escapeHtml(c.messageHeadline)}</div>
-        <div class="cmeta">
-          <a href="${c.url}" target="_blank" rel="noopener">${c.repoOwner}/${c.repoName}</a>
-          · ${relTime(c.committedDate)}
-          · ${c.oid.slice(0,7)}
-        </div>
-      </li>`;
-  }).join('');
-}
-
-// ────────────────────────────────────────────── LAB · contribution calendar
-function renderCalendar() {
-  const svg = document.getElementById('calendar-svg');
-  const days = (DATA.contributionCalendar && DATA.contributionCalendar.days) || [];
-  if (!days.length) { svg.innerHTML = ''; return; }
-  const cell = 11, gap = 2;
-  const weeks = Math.ceil(days.length / 7);
-  const w = weeks * (cell + gap) + 30, h = 7 * (cell + gap) + 20;
-  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-  svg.setAttribute('width', w);
-  svg.setAttribute('height', h);
-
-  // colour ramp — saffron scale
-  const max = Math.max(1, ...days.map(d => d.contributionCount));
-  function color(n) {
-    if (n === 0) return '#1c1a14';
-    const t = Math.min(1, n / Math.max(4, max * 0.6));
-    // interpolate from dim accent to bright accent
-    const dim = [50, 33, 22], bright = [232, 152, 92];
-    const c = dim.map((d, i) => Math.round(d + (bright[i] - d) * t));
-    return `rgb(${c.join(',')})`;
-  }
-
-  const firstWeekday = new Date(days[0].date).getDay(); // 0=Sun
-  let svgChildren = '';
-  // weekday labels
-  ['Mon','Wed','Fri'].forEach((lbl, i) => {
-    const wIdx = [1,3,5][i];
-    const y = 12 + wIdx * (cell + gap) + cell - 2;
-    svgChildren += `<text class="cal-weekday-label" x="0" y="${y}">${lbl}</text>`;
-  });
-  // month labels
-  let lastMonth = -1;
-  days.forEach((d, i) => {
-    const date = new Date(d.date);
-    const wIdx = Math.floor((i + firstWeekday) / 7);
-    const dIdx = (i + firstWeekday) % 7;
-    if (date.getDate() <= 7 && date.getMonth() !== lastMonth) {
-      lastMonth = date.getMonth();
-      const x = 22 + wIdx * (cell + gap);
-      svgChildren += `<text class="cal-month-label" x="${x}" y="9">${date.toLocaleString('en',{month:'short'}).toLowerCase()}</text>`;
-    }
-    const x = 22 + wIdx * (cell + gap);
-    const y = 12 + dIdx * (cell + gap);
-    svgChildren += `<rect class="cal-cell" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${color(d.contributionCount)}"><title>${d.date} · ${d.contributionCount}</title></rect>`;
-  });
-  svg.innerHTML = svgChildren;
-}
-
-// ────────────────────────────────────────────── RHYTHM · flattened summary
-function renderRhythmSummary() {
-  if (!DATA || !DATA.hoursOfDay) return;
-  const h = DATA.hoursOfDay;
-  const total = h.reduce((a, b) => a + b, 0);
-  const peakIdx = h.indexOf(Math.max(...h));
-  document.getElementById('peak-hour').textContent = formatHour(peakIdx) + ' SGT';
-  document.getElementById('rhythm-n').textContent = total;
-}
-function formatHour(h) {
-  if (h === 0) return 'midnight';
-  if (h === 12) return 'noon';
-  return (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
-}
-
-// ════════════════════════════════════════════════════════════════════════
-// COSMIC · full-screen 360° starfield
-// Every repo is a star fixed on a unit sphere around the viewer. You navigate
-// by rotating the camera: on desktop, push the cursor to a screen edge to fly
-// along that bearing (auto-scroll); on mobile, the device-orientation sensors
-// steer the camera so you physically point the phone around the room. The
-// camera orientation is held as a QUATERNION end-to-end, so the device path
-// never gimbal-locks (no Euler-angle singularity at the poles).
-// ════════════════════════════════════════════════════════════════════════
-function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
-
-// ---- tiny quaternion / vector kit (components ordered x,y,z,w) ----
-function qMul(a, b) {
-  return [
-    a[3]*b[0] + a[0]*b[3] + a[1]*b[2] - a[2]*b[1],
-    a[3]*b[1] - a[0]*b[2] + a[1]*b[3] + a[2]*b[0],
-    a[3]*b[2] + a[0]*b[1] - a[1]*b[0] + a[2]*b[3],
-    a[3]*b[3] - a[0]*b[0] - a[1]*b[1] - a[2]*b[2]
-  ];
-}
-function qConj(q) { return [-q[0], -q[1], -q[2], q[3]]; }
-function qAxisAngle(ax, ay, az, ang) {
-  const h = ang / 2, s = Math.sin(h);
-  return [ax*s, ay*s, az*s, Math.cos(h)];
-}
-function qRotate(q, v) {                 // rotate vector v by quaternion q
-  const x = v[0], y = v[1], z = v[2];
-  const qx = q[0], qy = q[1], qz = q[2], qw = q[3];
-  const tx = 2*(qy*z - qz*y);
-  const ty = 2*(qz*x - qx*z);
-  const tz = 2*(qx*y - qy*x);
-  return [
-    x + qw*tx + (qy*tz - qz*ty),
-    y + qw*ty + (qz*tx - qx*tz),
-    z + qw*tz + (qx*ty - qy*tx)
-  ];
-}
-// Euler (YXZ order) → quaternion — the convention the orientation sensors use.
-function qFromEulerYXZ(x, y, z) {
-  const c1 = Math.cos(x/2), c2 = Math.cos(y/2), c3 = Math.cos(z/2);
-  const s1 = Math.sin(x/2), s2 = Math.sin(y/2), s3 = Math.sin(z/2);
-  return [
-    s1*c2*c3 + c1*s2*s3,
-    c1*s2*c3 - s1*c2*s3,
-    c1*c2*s3 - s1*s2*c3,
-    c1*c2*c3 + s1*s2*s3
-  ];
-}
-const DEG = Math.PI / 180;
-const Q_SCREEN = [-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)];   // tip camera to look out the back of the device
-
-// ---- module state ----
-let cosmicOpen = false;
-let cosmicRAF = 0;
-let cosmic = null;
-
-const overlayEl = document.getElementById('cosmicOverlay');
-const fabEl     = document.getElementById('cosmicFab');
-const closeEl   = document.getElementById('cosmicClose');
-const motionEl  = document.getElementById('cosmicMotion');
-
-function buildCosmicStars() {
-  if (!cosmic || !DATA) return;
-  const all = [...(DATA.orgRepos || []), ...(DATA.userRepos || [])];
-  if (!all.length) { cosmic.stars = []; }
-  const max = Math.max(1, ...all.map(r => (r.recentCommits||[]).length + (r.stars || 0)));
-  const n = all.length;
-  // Fibonacci sphere — scatter repos evenly across the full 360° × 180°.
-  const golden = Math.PI * (3 - Math.sqrt(5));
-  cosmic.stars = all.map((r, i) => {
-    const y = n > 1 ? 1 - (i / (n - 1)) * 2 : 0;       // -1 … 1 (pole to pole)
-    const rad = Math.sqrt(Math.max(0, 1 - y*y));
-    const theta = i * golden + (hash(r.name) % 360) * DEG * 0.05;
-    const dir = [Math.cos(theta) * rad, y, Math.sin(theta) * rad];
-    const da = daysAgo(r.pushedAt);
-    const importance = ((r.recentCommits||[]).length * 4 + (r.stars||0) + 1) / (max + 1);
-    let color;
-    if (da <= 7)       color = '#e8985c';
-    else if (da <= 30) color = '#6fb8ad';
-    else               color = '#6f6957';
-    return { r, dir, da, color, size: 1.6 + importance * 4.4, tw: (hash(r.name + 't') % 100) / 100 };
-  });
-  // decorative background field, also distributed across the sphere
-  const pix = [];
-  for (let i = 0; i < 320; i++) {
-    const y = 1 - (i / 319) * 2;
-    const rad = Math.sqrt(Math.max(0, 1 - y*y));
-    const theta = i * golden;
-    pix.push({ dir: [Math.cos(theta) * rad, y, Math.sin(theta) * rad],
-               s: 0.4 + (i % 7) / 7 * 1.1, a: 0.16 + (i % 5) / 5 * 0.42, tw: (i % 13) / 13 });
-  }
-  cosmic.pixies = pix;
-}
-
-function sizeCosmicCanvas() {
-  if (!cosmic) return;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const w = window.innerWidth, h = window.innerHeight;
-  cosmic.canvas.width = w * dpr;
-  cosmic.canvas.height = h * dpr;
-  cosmic.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  cosmic.w = w; cosmic.h = h; cosmic.dpr = dpr;
-  cosmic.focal = (h / 2) / Math.tan((cosmic.fov * DEG) / 2);
-}
-
-function openCosmic() {
-  if (cosmicOpen) return;
-  const canvas = document.getElementById('cosmic-canvas');
-  const ctx = canvas.getContext('2d');
-  cosmic = {
-    canvas, ctx, tip: document.getElementById('cosmic-tip'),
-    stars: [], pixies: [],
-    yaw: 0, pitch: 0,                  // free-look camera (radians)
-    camQ: [0, 0, 0, 1],
-    mode: 'free',                      // 'free' (mouse/touch) | 'motion' (sensors)
-    mouse: { x: -1, y: -1, inside: false },
-    focused: null, t: 0, fov: 72
+  var raf=0;function relayout(){cancelAnimationFrame(raf);raf=requestAnimationFrame(layout)}
+  if(window.ResizeObserver){new ResizeObserver(relayout).observe(scroller);
+    [].forEach.call(root.querySelectorAll(".group"),function(g){new ResizeObserver(function(){if(!g.style.minHeight||g.scrollHeight>parseFloat(g.style.minHeight)+1)relayout()}).observe(g)})}
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(relayout);
+  window.addEventListener("load",relayout);
+  var target=null;scroller.addEventListener("scrollend",function(){target=null});
+  function stops(){return [].map.call(root.querySelectorAll(".screen"),function(s){return Math.round(s.getBoundingClientRect().top+scroller.scrollTop-barH())})}
+  function pageBy(dir){var pos=target!=null?target:scroller.scrollTop,step=scroller.clientHeight-barH(),max=scroller.scrollHeight-scroller.clientHeight,s=stops(),dest;
+    if(dir>0){var nx=s.filter(function(t){return t>pos+4})[0];dest=Math.min(nx!=null?nx:max,pos+step)}else{var pv=s.filter(function(t){return t<pos-4}).pop();dest=Math.max(pv!=null?pv:0,pos-step)}
+    dest=Math.min(Math.max(dest,0),max);if(dest===Math.round(pos))return;target=dest;scroller.scrollTo({top:dest,behavior:"smooth"})}
+  document.addEventListener("keydown",function(e){if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+    var t=e.target instanceof Element?e.target:null;if(t&&t.closest('input,textarea,select,[role="slider"],[contenteditable]'))return;e.preventDefault();pageBy(e.key==="ArrowDown"?1:-1)});
+  /* deep links (#projects) land under the app bar once layout settles */
+  function toHash(){var id=location.hash.slice(1);if(!/^[\w-]+$/.test(id))return;var el=document.getElementById(id);if(!el)return;
+    scroller.scrollTop=0;scroller.scrollTo({top:el.getBoundingClientRect().top-barH()})}
+  var hashUntil=location.hash?Date.now()+2500:0,userMoved=false;
+  ["wheel","touchstart","keydown"].forEach(function(ev){window.addEventListener(ev,function(){userMoved=true},{passive:true,once:true})});
+  relayout();
+  /* scrollspy: the topic filling the view is current; on the last screen, the last topic */
+  var links=[].slice.call(document.querySelectorAll('.nav a[href^="#"]')),spyRaf=0;
+  /* topics that share one row on screen are all current */
+  function spy(){spyRaf=0;var line=barH()+(scroller.clientHeight-barH())*0.4;
+    var tops=links.map(function(a){var el=document.querySelector(a.getAttribute("href"));return el?el.getBoundingClientRect().top:1e9});
+    var curTop=null;tops.forEach(function(tp){if(tp<=line&&(curTop===null||tp>curTop+4))curTop=tp});
+    if(scroller.scrollTop+scroller.clientHeight>=scroller.scrollHeight-2)curTop=tops[tops.length-1];
+    links.forEach(function(a,i){if(curTop!==null&&Math.abs(tops[i]-curTop)<=4)a.setAttribute("aria-current","true");else a.removeAttribute("aria-current")})}
+  scroller.addEventListener("scroll",function(){if(!spyRaf)spyRaf=requestAnimationFrame(spy)},{passive:true});
+  window.addEventListener("load",spy);
+  /* in-page links scroll the body scroller */
+  document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var id=a.getAttribute("href");
+    var el=id==="#top"?root:document.querySelector(id);if(!el)return;e.preventDefault();
+    scroller.scrollTo({top:id==="#top"?0:el.getBoundingClientRect().top+scroller.scrollTop-barH(),behavior:"smooth"})});
+  window.__screenFit={relayout:relayout,layout:layout,pageBy:pageBy,natural:function(){return natural}};
+})();
+/* ambient particles: faint developer glyphs (braces, prompts, branches, puzzle pieces) drifting on a slow random walk */
+(function(){
+  var cv=document.getElementById("bg");if(!cv||!cv.getContext)return;
+  var ctx=cv.getContext("2d"),dpr=1,W=0,H=0,parts=[],color="#0b7a55",raf=0,last=0;
+  var still=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var P={
+    prompt:"M4 7l5 5-5 5M12 18h8",
+    braces:"M9 4c-2 0-3 1-3 3v2c0 1.5-1 3-2.5 3C5 12 6 13.5 6 15v2c0 2 1 3 3 3M15 4c2 0 3 1 3 3v2c0 1.5 1 3 2.5 3-1.5 0-2.5 1.5-2.5 3v2c0 2-1 3-3 3",
+    tag:"M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16",
+    branch:"M6 3v12M6 15a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 9c0 5-6 4-12 9",
+    puzzle:"M5 8h3a2 2 0 1 1 4 0h3v3a2 2 0 1 1 0 4v4H5v-4a2 2 0 1 0 0-4z",
+    gear:"M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1",
+    phone:"M7.5 2.5h9a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 20V4a1.5 1.5 0 0 1 1.5-1.5zM10.5 18.5h3",
+    laptop:"M5 5h14v10H5zM2.5 19h19",
+    plug:"M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"
   };
-  buildCosmicStars();
-  sizeCosmicCanvas();
-
-  overlayEl.hidden = false;
-  overlayEl.setAttribute('aria-hidden', 'false');
-  requestAnimationFrame(() => overlayEl.classList.add('show'));
-  cosmicOpen = true;
-  document.body.style.overflow = 'hidden';
-  if (location.hash !== '#cosmic') history.pushState(null, '', '#cosmic');
-
-  bindCosmicInput();
-  maybeOfferMotion();
-  cancelAnimationFrame(cosmicRAF);
-  cosmicLoop();
-}
-
-function closeCosmic(fromPop) {
-  if (!cosmicOpen) return;
-  cosmicOpen = false;
-  cancelAnimationFrame(cosmicRAF);
-  overlayEl.classList.remove('show');
-  document.body.style.overflow = '';
-  unbindCosmicInput();
-  setTimeout(() => { if (!cosmicOpen) { overlayEl.hidden = true; overlayEl.setAttribute('aria-hidden', 'true'); } }, 340);
-  if (!fromPop && location.hash === '#cosmic') history.replaceState(null, '', location.pathname + location.search);
-}
-
-// ---- input: trackpad wheel + mouse drag (desktop) + touch (mobile) ----
-const COSMIC_DRAG_THRESH = 5;   // px moved before a press counts as a drag, not a click
-function cosmicPointerMove(e) {
-  cosmic.mouse.x = e.clientX; cosmic.mouse.y = e.clientY; cosmic.mouse.inside = true;
-  if (cosmic._drag) {
-    const dx = e.clientX - cosmic._dx, dy = e.clientY - cosmic._dy;
-    cosmic.yaw   -= dx * 0.0042;        // drag-the-sky: content follows the cursor
-    cosmic.pitch -= dy * 0.0042;
-    cosmic._dx = e.clientX; cosmic._dy = e.clientY;
-    if (Math.abs(e.clientX - cosmic._d0x) + Math.abs(e.clientY - cosmic._d0y) > COSMIC_DRAG_THRESH) cosmic._moved = true;
+  var paths={};for(var k in P)paths[k]=new Path2D(P[k]);
+  var GLYPHS=["$","~/","&&","{}","0x1F","npm","git","MCP","=>"];
+  var KINDS=Object.keys(P).concat(GLYPHS.map(function(g){return "t:"+g}));
+  function rnd(a,b){return a+Math.random()*(b-a)}
+  function readColor(){var c=getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();if(c)color=c}
+  function make(){var depth=Math.random();return{
+    k:KINDS[(Math.random()*KINDS.length)|0],x:rnd(0,W),y:rnd(0,H),
+    s:18+depth*22,a:.05+depth*.07,dir:rnd(0,Math.PI*2),sp:rnd(.06,.22)*(0.6+depth),
+    r:rnd(0,Math.PI*2),vr:rnd(-.0025,.0025)}}
+  function size(){
+    dpr=Math.min(window.devicePixelRatio||1,2);W=window.innerWidth;H=window.innerHeight;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    var want=Math.max(12,Math.min(46,Math.round(W*H/36000)));
+    while(parts.length<want)parts.push(make());parts.length=want;
+    parts.forEach(function(p){if(p.x>W+40)p.x=rnd(0,W);if(p.y>H+40)p.y=rnd(0,H)});
   }
-}
-function cosmicPointerLeave() { cosmic.mouse.inside = false; cosmic._drag = false; }
-function cosmicMouseDown(e) {
-  if (e.button !== 0) return;
-  cosmic._drag = true; cosmic._moved = false;
-  cosmic._dx = cosmic._d0x = e.clientX; cosmic._dy = cosmic._d0y = e.clientY;
-}
-function cosmicMouseUp() { cosmic._drag = false; }
-// Trackpad two-finger swipe (and mouse wheel) → glide across the 360° in any direction.
-function cosmicWheel(e) {
-  if (cosmic.mode === 'motion') return;
-  e.preventDefault();
-  const k = 0.0024;
-  cosmic.yaw   += e.deltaX * k;
-  cosmic.pitch += e.deltaY * k;
-}
-function cosmicClick() {
-  if (cosmic._moved) { cosmic._moved = false; return; }   // swallow the click that ends a drag
-  if (cosmic.focused) window.open(cosmic.focused.r.url, '_blank', 'noopener');
-}
-function cosmicKey(e) { if (e.key === 'Escape') closeCosmic(); }
-function cosmicTouchStart(e) { if (e.touches.length) { cosmic._tx = e.touches[0].clientX; cosmic._ty = e.touches[0].clientY; } }
-function cosmicTouchMove(e) {
-  if (cosmic.mode === 'motion' || !e.touches.length) return;   // sensors win when active
-  const tx = e.touches[0].clientX, ty = e.touches[0].clientY;
-  cosmic.yaw   -= (tx - cosmic._tx) * 0.004;
-  cosmic.pitch += (ty - cosmic._ty) * 0.004;
-  cosmic._tx = tx; cosmic._ty = ty;
-  e.preventDefault();
-}
-function bindCosmicInput() {
-  cosmic.canvas.addEventListener('mousemove', cosmicPointerMove);
-  cosmic.canvas.addEventListener('mouseleave', cosmicPointerLeave);
-  cosmic.canvas.addEventListener('mousedown', cosmicMouseDown);
-  window.addEventListener('mouseup', cosmicMouseUp);
-  cosmic.canvas.addEventListener('wheel', cosmicWheel, { passive: false });
-  cosmic.canvas.addEventListener('click', cosmicClick);
-  cosmic.canvas.addEventListener('touchstart', cosmicTouchStart, { passive: true });
-  cosmic.canvas.addEventListener('touchmove', cosmicTouchMove, { passive: false });
-  window.addEventListener('keydown', cosmicKey);
-  window.addEventListener('resize', sizeCosmicCanvas);
-}
-function unbindCosmicInput() {
-  if (!cosmic) return;
-  cosmic.canvas.removeEventListener('mousemove', cosmicPointerMove);
-  cosmic.canvas.removeEventListener('mouseleave', cosmicPointerLeave);
-  cosmic.canvas.removeEventListener('mousedown', cosmicMouseDown);
-  window.removeEventListener('mouseup', cosmicMouseUp);
-  cosmic.canvas.removeEventListener('wheel', cosmicWheel);
-  cosmic.canvas.removeEventListener('click', cosmicClick);
-  cosmic.canvas.removeEventListener('touchstart', cosmicTouchStart);
-  cosmic.canvas.removeEventListener('touchmove', cosmicTouchMove);
-  window.removeEventListener('keydown', cosmicKey);
-  window.removeEventListener('resize', sizeCosmicCanvas);
-  if (cosmic._orient) window.removeEventListener('deviceorientation', cosmic._orient, true);
-}
-
-// ---- device orientation (mobile) — gimbal-lock-free via quaternion compose ----
-function deviceCamQuat(alpha, beta, gamma, orient) {
-  let q = qFromEulerYXZ(beta, alpha, -gamma);   // raw sensor frame
-  q = qMul(q, Q_SCREEN);                          // look out through the screen
-  q = qMul(q, qAxisAngle(0, 0, 1, -orient));      // correct for screen rotation
-  return q;
-}
-function startMotion() {
-  const handler = (e) => {
-    if (e.alpha == null && e.beta == null && e.gamma == null) return;
-    const orient = (screen.orientation && screen.orientation.angle != null
-                    ? screen.orientation.angle : (window.orientation || 0)) * DEG;
-    cosmic.camQ = deviceCamQuat((e.alpha||0)*DEG, (e.beta||0)*DEG, (e.gamma||0)*DEG, orient);
-    cosmic.mode = 'motion';
-    document.getElementById('cosmic-hint').textContent =
-      'point your phone around the room to look across the cosmos · tap a centred star to open it';
-  };
-  cosmic._orient = handler;
-  window.addEventListener('deviceorientation', handler, true);
-}
-function maybeOfferMotion() {
-  const hasOrient = 'DeviceOrientationEvent' in window;
-  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-  motionEl.hidden = true;
-  if (!hasOrient || !coarse) return;             // desktop: edge-pan only
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    // iOS 13+ needs an explicit permission request triggered by a user gesture.
-    motionEl.hidden = false;
-    motionEl.onclick = () => {
-      DeviceOrientationEvent.requestPermission()
-        .then((res) => { motionEl.hidden = true; if (res === 'granted') startMotion(); })
-        .catch(() => { motionEl.hidden = true; });
-    };
-  } else {
-    startMotion();                               // Android / older iOS: just listen
-  }
-}
-
-// ---- per-frame camera update (free-look driven by trackpad / drag / touch) ----
-function updateFreeCamera() {
-  if (cosmic.mode === 'motion') return;
-  const lim = 80 * DEG;                            // stay shy of the poles
-  cosmic.pitch = Math.max(-lim, Math.min(lim, cosmic.pitch));
-  cosmic.camQ = qMul(qAxisAngle(0, 1, 0, cosmic.yaw), qAxisAngle(1, 0, 0, cosmic.pitch));
-}
-
-// ---- render ----
-function projectDir(dir) {
-  const v = qRotate(qConj(cosmic.camQ), dir);     // world → camera space
-  if (v[2] >= -0.05) return null;                 // behind / >~87° off-axis
-  const f = cosmic.focal;
-  return { x: cosmic.w/2 + (v[0] / -v[2]) * f, y: cosmic.h/2 - (v[1] / -v[2]) * f, depth: -v[2] };
-}
-function cosmicLoop() {
-  if (!cosmicOpen || !cosmic) return;
-  cosmic.t++;
-  if (cosmic.mode !== 'motion') updateFreeCamera();
-  const { ctx, w, h, t } = cosmic;
-  ctx.clearRect(0, 0, w, h);
-
-  // background field
-  ctx.fillStyle = '#f3eedf';
-  for (const p of cosmic.pixies) {
-    const s = projectDir(p.dir);
-    if (!s) continue;
-    ctx.globalAlpha = p.a * (0.55 + 0.45 * Math.sin(t * 0.02 + p.tw * 30));
-    ctx.beginPath(); ctx.arc(s.x, s.y, p.s, 0, Math.PI*2); ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  // repo stars
-  const cx = w/2, cy = h/2;
-  const drawn = [];
-  let focus = null, focusD = 1e9;
-  for (const st of cosmic.stars) {
-    const s = projectDir(st.dir);
-    if (!s) continue;
-    if (s.x < -120 || s.x > w + 120 || s.y < -120 || s.y > h + 120) continue;
-    const pr = Math.max(1.5, st.size * (0.7 + 0.55 * s.depth));
-    const dd = Math.hypot(s.x - cx, s.y - cy);
-    if (dd < 90 && dd < focusD) { focusD = dd; focus = { st, s, pr }; }   // reticle focus
-    drawn.push({ st, s, pr });
-  }
-  drawn.sort((a, b) => b.s.depth - a.s.depth);     // far → near
-  for (const d of drawn) {
-    const { st, s, pr } = d;
-    const tw = 0.75 + 0.25 * Math.sin(t * 0.03 + st.tw * 30);
-    const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, pr * 4);
-    grd.addColorStop(0, st.color); grd.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.globalAlpha = 0.4 * tw; ctx.fillStyle = grd;
-    ctx.beginPath(); ctx.arc(s.x, s.y, pr * 4, 0, Math.PI*2); ctx.fill();
-    ctx.globalAlpha = tw; ctx.fillStyle = st.color;
-    ctx.beginPath(); ctx.arc(s.x, s.y, pr, 0, Math.PI*2); ctx.fill();
-    if (pr > 3.4 || (focus && focus.st === st)) {
-      ctx.globalAlpha = (focus && focus.st === st) ? 1 : 0.5;
-      ctx.fillStyle = '#f3eedf';
-      ctx.font = '11px "JetBrains Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(shortRepo(st.r.name), s.x, s.y - pr - 6);
-    }
-  }
-  ctx.globalAlpha = 1;
-
-  // desktop: prefer the star under the cursor over the reticle pick
-  if (cosmic.mode === 'free' && cosmic.mouse.inside) {
-    let best = null, bestD = 26*26;
-    for (const d of drawn) {
-      const dx = d.s.x - cosmic.mouse.x, dy = d.s.y - cosmic.mouse.y, dd = dx*dx + dy*dy;
-      if (dd < bestD) { bestD = dd; best = d; }
-    }
-    if (best) focus = best;
-  }
-
-  cosmic.focused = focus ? focus.st : null;
-  overlayEl.classList.toggle('locked', !!cosmic.focused);
-  cosmic.canvas.style.cursor = cosmic._drag ? 'grabbing' : (cosmic.focused ? 'pointer' : 'grab');
-  updateCosmicTip(focus);
-
-  cosmicRAF = requestAnimationFrame(cosmicLoop);
-}
-
-function updateCosmicTip(focus) {
-  const tip = cosmic.tip;
-  if (!focus) { tip.classList.remove('show'); return; }
-  const st = focus.st, da = st.da;
-  tip.style.left = focus.s.x + 'px';
-  tip.style.top  = (focus.s.y - focus.pr - 8) + 'px';
-  tip.innerHTML =
-    '<div class="tt-name">' + escapeHtml(st.r.name) + '</div>' +
-    '<div class="tt-meta">' + escapeHtml(st.r.description || '—') + '</div>' +
-    '<div class="tt-meta">' + (da === 0 ? 'pushed today' : 'pushed ' + da + 'd ago') +
-      ' · ' + escapeHtml(st.r.language || 'n/a') + '</div>' +
-    '<div class="tt-open">' + (cosmic.mode === 'motion' ? 'tap to open ↗' : 'click to open ↗') + '</div>';
-  tip.classList.add('show');
-}
-function shortRepo(name) { return name.replace(/-sankhacooray-com$/, ' ·sc').replace(/-/g, ' '); }
-
-// ---- wiring ----
-fabEl.addEventListener('click', openCosmic);
-closeEl.addEventListener('click', () => closeCosmic());
-window.addEventListener('popstate', () => {
-  if (location.hash === '#cosmic') openCosmic();
-  else if (cosmicOpen) closeCosmic(true);
-});
-if (location.hash === '#cosmic') requestAnimationFrame(openCosmic);
-
-// ────────────────────────────────────────────── claude · developing now
-function fmtCompact(n) {
-  if (n == null) return '—';
-  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M';
-  if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'k';
-  return String(n);
-}
-
-async function loadClaude() {
-  if (!CLAUDE_PROXY_URL) return;
-  try {
-    const sep = CLAUDE_PROXY_URL.includes('?') ? '&' : '?';
-    const d = await fetch(CLAUDE_PROXY_URL + sep + 'source=claude', { cache: 'no-store' }).then(r => r.json());
-    if (!d || d.error) return;
-    renderClaude(d);
-  } catch (err) {
-    console.error('claude status', err);
-  }
-}
-
-function renderClaude(d) {
-  const block = document.getElementById('claude-block');
-  const card = document.getElementById('claude-card');
-  block.hidden = false;
-
-  const live = !!d.activeNow;
-  card.classList.toggle('live', live);
-  document.getElementById('claude-state').textContent =
-    live ? 'coding right now'
-         : (d.lastActiveAt ? 'last active ' + relTime(d.lastActiveAt) : 'idle');
-
-  document.getElementById('claude-tok-today').textContent = fmtCompact(d.tokens && d.tokens.today);
-  document.getElementById('claude-tok-week').textContent  = fmtCompact(d.tokens && d.tokens.week);
-  document.getElementById('claude-sess-week').textContent = fmt(d.sessions && d.sessions.week);
-}
-
-// ────────────────────────────────────────────── boot
-load();
-loadClaude();
-setInterval(loadClaude, 60 * 1000);   // keep the live dot honest
+  function draw(p){
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.globalAlpha=p.a;ctx.strokeStyle=color;ctx.fillStyle=color;
+    var sc=p.s/24;
+    if(p.k.indexOf("t:")===0){ctx.font="500 "+Math.round(p.s*.72)+"px 'JetBrains Mono', Menlo, monospace";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(p.k.slice(2),0,0)}
+    else{ctx.scale(sc,sc);ctx.translate(-12,-12);ctx.lineWidth=1.5/sc*1.1;ctx.lineCap="round";ctx.lineJoin="round";
+      if(p.k==="atom"){ctx.beginPath();ctx.arc(12,12,1.6,0,Math.PI*2);ctx.fill();for(var i=0;i<3;i++){ctx.beginPath();ctx.ellipse(12,12,9.5,3.6,i*Math.PI/3,0,Math.PI*2);ctx.stroke()}}
+      else ctx.stroke(paths[p.k])}
+    ctx.restore()}
+  function frame(t){
+    var dt=last?Math.min(48,t-last)/16.7:1;last=t;
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<parts.length;i++){var p=parts[i];
+      p.dir+=rnd(-.03,.03)*dt;p.x+=Math.cos(p.dir)*p.sp*dt;p.y+=Math.sin(p.dir)*p.sp*dt;p.r+=p.vr*dt;
+      var m=p.s;if(p.x<-m)p.x=W+m;else if(p.x>W+m)p.x=-m;if(p.y<-m)p.y=H+m;else if(p.y>H+m)p.y=-m;
+      draw(p)}
+    raf=requestAnimationFrame(frame)}
+  function start(){cancelAnimationFrame(raf);last=0;if(still){ctx.clearRect(0,0,W,H);parts.forEach(draw)}else raf=requestAnimationFrame(frame)}
+  readColor();size();start();
+  window.addEventListener("resize",function(){size();if(still)start()});
+  document.addEventListener("visibilitychange",function(){if(document.hidden)cancelAnimationFrame(raf);else start()});
+  new MutationObserver(function(){readColor();if(still)start()}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){readColor();if(still)start()});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(still)start()});
+})();
+/* parts chips: tap toggles on touch; Esc or a tap elsewhere closes */
+(function(){document.addEventListener("click",function(e){var p=e.target.closest(".parts");[].forEach.call(document.querySelectorAll(".parts.on"),function(x){if(x!==p)x.classList.remove("on")});if(p)p.classList.toggle("on")});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")[].forEach.call(document.querySelectorAll(".parts.on"),function(x){x.classList.remove("on")})})})();
+/* ⓘ: full-screen frosted note while hovering; tap toggles on touch (rule 18) */
+(function(){
+  var b=document.getElementById("roles-info"),g=document.getElementById("glass");if(!b||!g)return;
+  /* hover intent: open only after the pointer rests on the ⓘ, so passing over it does nothing */
+  var DELAY=400,timer=0;
+  function on(){clearTimeout(timer);g.classList.add("on")}function off(){clearTimeout(timer);g.classList.remove("on")}
+  function later(){clearTimeout(timer);timer=setTimeout(on,DELAY)}
+  b.addEventListener("mouseenter",later);b.addEventListener("mouseleave",off);b.addEventListener("focus",later);b.addEventListener("blur",off);
+  b.addEventListener("click",function(e){e.stopPropagation();g.classList.toggle("on")});
+  document.addEventListener("click",function(e){if(e.target!==b)off()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")off()});
+})();
+/* theme toggle shared with the sankhacooray.com family */
+(function(){var r=document.documentElement,K="sc-theme",mq=window.matchMedia("(prefers-color-scheme: dark)");function eff(){try{var s=localStorage.getItem(K);if(s==="light"||s==="dark")return s}catch(e){}return mq.matches?"dark":"light"}
+  var b=document.getElementById("theme-toggle");if(!b)return;
+  function label(){var l="Switch to "+(eff()==="dark"?"light":"dark")+" theme";b.setAttribute("aria-label",l);b.title=l}
+  label();if(mq.addEventListener)mq.addEventListener("change",label);
+  b.addEventListener("click",function(){var n=eff()==="dark"?"light":"dark";try{localStorage.setItem(K,n)}catch(e){}r.setAttribute("data-theme",n);label()})})();
 </script>
 <script async src="https://sankhacooray.com/js/sankha-analytics.js"></script>
-
-  <!-- Shared network footer · cdn.sankhacooray.com (auto-themes to this page) -->
-  <div id="scn-footer"></div>
-  <script async src="https://cdn.sankhacooray.com/js/sankha-footer.js?v=20260901"
-          data-site="dev.sankhacooray.com"></script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css">
+<style>.term{background:#0a0f0d;border-radius:16px;box-shadow:0 30px 60px -20px #000c,0 0 0 1px #ffffff1a;overflow:hidden;font-family:"JetBrains Mono",monospace;font-size:17px;line-height:1.75}
+.bar{height:38px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#ffffff0a}.bar i{width:12px;height:12px;border-radius:50%;background:#ffffff26}
+.body{padding:20px 24px 24px;color:#cfd9d4;white-space:pre}.p{color:#5fe0a6}.d{color:#7d8c85}.t{color:#9ad1ff}</style>
+<div><div class="k">MCP server · stdio</div><h1>Outlook <em>MCP</em></h1><p>Gives Claude Code read and write access to an Outlook.com mailbox through Microsoft Graph, with your own app registration.</p><div class="chips"><span class="chip">Node</span><span class="chip">Microsoft Graph</span><span class="chip">MSAL</span></div></div>
+<div class="term"><div class="bar"><i></i><i></i><i></i></div><div class="body"><span class="p">$</span> npm run login
+<span class="d">device code sign-in · token cache 0600</span>
+<span class="p">$</span> claude mcp add outlook --scope user
+<span class="d">tools</span>
+  <span class="t">search_mail</span>    <span class="t">read_mail</span>
+  <span class="t">list_folders</span>   <span class="t">mark_read</span>
+  <span class="t">move_mail</span>      <span class="t">create_draft</span>
+  <span class="t">send_draft</span></div></div>

@@ -1,0 +1,231 @@
+{
+  "roles": {
+    "mine": "Mine",
+    "co": "Co-owned",
+    "contrib": "Contributed"
+  },
+  "groups": [
+    {
+      "id": "extensions",
+      "title": "Browser extensions",
+      "lede": "Side panels and one-click helpers for browser chores.",
+      "context": "Chrome · Manifest V3",
+      "projects": [
+        {
+          "name": "Config Copilot",
+          "desc": "Fill web console forms from one config JSON, value by value or in one learned click.",
+          "plat": [
+            "chrome"
+          ],
+          "role": "mine",
+          "thumb": "config-copilot.jpg",
+          "years": "2026"
+        },
+        {
+          "name": "Tab Export",
+          "desc": "One click saves every open tab in the window as a .webloc or .url shortcut file.",
+          "plat": [
+            "chrome"
+          ],
+          "role": "mine",
+          "thumb": "tab-export.jpg",
+          "url": "https://github.com/bsc2fast/tab-export-mv3",
+          "urlLabel": "GitHub",
+          "years": "2026"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "title": "Mac, Android & MCP",
+      "lede": "Small native utilities and MCP servers that put the right data next to Claude.",
+      "context": "Swift · Kotlin · Node",
+      "projects": [
+        {
+          "name": "Claude Meter",
+          "desc": "Claude plan usage in the Mac menu bar: session, weekly and model limits at a glance.",
+          "plat": [
+            "mac"
+          ],
+          "role": "mine",
+          "thumb": "claude-meter.jpg",
+          "url": "https://aimeter.sankhacooray.com/",
+          "urlLabel": "Download",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Claude Meter",
+              "kind": "macOS menu bar app, Swift",
+              "repo": "claude-meter-macos"
+            },
+            {
+              "name": "aimeter",
+              "kind": "Download page on a Cloudflare Worker",
+              "repo": "aimeter-sankhacooray-com"
+            }
+          ]
+        },
+        {
+          "name": "Shotlink",
+          "desc": "Phone screenshots reach the Mac in seconds, encrypted, ready for Claude over MCP.",
+          "plat": [
+            "android",
+            "mac"
+          ],
+          "role": "mine",
+          "thumb": "shotlink.jpg",
+          "url": "https://shotlink.sankhacooray.com/",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Shotlink for Android",
+              "kind": "Phone app, Kotlin",
+              "repo": "shotlink-android"
+            },
+            {
+              "name": "Mac receiver + MCP server",
+              "kind": "Node daemon, launchd agent",
+              "repo": "shotlink-server"
+            },
+            {
+              "name": "Relay",
+              "kind": "Cloudflare Worker + Durable Object",
+              "repo": "shotlink-server/relay"
+            }
+          ]
+        },
+        {
+          "name": "Outlook MCP",
+          "desc": "A local MCP server that lets Claude Code search, read and draft Outlook.com mail.",
+          "plat": [
+            "term"
+          ],
+          "role": "mine",
+          "thumb": "outlook-mcp.jpg",
+          "years": "2026"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title": "The network's own plumbing",
+      "lede": "Shared pieces every *.sankhacooray.com site loads, so a fix in one place reaches them all.",
+      "context": "cdn · meta · analytics",
+      "projects": [
+        {
+          "name": "Shared components",
+          "desc": "Drop-in front-end modules every sub-site loads: the auto-theming footer, the analytics loader and chat.",
+          "plat": [
+            "web"
+          ],
+          "role": "mine",
+          "thumb": "cdn.jpg",
+          "url": "https://cdn.sankhacooray.com/",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Components",
+              "kind": "Footer, analytics, chat and weather scripts",
+              "repo": "cdn-sankhacooray-com"
+            },
+            {
+              "name": "Site assistant",
+              "kind": "Cloudflare Worker behind the chat widget",
+              "repo": "chat-sankhacooray-com"
+            },
+            {
+              "name": "Contact form",
+              "kind": "Apps Script backend",
+              "repo": "contact-sankhacooray-com"
+            }
+          ]
+        },
+        {
+          "name": "Link previews",
+          "desc": "Every sub-site as the share card you see when its link is pasted into WhatsApp, iMessage or Slack.",
+          "plat": [
+            "web"
+          ],
+          "role": "mine",
+          "thumb": "meta.jpg",
+          "url": "https://meta.sankhacooray.com/",
+          "years": "2026"
+        },
+        {
+          "name": "Visitor badge",
+          "desc": "One GA4 property for the whole network; each page shows its own visitors and its rank among siblings.",
+          "plat": [
+            "web"
+          ],
+          "role": "mine",
+          "thumb": "analytics.jpg",
+          "url": "https://github.com/sankhacooray/analytics-sankhacooray-com",
+          "urlLabel": "GitHub",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Analytics proxy",
+              "kind": "Apps Script over the GA4 Data API",
+              "repo": "analytics-sankhacooray-com"
+            },
+            {
+              "name": "sankha-analytics.js",
+              "kind": "Page beacon and badge",
+              "repo": "cdn-sankhacooray-com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "activity",
+      "title": "Activity",
+      "lede": "A live view of what I'm building, drawn from the GitHub API and refreshed every hour.",
+      "context": "GitHub GraphQL · cached 1 h",
+      "projects": [
+        {
+          "name": "The lab",
+          "desc": "Every live sub-site as a tile, with a pulse on the ones pushed to in the last seven days.",
+          "plat": [
+            "web"
+          ],
+          "thumb": "activity-lab.jpg",
+          "url": "/activity/",
+          "parts": [
+            {
+              "name": "Activity page",
+              "kind": "Static page, vanilla JS",
+              "repo": "dev-sankhacooray-com"
+            },
+            {
+              "name": "GitHub proxy",
+              "kind": "Apps Script, caches GraphQL for 1 h",
+              "repo": "dev-sankhacooray-com-proxy"
+            }
+          ]
+        },
+        {
+          "name": "Code cosmos",
+          "desc": "Each repository as a star in a 360° sky: brighter for recent work, bigger for more activity.",
+          "plat": [
+            "web"
+          ],
+          "thumb": "activity-cosmos.jpg",
+          "url": "/activity/#cosmic"
+        },
+        {
+          "name": "One year, day by day",
+          "desc": "A 365-day contribution canvas and the latest commits across every repository, freshest first.",
+          "plat": [
+            "web"
+          ],
+          "thumb": "activity-year.jpg",
+          "url": "/activity/"
+        }
+      ]
+    }
+  ],
+  "excluded": "Left out on purpose: Concur Copilot (expense claims), OTP Courier (bank OTPs from a personal mailbox), Nest Skim (home camera), Lookout and the auth gate (personal accounts, admin console), Doctor Lanka (medical), ytvault (private playlists, local only), shake-fixer (AHLab concept deck).",
+  "thumbsNote": "No Worker here (GitHub Pages), so thumbnails are files in thumbs/: live og:images for Claude Meter, Shotlink, cdn and meta; a store screenshot for Export Tabs; designed cards from thumbs-src/ for Config Copilot, Outlook MCP and the visitor badge; screenshots of /activity/ for the activity cards.",
+  "cardsNote": "Cards show only things people use. Backends and helper repos are listed as parts of their product (hover the parts chip)."
+}

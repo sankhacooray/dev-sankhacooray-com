@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>dev — Sankha Cooray · a small private lab</title>
+<meta name="description" content="Live view of what Sankha is making — a 365-day contribution canvas, the daily rhythm of commits, and a full-screen 360° cosmos of repos. Built from the GitHub GraphQL API.">
+<link rel="canonical" href="https://dev.sankhacooray.com/activity/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="dev — Sankha Cooray">
+<meta property="og:title" content="dev — Sankha Cooray · a small private lab">
+<meta property="og:description" content="Live view of what Sankha is making — a year of small daily experiments, with a 360° cosmos of every repo you can fly through.">
+<meta property="og:url" content="https://dev.sankhacooray.com/activity/">
+<meta property="og:image" content="https://dev.sankhacooray.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="dev — a live view of what Sankha Cooray is making, from the GitHub API">
+<meta property="og:locale" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="dev — Sankha Cooray · a small private lab">
+<meta name="twitter:description" content="A year of small daily experiments — with a 360° cosmos of every repo.">
+<meta name="twitter:image" content="https://dev.sankhacooray.com/assets/og-image.png">
+<meta name="twitter:image:alt" content="dev — a live view of what Sankha Cooray is making, from the GitHub API">
+
+<link rel="icon" type="image/svg+xml" href="../assets/icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0c0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="dev">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0d0c0a;
+  --surface: #15140f;
+  --surface-2: #1f1d16;
+  --border: #2b2820;
+  --border-soft: #1c1a14;
+  --text: #f3eedf;
+  --text-dim: #b3ab92;
+  --text-muted: #6f6957;
+  --accent: #e8985c;        /* saffron */
+  --accent-dim: #a86d3d;
+  --accent-soft: rgba(232,152,92,0.10);
+  --teal: #6fb8ad;          /* muted teal */
+  --teal-dim: #4a847b;
+  --teal-soft: rgba(111,184,173,0.10);
+  --rose: #c97b7b;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --maxw: 1080px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(900px 500px at 15% -10%, rgba(232,152,92,0.06), transparent 60%),
+    radial-gradient(700px 400px at 100% 30%, rgba(111,184,173,0.04), transparent 60%);
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--text); }
+
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 1.5rem; }
+
+/* ───────── header ───────── */
+header.site {
+  padding: 3rem 0 1.5rem;
+}
+.site-id {
+  display: flex; gap: 1.25rem; align-items: flex-start;
+  flex-wrap: wrap;
+}
+.site-id > div { min-width: 0; flex: 1 1 240px; }
+.avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.site-id h1 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.site-id h1 .accent { color: var(--accent); font-style: italic; }
+.site-id .sub {
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-top: 0.4rem;
+  max-width: 50ch;
+}
+.site-id .links {
+  margin-top: 0.6rem;
+  display: flex; gap: 0.5rem 1rem; flex-wrap: wrap;
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+}
+.site-id .sub { overflow-wrap: anywhere; }
+.site-id .links a { color: var(--text-dim); }
+.site-id .links a:hover { color: var(--accent); }
+
+/* ───────── stats strip ───────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 2rem 0 1.5rem;
+  overflow: hidden;
+}
+.stat {
+  background: var(--surface);
+  padding: 1rem 1.25rem;
+}
+.stat .n {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.85rem;
+  line-height: 1;
+  color: var(--text);
+}
+.stat .l {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+}
+@media (max-width: 640px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ───────── view container ───────── */
+.view { display: none; }
+.view.active { display: block; }
+
+section.block { margin: 2.5rem 0; }
+section.block h2 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+section.block .lead {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  max-width: 55ch;
+  margin-bottom: 1.25rem;
+}
+
+/* ───────── LAB view ───────── */
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+.lab-tile {
+  --card-glow: rgba(232,152,92,0.18);   /* saffron (default) */
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex; flex-direction: column;
+  min-height: 110px;
+  position: relative;
+  transition: border-color 160ms, background 160ms;
+  overflow: hidden;
+}
+/* cycle the brand palette across the grid */
+.lab-tile:nth-child(3n+2) { --card-glow: rgba(111,184,173,0.18); } /* teal */
+.lab-tile:nth-child(3n)   { --card-glow: rgba(201,123,123,0.20); } /* rose */
+/* imbalanced gradient wash — anchored off-corner, revealed on hover */
+.lab-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(135% 105% at 12% 0%, var(--card-glow), transparent 58%),
+    radial-gradient(90% 80% at 108% 112%, var(--card-glow), transparent 62%);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.lab-tile > * { position: relative; z-index: 1; }
+.lab-tile:hover::before { opacity: 1; }
+.lab-tile:hover {
+  background: var(--surface-2);
+}
+.lab-tile .tname {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.25;
+  word-break: break-word;
+}
+.lab-tile .tdesc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 0.4rem;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lab-tile .tmeta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.lab-tile .lang-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+.lab-tile .pulse {
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent);
+}
+.lab-tile.fresh .pulse { animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(232,152,92,0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(232,152,92,0); }
+  100% { box-shadow: 0 0 0 0 rgba(232,152,92,0); }
+}
+
+/* commit feed */
+.commit-feed {
+  list-style: none;
+  border-left: 1px solid var(--border);
+  padding-left: 1rem;
+}
+.commit-feed li {
+  padding: 0.65rem 0;
+  border-bottom: 1px dashed var(--border-soft);
+  position: relative;
+}
+.commit-feed li:last-child { border-bottom: 0; }
+.commit-feed li::before {
+  content: '';
+  position: absolute;
+  left: -1.3rem;
+  top: 1.05rem;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  border: 2px solid var(--bg);
+}
+.commit-feed li.fresh::before { background: var(--accent); }
+.commit-feed .cmsg {
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+.commit-feed .cmeta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+.commit-feed .cmeta a { color: var(--text-dim); }
+.commit-feed .cmeta a:hover { color: var(--accent); }
+
+/* contribution calendar */
+.calendar-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+.calendar-svg { display: block; min-width: 100%; }
+.cal-cell { transition: fill 200ms; }
+.cal-month-label, .cal-weekday-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  fill: var(--text-muted);
+}
+
+/* ───────── RHYTHM · flattened summary ───────── */
+.rhythm-line {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  max-width: 56ch;
+  margin-bottom: 0.6rem;
+}
+.rhythm-line .big {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.9rem;
+  color: var(--accent);
+  font-style: italic;
+  line-height: 1;
+}
+
+/* ───────── "Browse Code Cosmic" feature button (centered CTA) ───────── */
+.cosmic-cta {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  margin: 3rem 0 2.5rem;
+}
+.cosmic-launch {
+  display: inline-flex; align-items: center; gap: 0.65rem;
+  padding: 0.9rem 1.7rem;
+  background: linear-gradient(180deg, rgba(232,152,92,0.16), rgba(232,152,92,0.06));
+  border: 1px solid var(--accent-dim);
+  border-radius: 999px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 6px 26px rgba(232,152,92,0.16);
+  transition: border-color 200ms, color 200ms, transform 160ms, box-shadow 200ms, background 200ms;
+}
+.cosmic-launch:hover {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 10px 34px rgba(232,152,92,0.32);
+}
+.cosmic-launch .fab-spark {
+  width: 16px; height: 16px; color: var(--accent); flex: 0 0 auto;
+  animation: fab-twinkle 3.2s ease-in-out infinite;
+}
+.cosmic-launch:hover .fab-spark { color: var(--bg); }
+@keyframes fab-twinkle {
+  0%, 100% { opacity: 0.6; transform: scale(0.92) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.08) rotate(8deg); }
+}
+.cosmic-cta-sub {
+  margin-top: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ───────── COSMIC · full-screen 360° overlay ───────── */
+.cosmic-overlay {
+  position: fixed; inset: 0;
+  z-index: 1000;
+  background: radial-gradient(ellipse at 50% 45%, #14120d 0%, #060504 70%, #000 100%);
+  overflow: hidden;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+.cosmic-overlay[hidden] { display: none; }
+.cosmic-overlay.show { opacity: 1; }
+#cosmic-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* center reticle — the "you are looking here" focus ring */
+.cosmic-reticle {
+  position: absolute; left: 50%; top: 50%;
+  width: 46px; height: 46px; margin: -23px 0 0 -23px;
+  border: 1px solid rgba(243,238,223,0.22);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: border-color 160ms, transform 160ms;
+}
+.cosmic-reticle::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px;
+  border-radius: 50%; background: rgba(243,238,223,0.45);
+}
+.cosmic-overlay.locked .cosmic-reticle {
+  border-color: var(--accent);
+  transform: scale(1.12);
+}
+
+/* floating tooltip / label for the focused star */
+.cosmic-tip {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -140%);
+  background: rgba(8,7,5,0.86);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--text);
+  max-width: 260px;
+  opacity: 0;
+  transition: opacity 140ms;
+  z-index: 1010;
+  white-space: nowrap;
+}
+.cosmic-tip.show { opacity: 1; }
+.cosmic-tip .tt-name { color: var(--accent); font-weight: 500; }
+.cosmic-tip .tt-meta { color: var(--text-dim); font-size: 0.7rem; margin-top: 0.25rem; white-space: normal; }
+.cosmic-tip .tt-open { color: var(--teal); font-size: 0.66rem; margin-top: 0.4rem; letter-spacing: 0.05em; }
+
+/* overlay chrome */
+.cosmic-ui {
+  position: absolute; left: 1.5rem; bottom: 1.4rem;
+  z-index: 1010; pointer-events: none;
+  max-width: min(70vw, 460px);
+}
+.cosmic-ui .cosmic-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.7rem; color: var(--text); line-height: 1;
+}
+.cosmic-ui .cosmic-hint {
+  margin-top: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--text-muted); line-height: 1.5;
+}
+.cosmic-legend {
+  position: absolute; right: 1.5rem; bottom: 1.4rem;
+  z-index: 1010; pointer-events: none;
+  display: flex; flex-direction: column; gap: 0.35rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--text-muted);
+  text-align: right;
+}
+@media (max-width: 640px) { .cosmic-legend { display: none; } }
+.cosmic-close {
+  position: absolute; right: 1.1rem; top: 1.1rem;
+  z-index: 1010;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: rgba(8,7,5,0.6);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem; cursor: pointer;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: color 160ms, border-color 160ms, transform 160ms;
+}
+.cosmic-close:hover { color: var(--text); border-color: var(--accent-dim); transform: rotate(90deg); }
+.cosmic-motion {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 1020;
+  padding: 0.85rem 1.4rem;
+  background: var(--accent); color: var(--bg);
+  border: 0; border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem; letter-spacing: 0.02em; cursor: pointer;
+  box-shadow: 0 8px 30px rgba(232,152,92,0.3);
+}
+.cosmic-motion[hidden] { display: none; }
+
+/* ───────── footer ───────── */
+footer.site {
+  margin: 4rem 0 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+}
+footer.site a { color: var(--text-dim); }
+footer.site a:hover { color: var(--accent); }
+
+/* ───────── claude · "developing now" ───────── */
+.claude-card {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+.claude-status {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  flex: 1 1 auto;
+}
+.claude-status .claude-state { color: var(--text); }
+.claude-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--text-muted);
+  flex: 0 0 auto;
+}
+.claude-card.live .claude-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent);
+  animation: pulse 1.8s ease-out infinite;
+}
+.claude-card.live .claude-state { color: var(--accent); }
+.claude-metrics {
+  display: flex; gap: 1.75rem;
+  flex: 0 0 auto;
+}
+.claude-metrics .cm-n {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.5rem; line-height: 1;
+  color: var(--text);
+}
+.claude-metrics .cm-l {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+@media (max-width: 520px) {
+  .claude-metrics { gap: 1.25rem; }
+  .claude-metrics .cm-n { font-size: 1.25rem; }
+}
+
+/* ───────── loading / error ───────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.error-banner {
+  padding: 0.85rem 1rem;
+  background: rgba(201,123,123,0.08);
+  border: 1px solid rgba(201,123,123,0.3);
+  border-radius: var(--radius-sm);
+  color: var(--rose);
+  font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 1rem 0;
+}
+.muted { color: var(--text-muted); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; }
+
+/* ───────── contact form ───────── */
+.cf-wrap { max-width: 560px; }
+.cf-form[hidden] { display: none; }
+.cf-form fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
+.cf-form fieldset[disabled] { opacity: .55; }
+.cf-field { display: grid; gap: 0.4rem; }
+.cf-field label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.cf-field input, .cf-field textarea { width: 100%; box-sizing: border-box; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 0.95rem; padding: 0.7rem 0.85rem; resize: vertical; transition: border-color .18s ease, box-shadow .18s ease; }
+.cf-field input:focus, .cf-field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.cf-field input::placeholder, .cf-field textarea::placeholder { color: var(--text-muted); }
+.cf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.cf-submit { margin-top: 1.1rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; background: var(--accent); color: var(--bg); border: 0; border-radius: var(--radius-sm); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.8rem 1.3rem; transition: opacity .18s ease, transform .12s ease; }
+.cf-submit:hover { opacity: .9; }
+.cf-submit:active { transform: translateY(1px); }
+.cf-submit.is-loading { pointer-events: none; opacity: .85; }
+.cf-spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,.3); border-top-color: var(--bg); border-radius: 50%; animation: cf-spin .7s linear infinite; }
+.cf-submit.is-loading .cf-spinner { display: inline-block; }
+@keyframes cf-spin { to { transform: rotate(360deg); } }
+.cf-status { min-height: 18px; margin: 0.8rem 0 0; font-size: 0.85rem; color: #ef6b6b; }
+.cf-success { padding: 0.5rem 0; }
+.cf-success[hidden] { display: none; }
+.cf-check { width: 50px; height: 50px; margin-bottom: 1rem; display: grid; place-items: center; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+.cf-success h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.5rem; }
+.cf-success p { color: var(--text-dim); margin: 0.4rem 0 0; font-size: 0.95rem; }
+.cf-again { margin-top: 1.2rem; background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: var(--radius-sm); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.6rem 1rem; transition: border-color .18s ease, color .18s ease; }
+.cf-again:hover { border-color: var(--accent); color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="site">
+    <div class="site-id">
+      <img id="avatar" class="avatar skeleton" alt="">
+      <div>
+        <h1>Sankha <span class="accent">— a small private lab.</span></h1>
+        <p class="sub" id="bio">Daily small experiments at the edges of code, music, biology, and play. Live view of what I'm making right now — three lenses, same data.</p>
+        <div class="links">
+          <a id="link-gh" href="https://github.com/bsc2fast" target="_blank" rel="noopener">github.com/bsc2fast</a>
+          <a href="https://github.com/sankhacooray" target="_blank" rel="noopener">org/sankhacooray</a>
+          <a href="https://sankhacooray.com" target="_blank" rel="noopener">sankhacooray.com</a>
+          <a href="/">dev tools</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat"><div class="n" id="s-contrib">—</div><div class="l">contributions · 12mo</div></div>
+      <div class="stat"><div class="n" id="s-repos">—</div><div class="l">repos touched · 12mo</div></div>
+      <div class="stat"><div class="n" id="s-streak">—</div><div class="l">current streak · days</div></div>
+      <div class="stat"><div class="n" id="s-longest">—</div><div class="l">longest streak · days</div></div>
+    </div>
+
+  </header>
+
+  <main>
+
+    <!-- ───────────── LAB ───────────── -->
+    <section class="view view-lab active" id="view-lab">
+      <section class="block" id="claude-block" hidden>
+        <h2>building with claude</h2>
+        <p class="lead">My daily AI pair. The dot is live when a Claude Code session is actively running on my machine right now.</p>
+        <div class="claude-card" id="claude-card">
+          <div class="claude-status">
+            <span class="claude-dot"></span>
+            <span class="claude-state" id="claude-state">checking…</span>
+          </div>
+          <div class="claude-metrics">
+            <div><div class="cm-n" id="claude-tok-today">—</div><div class="cm-l">tokens · today</div></div>
+            <div><div class="cm-n" id="claude-tok-week">—</div><div class="cm-l">tokens · 7d</div></div>
+            <div><div class="cm-n" id="claude-sess-week">—</div><div class="cm-l">sessions · 7d</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="rhythm-block">
+        <h2>the shape of a day</h2>
+        <p class="rhythm-line">Most makers have a shape to their day. Mine looks like <span class="big" id="peak-hour">—</span> — that's when most of my commits land.</p>
+        <p class="muted">based on the last <span id="rhythm-n">—</span> commits across all repos</p>
+      </section>
+
+      <section class="cosmic-cta">
+        <button class="cosmic-launch" id="cosmicFab" type="button" aria-label="Browse Code Cosmic — open the full-screen 360° cosmos">
+          <svg class="fab-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l1.6 5.4L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.6L12 2z"/>
+            <circle cx="19" cy="4" r="1.1"/><circle cx="5.5" cy="18" r="1.4"/>
+          </svg>
+          <span class="fab-label">Browse Code Cosmic</span>
+        </button>
+        <p class="cosmic-cta-sub">a full-screen 360° flythrough of every repo</p>
+      </section>
+
+      <section class="block">
+        <h2>the lab</h2>
+        <p class="lead">Sub-sites I'm tending. Each tile is a live sub-domain on <code>*.sankhacooray.com</code>. A pulse means I pushed in the last 7 days.</p>
+        <div class="lab-grid" id="lab-grid">
+          <div class="lab-tile skeleton" style="height:110px"></div>
+          <div class="lab-tile skeleton" style="height:110px"></div>
+          <div class="lab-tile skeleton" style="height:110px"></div>
+          <div class="lab-tile skeleton" style="height:110px"></div>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>recent work</h2>
+        <p class="lead">Last 25 commits across everything, freshest on top.</p>
+        <ul class="commit-feed" id="commit-feed">
+          <li class="muted">loading…</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2>one year, day by day</h2>
+        <p class="lead">Every cell is a day. Brighter = busier.</p>
+        <div class="calendar-wrap"><svg class="calendar-svg" id="calendar-svg"></svg></div>
+      </section>
+
+      <section class="block" id="contact">
+        <h2>get in touch</h2>
+        <p class="lead">Working on something, hiring, or just want to compare notes? Send a note &mdash; it reaches me directly.</p>
+        <div class="cf-wrap">
+          <form class="cf-form" id="cfForm" novalidate>
+            <fieldset id="cfFields">
+              <div class="cf-field">
+                <label for="cf-name">name</label>
+                <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="200" placeholder="your name" />
+              </div>
+              <div class="cf-field">
+                <label for="cf-email">email</label>
+                <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@example.com" />
+              </div>
+              <div class="cf-field">
+                <label for="cf-message">message</label>
+                <textarea id="cf-message" name="message" rows="5" required maxlength="5000" placeholder="what's on your mind?"></textarea>
+              </div>
+              <div class="cf-hp" aria-hidden="true">
+                <label for="cf-company">company</label>
+                <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+              </div>
+            </fieldset>
+            <button class="cf-submit" id="cfSubmit" type="submit">
+              <span class="cf-label">send message</span>
+              <span class="cf-spinner" aria-hidden="true"></span>
+            </button>
+            <p class="cf-status" id="cfStatus" role="status" aria-live="polite"></p>
+          </form>
+          <div class="cf-success" id="cfSuccess" hidden>
+            <div class="cf-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3>message sent</h3>
+            <p>Thanks for reaching out &mdash; I'll get back to you soon.</p>
+            <button class="cf-again" id="cfAgain" type="button">send another</button>
+          </div>
+        </div>
+      </section>
+
+      <script>
+      (function () {
+        "use strict";
+        var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVh7KHZDVkO29XaSiF1zP7LqvwzPy_5yPs4GN4aAofezUaaWaSt36MAwxty_CXe_aSlQ/exec";
+        var form = document.getElementById("cfForm");
+        if (!form) return;
+        var fields = document.getElementById("cfFields");
+        var btn = document.getElementById("cfSubmit");
+        var statusEl = document.getElementById("cfStatus");
+        var success = document.getElementById("cfSuccess");
+        var again = document.getElementById("cfAgain");
+        var label = btn.querySelector(".cf-label");
+        var labelText = label ? label.textContent : "send message";
+        function setLoading(loading) {
+          fields.disabled = loading; btn.disabled = loading;
+          btn.classList.toggle("is-loading", loading);
+          btn.setAttribute("aria-busy", loading ? "true" : "false");
+          if (label) label.textContent = loading ? "sending…" : labelText;
+        }
+        function showError(msg) { statusEl.style.color = "#ef6b6b"; statusEl.textContent = msg; }
+        function showSuccess() {
+          statusEl.textContent = ""; form.hidden = true;
+          if (success) { success.hidden = false; success.scrollIntoView({ behavior: "smooth", block: "center" }); }
+        }
+        function resetToForm() {
+          if (success) success.hidden = true; form.reset(); form.hidden = false; statusEl.textContent = "";
+          var first = document.getElementById("cf-name");
+          if (first) setTimeout(function () { first.focus(); }, 150);
+        }
+        if (again) again.addEventListener("click", resetToForm);
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); statusEl.textContent = "";
+          if (!form.checkValidity()) { form.reportValidity(); return; }
+          var payload = {
+            name: form.elements["name"].value,
+            email: form.elements["email"].value,
+            message: form.elements["message"].value,
+            company: form.elements["company"].value,
+            userAgent: navigator.userAgent,
+            source: "dev.sankhacooray.com"
+          };
+          setLoading(true);
+          fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload),
+            redirect: "follow"
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              if (data && data.ok) showSuccess();
+              else showError((data && data.message) || "Something went wrong. Please try again.");
+            })
+            .catch(function () { showError("Network error — please try again, or reach me on LinkedIn."); })
+            .finally(function () { setLoading(false); });
+        });
+      })();
+      </script>
+
+    </section>
+
+  </main>
+
+  <footer class="site">
+    <div>updated <span id="generated">—</span> · source: github graphql, cached 1h</div>
+    <div><a href="https://github.com/sankhacooray/dev-sankhacooray-com" target="_blank" rel="noopener">source ↗</a></div>
+  </footer>
+
+</div>
+
+<!-- ───────── full-screen 360° cosmos ───────── -->
+<div class="cosmic-overlay" id="cosmicOverlay" hidden aria-hidden="true">
+  <canvas id="cosmic-canvas"></canvas>
+  <div class="cosmic-reticle" aria-hidden="true"></div>
+  <div class="cosmic-tip" id="cosmic-tip"></div>
+  <div class="cosmic-ui">
+    <div class="cosmic-title">code cosmos</div>
+    <p class="cosmic-hint" id="cosmic-hint">swipe on your trackpad — or drag — to glide across the 360° · click a star to open it</p>
+  </div>
+  <div class="cosmic-legend">
+    <span><span style="color:var(--accent)">●</span> touched this week</span>
+    <span><span style="color:var(--teal)">●</span> touched this month</span>
+    <span><span style="color:var(--text-muted)">●</span> older</span>
+  </div>
+  <button class="cosmic-close" id="cosmicClose" type="button" aria-label="Close cosmos">✕</button>
+  <button class="cosmic-motion" id="cosmicMotion" type="button" hidden>Enable motion to look around</button>
+</div>
+
+<script>
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbwE3X7K81BpihyxwlXHO_xvJJGVFLUbTS1eZH5slQAi_v7f0B51PYZqeymjnM_nfoBFow/exec';
+const CACHE_KEY = 'dev_sk_v1';
+const CACHE_TTL_MS = 30 * 60 * 1000;
+
+// Claude "developing now" status — the analytics proxy's /exec URL
+// (analytics-sankhacooray-com). Leave '' to keep the panel hidden until
+// the proxy is deployed. The ?source=claude slice is appended below.
+const CLAUDE_PROXY_URL = 'https://script.google.com/macros/s/AKfycbwvNZxtG3yOd2YUCDjRxUt9x9BcDP2St-ywC8WcecI_TcqirM3crgTW0qaR_712JTdhdw/exec';
+
+// ────────────────────────────────────────────── data
+let DATA = null;
+
+async function load() {
+  try {
+    const cached = readCache();
+    if (cached) { DATA = cached; render(); }
+    const fresh = await fetch(PROXY_URL).then(r => r.json());
+    if (fresh.error) throw new Error(fresh.error);
+    DATA = fresh;
+    writeCache(fresh);
+    render();
+  } catch (err) {
+    if (!DATA) showError(err.message);
+    console.error(err);
+  }
+}
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY); if (!raw) return null;
+    const { ts, data } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL_MS) return null;
+    return data;
+  } catch { return null; }
+}
+function writeCache(data) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+}
+function showError(msg) {
+  const el = document.createElement('div');
+  el.className = 'error-banner';
+  el.textContent = 'Live data unavailable: ' + msg + ' — showing skeleton.';
+  document.querySelector('main').prepend(el);
+}
+
+// ────────────────────────────────────────────── render
+function render() {
+  if (!DATA) return;
+  // header
+  if (DATA.user) {
+    const a = document.getElementById('avatar');
+    a.src = DATA.user.avatar; a.classList.remove('skeleton');
+    if (DATA.user.bio) document.getElementById('bio').textContent = DATA.user.bio;
+    if (DATA.user.login) document.getElementById('link-gh').textContent = 'github.com/' + DATA.user.login;
+  }
+  // stats
+  if (DATA.totals) {
+    document.getElementById('s-contrib').textContent = fmt(DATA.totals.commitsLast12Months);
+    document.getElementById('s-repos').textContent = fmt(DATA.totals.reposWithCommits);
+    document.getElementById('s-streak').textContent = fmt(DATA.totals.currentStreak);
+    document.getElementById('s-longest').textContent = fmt(DATA.totals.longestStreak);
+  }
+  renderLab();
+  renderCommits();
+  renderCalendar();
+  renderRhythmSummary();
+  if (cosmicOpen) buildCosmicStars();   // refresh the cosmos if it's open when fresh data lands
+  if (DATA.generatedAt) {
+    document.getElementById('generated').textContent = relTime(DATA.generatedAt);
+  }
+}
+
+function fmt(n) { return n == null ? '—' : n.toString(); }
+function relTime(iso) {
+  const d = new Date(iso); const s = Math.floor((Date.now() - d) / 1000);
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+function daysAgo(iso) { return Math.floor((Date.now() - new Date(iso)) / 86400000); }
+
+// ────────────────────────────────────────────── LAB · grid of repos
+function renderLab() {
+  const grid = document.getElementById('lab-grid');
+  // Show *-sankhacooray-com tiles first (the "lab"), then top user repos
+  const labRepos = (DATA.orgRepos || []).filter(r => r.name.endsWith('-sankhacooray-com') || (DATA.orgRepos || []).length < 8);
+  const others = (DATA.orgRepos || []).filter(r => !labRepos.includes(r));
+  const list = [...labRepos, ...others].slice(0, 24);
+  if (!list.length) { grid.innerHTML = '<p class="muted">no repos loaded</p>'; return; }
+  grid.innerHTML = list.map(r => {
+    const da = daysAgo(r.pushedAt);
+    const fresh = da <= 7;
+    const subdomain = r.name.replace(/-sankhacooray-com$/, '');
+    const displayName = r.name.endsWith('-sankhacooray-com')
+      ? subdomain + '<span style="color:var(--text-muted)">.sankhacooray.com</span>'
+      : r.name;
+    return `
+      <a class="lab-tile ${fresh ? 'fresh' : ''}" href="${r.url}" target="_blank" rel="noopener">
+        ${fresh ? '<span class="pulse"></span>' : ''}
+        <div class="tname">${displayName}</div>
+        <div class="tdesc">${escapeHtml(r.description || '')}</div>
+        <div class="tmeta">
+          <span>${r.language ? `<span class="lang-dot" style="background:${r.languageColor||'#888'}"></span>${r.language}` : ''}</span>
+          <span>${da === 0 ? 'today' : da + 'd'}</span>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ────────────────────────────────────────────── LAB · commit feed
+function renderCommits() {
+  const ul = document.getElementById('commit-feed');
+  const list = (DATA.recentCommits || []).slice(0, 25);
+  if (!list.length) { ul.innerHTML = '<li class="muted">no recent commits</li>'; return; }
+  ul.innerHTML = list.map(c => {
+    const da = daysAgo(c.committedDate);
+    const fresh = da <= 1;
+    return `
+      <li class="${fresh ? 'fresh' : ''}">
+        <div class="cmsg">${escapeHtml(c.messageHeadline)}</div>
+        <div class="cmeta">
+          <a href="${c.url}" target="_blank" rel="noopener">${c.repoOwner}/${c.repoName}</a>
+          · ${relTime(c.committedDate)}
+          · ${c.oid.slice(0,7)}
+        </div>
+      </li>`;
+  }).join('');
+}
+
+// ────────────────────────────────────────────── LAB · contribution calendar
+function renderCalendar() {
+  const svg = document.getElementById('calendar-svg');
+  const days = (DATA.contributionCalendar && DATA.contributionCalendar.days) || [];
+  if (!days.length) { svg.innerHTML = ''; return; }
+  const cell = 11, gap = 2;
+  const weeks = Math.ceil(days.length / 7);
+  const w = weeks * (cell + gap) + 30, h = 7 * (cell + gap) + 20;
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+
+  // colour ramp — saffron scale
+  const max = Math.max(1, ...days.map(d => d.contributionCount));
+  function color(n) {
+    if (n === 0) return '#1c1a14';
+    const t = Math.min(1, n / Math.max(4, max * 0.6));
+    // interpolate from dim accent to bright accent
+    const dim = [50, 33, 22], bright = [232, 152, 92];
+    const c = dim.map((d, i) => Math.round(d + (bright[i] - d) * t));
+    return `rgb(${c.join(',')})`;
+  }
+
+  const firstWeekday = new Date(days[0].date).getDay(); // 0=Sun
+  let svgChildren = '';
+  // weekday labels
+  ['Mon','Wed','Fri'].forEach((lbl, i) => {
+    const wIdx = [1,3,5][i];
+    const y = 12 + wIdx * (cell + gap) + cell - 2;
+    svgChildren += `<text class="cal-weekday-label" x="0" y="${y}">${lbl}</text>`;
+  });
+  // month labels
+  let lastMonth = -1;
+  days.forEach((d, i) => {
+    const date = new Date(d.date);
+    const wIdx = Math.floor((i + firstWeekday) / 7);
+    const dIdx = (i + firstWeekday) % 7;
+    if (date.getDate() <= 7 && date.getMonth() !== lastMonth) {
+      lastMonth = date.getMonth();
+      const x = 22 + wIdx * (cell + gap);
+      svgChildren += `<text class="cal-month-label" x="${x}" y="9">${date.toLocaleString('en',{month:'short'}).toLowerCase()}</text>`;
+    }
+    const x = 22 + wIdx * (cell + gap);
+    const y = 12 + dIdx * (cell + gap);
+    svgChildren += `<rect class="cal-cell" x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2" fill="${color(d.contributionCount)}"><title>${d.date} · ${d.contributionCount}</title></rect>`;
+  });
+  svg.innerHTML = svgChildren;
+}
+
+// ────────────────────────────────────────────── RHYTHM · flattened summary
+function renderRhythmSummary() {
+  if (!DATA || !DATA.hoursOfDay) return;
+  const h = DATA.hoursOfDay;
+  const total = h.reduce((a, b) => a + b, 0);
+  const peakIdx = h.indexOf(Math.max(...h));
+  document.getElementById('peak-hour').textContent = formatHour(peakIdx) + ' SGT';
+  document.getElementById('rhythm-n').textContent = total;
+}
+function formatHour(h) {
+  if (h === 0) return 'midnight';
+  if (h === 12) return 'noon';
+  return (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+// COSMIC · full-screen 360° starfield
+// Every repo is a star fixed on a unit sphere around the viewer. You navigate
+// by rotating the camera: on desktop, push the cursor to a screen edge to fly
+// along that bearing (auto-scroll); on mobile, the device-orientation sensors
+// steer the camera so you physically point the phone around the room. The
+// camera orientation is held as a QUATERNION end-to-end, so the device path
+// never gimbal-locks (no Euler-angle singularity at the poles).
+// ════════════════════════════════════════════════════════════════════════
+function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) | 0; return Math.abs(h); }
+
+// ---- tiny quaternion / vector kit (components ordered x,y,z,w) ----
+function qMul(a, b) {
+  return [
+    a[3]*b[0] + a[0]*b[3] + a[1]*b[2] - a[2]*b[1],
+    a[3]*b[1] - a[0]*b[2] + a[1]*b[3] + a[2]*b[0],
+    a[3]*b[2] + a[0]*b[1] - a[1]*b[0] + a[2]*b[3],
+    a[3]*b[3] - a[0]*b[0] - a[1]*b[1] - a[2]*b[2]
+  ];
+}
+function qConj(q) { return [-q[0], -q[1], -q[2], q[3]]; }
+function qAxisAngle(ax, ay, az, ang) {
+  const h = ang / 2, s = Math.sin(h);
+  return [ax*s, ay*s, az*s, Math.cos(h)];
+}
+function qRotate(q, v) {                 // rotate vector v by quaternion q
+  const x = v[0], y = v[1], z = v[2];
+  const qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+  const tx = 2*(qy*z - qz*y);
+  const ty = 2*(qz*x - qx*z);
+  const tz = 2*(qx*y - qy*x);
+  return [
+    x + qw*tx + (qy*tz - qz*ty),
+    y + qw*ty + (qz*tx - qx*tz),
+    z + qw*tz + (qx*ty - qy*tx)
+  ];
+}
+// Euler (YXZ order) → quaternion — the convention the orientation sensors use.
+function qFromEulerYXZ(x, y, z) {
+  const c1 = Math.cos(x/2), c2 = Math.cos(y/2), c3 = Math.cos(z/2);
+  const s1 = Math.sin(x/2), s2 = Math.sin(y/2), s3 = Math.sin(z/2);
+  return [
+    s1*c2*c3 + c1*s2*s3,
+    c1*s2*c3 - s1*c2*s3,
+    c1*c2*s3 - s1*s2*c3,
+    c1*c2*c3 + s1*s2*s3
+  ];
+}
+const DEG = Math.PI / 180;
+const Q_SCREEN = [-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)];   // tip camera to look out the back of the device
+
+// ---- module state ----
+let cosmicOpen = false;
+let cosmicRAF = 0;
+let cosmic = null;
+
+const overlayEl = document.getElementById('cosmicOverlay');
+const fabEl     = document.getElementById('cosmicFab');
+const closeEl   = document.getElementById('cosmicClose');
+const motionEl  = document.getElementById('cosmicMotion');
+
+function buildCosmicStars() {
+  if (!cosmic || !DATA) return;
+  const all = [...(DATA.orgRepos || []), ...(DATA.userRepos || [])];
+  if (!all.length) { cosmic.stars = []; }
+  const max = Math.max(1, ...all.map(r => (r.recentCommits||[]).length + (r.stars || 0)));
+  const n = all.length;
+  // Fibonacci sphere — scatter repos evenly across the full 360° × 180°.
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  cosmic.stars = all.map((r, i) => {
+    const y = n > 1 ? 1 - (i / (n - 1)) * 2 : 0;       // -1 … 1 (pole to pole)
+    const rad = Math.sqrt(Math.max(0, 1 - y*y));
+    const theta = i * golden + (hash(r.name) % 360) * DEG * 0.05;
+    const dir = [Math.cos(theta) * rad, y, Math.sin(theta) * rad];
+    const da = daysAgo(r.pushedAt);
+    const importance = ((r.recentCommits||[]).length * 4 + (r.stars||0) + 1) / (max + 1);
+    let color;
+    if (da <= 7)       color = '#e8985c';
+    else if (da <= 30) color = '#6fb8ad';
+    else               color = '#6f6957';
+    return { r, dir, da, color, size: 1.6 + importance * 4.4, tw: (hash(r.name + 't') % 100) / 100 };
+  });
+  // decorative background field, also distributed across the sphere
+  const pix = [];
+  for (let i = 0; i < 320; i++) {
+    const y = 1 - (i / 319) * 2;
+    const rad = Math.sqrt(Math.max(0, 1 - y*y));
+    const theta = i * golden;
+    pix.push({ dir: [Math.cos(theta) * rad, y, Math.sin(theta) * rad],
+               s: 0.4 + (i % 7) / 7 * 1.1, a: 0.16 + (i % 5) / 5 * 0.42, tw: (i % 13) / 13 });
+  }
+  cosmic.pixies = pix;
+}
+
+function sizeCosmicCanvas() {
+  if (!cosmic) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = window.innerWidth, h = window.innerHeight;
+  cosmic.canvas.width = w * dpr;
+  cosmic.canvas.height = h * dpr;
+  cosmic.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cosmic.w = w; cosmic.h = h; cosmic.dpr = dpr;
+  cosmic.focal = (h / 2) / Math.tan((cosmic.fov * DEG) / 2);
+}
+
+function openCosmic() {
+  if (cosmicOpen) return;
+  const canvas = document.getElementById('cosmic-canvas');
+  const ctx = canvas.getContext('2d');
+  cosmic = {
+    canvas, ctx, tip: document.getElementById('cosmic-tip'),
+    stars: [], pixies: [],
+    yaw: 0, pitch: 0,                  // free-look camera (radians)
+    camQ: [0, 0, 0, 1],
+    mode: 'free',                      // 'free' (mouse/touch) | 'motion' (sensors)
+    mouse: { x: -1, y: -1, inside: false },
+    focused: null, t: 0, fov: 72
+  };
+  buildCosmicStars();
+  sizeCosmicCanvas();
+
+  overlayEl.hidden = false;
+  overlayEl.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => overlayEl.classList.add('show'));
+  cosmicOpen = true;
+  document.body.style.overflow = 'hidden';
+  if (location.hash !== '#cosmic') history.pushState(null, '', '#cosmic');
+
+  bindCosmicInput();
+  maybeOfferMotion();
+  cancelAnimationFrame(cosmicRAF);
+  cosmicLoop();
+}
+
+function closeCosmic(fromPop) {
+  if (!cosmicOpen) return;
+  cosmicOpen = false;
+  cancelAnimationFrame(cosmicRAF);
+  overlayEl.classList.remove('show');
+  document.body.style.overflow = '';
+  unbindCosmicInput();
+  setTimeout(() => { if (!cosmicOpen) { overlayEl.hidden = true; overlayEl.setAttribute('aria-hidden', 'true'); } }, 340);
+  if (!fromPop && location.hash === '#cosmic') history.replaceState(null, '', location.pathname + location.search);
+}
+
+// ---- input: trackpad wheel + mouse drag (desktop) + touch (mobile) ----
+const COSMIC_DRAG_THRESH = 5;   // px moved before a press counts as a drag, not a click
+function cosmicPointerMove(e) {
+  cosmic.mouse.x = e.clientX; cosmic.mouse.y = e.clientY; cosmic.mouse.inside = true;
+  if (cosmic._drag) {
+    const dx = e.clientX - cosmic._dx, dy = e.clientY - cosmic._dy;
+    cosmic.yaw   -= dx * 0.0042;        // drag-the-sky: content follows the cursor
+    cosmic.pitch -= dy * 0.0042;
+    cosmic._dx = e.clientX; cosmic._dy = e.clientY;
+    if (Math.abs(e.clientX - cosmic._d0x) + Math.abs(e.clientY - cosmic._d0y) > COSMIC_DRAG_THRESH) cosmic._moved = true;
+  }
+}
+function cosmicPointerLeave() { cosmic.mouse.inside = false; cosmic._drag = false; }
+function cosmicMouseDown(e) {
+  if (e.button !== 0) return;
+  cosmic._drag = true; cosmic._moved = false;
+  cosmic._dx = cosmic._d0x = e.clientX; cosmic._dy = cosmic._d0y = e.clientY;
+}
+function cosmicMouseUp() { cosmic._drag = false; }
+// Trackpad two-finger swipe (and mouse wheel) → glide across the 360° in any direction.
+function cosmicWheel(e) {
+  if (cosmic.mode === 'motion') return;
+  e.preventDefault();
+  const k = 0.0024;
+  cosmic.yaw   += e.deltaX * k;
+  cosmic.pitch += e.deltaY * k;
+}
+function cosmicClick() {
+  if (cosmic._moved) { cosmic._moved = false; return; }   // swallow the click that ends a drag
+  if (cosmic.focused) window.open(cosmic.focused.r.url, '_blank', 'noopener');
+}
+function cosmicKey(e) { if (e.key === 'Escape') closeCosmic(); }
+function cosmicTouchStart(e) { if (e.touches.length) { cosmic._tx = e.touches[0].clientX; cosmic._ty = e.touches[0].clientY; } }
+function cosmicTouchMove(e) {
+  if (cosmic.mode === 'motion' || !e.touches.length) return;   // sensors win when active
+  const tx = e.touches[0].clientX, ty = e.touches[0].clientY;
+  cosmic.yaw   -= (tx - cosmic._tx) * 0.004;
+  cosmic.pitch += (ty - cosmic._ty) * 0.004;
+  cosmic._tx = tx; cosmic._ty = ty;
+  e.preventDefault();
+}
+function bindCosmicInput() {
+  cosmic.canvas.addEventListener('mousemove', cosmicPointerMove);
+  cosmic.canvas.addEventListener('mouseleave', cosmicPointerLeave);
+  cosmic.canvas.addEventListener('mousedown', cosmicMouseDown);
+  window.addEventListener('mouseup', cosmicMouseUp);
+  cosmic.canvas.addEventListener('wheel', cosmicWheel, { passive: false });
+  cosmic.canvas.addEventListener('click', cosmicClick);
+  cosmic.canvas.addEventListener('touchstart', cosmicTouchStart, { passive: true });
+  cosmic.canvas.addEventListener('touchmove', cosmicTouchMove, { passive: false });
+  window.addEventListener('keydown', cosmicKey);
+  window.addEventListener('resize', sizeCosmicCanvas);
+}
+function unbindCosmicInput() {
+  if (!cosmic) return;
+  cosmic.canvas.removeEventListener('mousemove', cosmicPointerMove);
+  cosmic.canvas.removeEventListener('mouseleave', cosmicPointerLeave);
+  cosmic.canvas.removeEventListener('mousedown', cosmicMouseDown);
+  window.removeEventListener('mouseup', cosmicMouseUp);
+  cosmic.canvas.removeEventListener('wheel', cosmicWheel);
+  cosmic.canvas.removeEventListener('click', cosmicClick);
+  cosmic.canvas.removeEventListener('touchstart', cosmicTouchStart);
+  cosmic.canvas.removeEventListener('touchmove', cosmicTouchMove);
+  window.removeEventListener('keydown', cosmicKey);
+  window.removeEventListener('resize', sizeCosmicCanvas);
+  if (cosmic._orient) window.removeEventListener('deviceorientation', cosmic._orient, true);
+}
+
+// ---- device orientation (mobile) — gimbal-lock-free via quaternion compose ----
+function deviceCamQuat(alpha, beta, gamma, orient) {
+  let q = qFromEulerYXZ(beta, alpha, -gamma);   // raw sensor frame
+  q = qMul(q, Q_SCREEN);                          // look out through the screen
+  q = qMul(q, qAxisAngle(0, 0, 1, -orient));      // correct for screen rotation
+  return q;
+}
+function startMotion() {
+  const handler = (e) => {
+    if (e.alpha == null && e.beta == null && e.gamma == null) return;
+    const orient = (screen.orientation && screen.orientation.angle != null
+                    ? screen.orientation.angle : (window.orientation || 0)) * DEG;
+    cosmic.camQ = deviceCamQuat((e.alpha||0)*DEG, (e.beta||0)*DEG, (e.gamma||0)*DEG, orient);
+    cosmic.mode = 'motion';
+    document.getElementById('cosmic-hint').textContent =
+      'point your phone around the room to look across the cosmos · tap a centred star to open it';
+  };
+  cosmic._orient = handler;
+  window.addEventListener('deviceorientation', handler, true);
+}
+function maybeOfferMotion() {
+  const hasOrient = 'DeviceOrientationEvent' in window;
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  motionEl.hidden = true;
+  if (!hasOrient || !coarse) return;             // desktop: edge-pan only
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    // iOS 13+ needs an explicit permission request triggered by a user gesture.
+    motionEl.hidden = false;
+    motionEl.onclick = () => {
+      DeviceOrientationEvent.requestPermission()
+        .then((res) => { motionEl.hidden = true; if (res === 'granted') startMotion(); })
+        .catch(() => { motionEl.hidden = true; });
+    };
+  } else {
+    startMotion();                               // Android / older iOS: just listen
+  }
+}
+
+// ---- per-frame camera update (free-look driven by trackpad / drag / touch) ----
+function updateFreeCamera() {
+  if (cosmic.mode === 'motion') return;
+  const lim = 80 * DEG;                            // stay shy of the poles
+  cosmic.pitch = Math.max(-lim, Math.min(lim, cosmic.pitch));
+  cosmic.camQ = qMul(qAxisAngle(0, 1, 0, cosmic.yaw), qAxisAngle(1, 0, 0, cosmic.pitch));
+}
+
+// ---- render ----
+function projectDir(dir) {
+  const v = qRotate(qConj(cosmic.camQ), dir);     // world → camera space
+  if (v[2] >= -0.05) return null;                 // behind / >~87° off-axis
+  const f = cosmic.focal;
+  return { x: cosmic.w/2 + (v[0] / -v[2]) * f, y: cosmic.h/2 - (v[1] / -v[2]) * f, depth: -v[2] };
+}
+function cosmicLoop() {
+  if (!cosmicOpen || !cosmic) return;
+  cosmic.t++;
+  if (cosmic.mode !== 'motion') updateFreeCamera();
+  const { ctx, w, h, t } = cosmic;
+  ctx.clearRect(0, 0, w, h);
+
+  // background field
+  ctx.fillStyle = '#f3eedf';
+  for (const p of cosmic.pixies) {
+    const s = projectDir(p.dir);
+    if (!s) continue;
+    ctx.globalAlpha = p.a * (0.55 + 0.45 * Math.sin(t * 0.02 + p.tw * 30));
+    ctx.beginPath(); ctx.arc(s.x, s.y, p.s, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // repo stars
+  const cx = w/2, cy = h/2;
+  const drawn = [];
+  let focus = null, focusD = 1e9;
+  for (const st of cosmic.stars) {
+    const s = projectDir(st.dir);
+    if (!s) continue;
+    if (s.x < -120 || s.x > w + 120 || s.y < -120 || s.y > h + 120) continue;
+    const pr = Math.max(1.5, st.size * (0.7 + 0.55 * s.depth));
+    const dd = Math.hypot(s.x - cx, s.y - cy);
+    if (dd < 90 && dd < focusD) { focusD = dd; focus = { st, s, pr }; }   // reticle focus
+    drawn.push({ st, s, pr });
+  }
+  drawn.sort((a, b) => b.s.depth - a.s.depth);     // far → near
+  for (const d of drawn) {
+    const { st, s, pr } = d;
+    const tw = 0.75 + 0.25 * Math.sin(t * 0.03 + st.tw * 30);
+    const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, pr * 4);
+    grd.addColorStop(0, st.color); grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = 0.4 * tw; ctx.fillStyle = grd;
+    ctx.beginPath(); ctx.arc(s.x, s.y, pr * 4, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = tw; ctx.fillStyle = st.color;
+    ctx.beginPath(); ctx.arc(s.x, s.y, pr, 0, Math.PI*2); ctx.fill();
+    if (pr > 3.4 || (focus && focus.st === st)) {
+      ctx.globalAlpha = (focus && focus.st === st) ? 1 : 0.5;
+      ctx.fillStyle = '#f3eedf';
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(shortRepo(st.r.name), s.x, s.y - pr - 6);
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  // desktop: prefer the star under the cursor over the reticle pick
+  if (cosmic.mode === 'free' && cosmic.mouse.inside) {
+    let best = null, bestD = 26*26;
+    for (const d of drawn) {
+      const dx = d.s.x - cosmic.mouse.x, dy = d.s.y - cosmic.mouse.y, dd = dx*dx + dy*dy;
+      if (dd < bestD) { bestD = dd; best = d; }
+    }
+    if (best) focus = best;
+  }
+
+  cosmic.focused = focus ? focus.st : null;
+  overlayEl.classList.toggle('locked', !!cosmic.focused);
+  cosmic.canvas.style.cursor = cosmic._drag ? 'grabbing' : (cosmic.focused ? 'pointer' : 'grab');
+  updateCosmicTip(focus);
+
+  cosmicRAF = requestAnimationFrame(cosmicLoop);
+}
+
+function updateCosmicTip(focus) {
+  const tip = cosmic.tip;
+  if (!focus) { tip.classList.remove('show'); return; }
+  const st = focus.st, da = st.da;
+  tip.style.left = focus.s.x + 'px';
+  tip.style.top  = (focus.s.y - focus.pr - 8) + 'px';
+  tip.innerHTML =
+    '<div class="tt-name">' + escapeHtml(st.r.name) + '</div>' +
+    '<div class="tt-meta">' + escapeHtml(st.r.description || '—') + '</div>' +
+    '<div class="tt-meta">' + (da === 0 ? 'pushed today' : 'pushed ' + da + 'd ago') +
+      ' · ' + escapeHtml(st.r.language || 'n/a') + '</div>' +
+    '<div class="tt-open">' + (cosmic.mode === 'motion' ? 'tap to open ↗' : 'click to open ↗') + '</div>';
+  tip.classList.add('show');
+}
+function shortRepo(name) { return name.replace(/-sankhacooray-com$/, ' ·sc').replace(/-/g, ' '); }
+
+// ---- wiring ----
+fabEl.addEventListener('click', openCosmic);
+closeEl.addEventListener('click', () => closeCosmic());
+window.addEventListener('popstate', () => {
+  if (location.hash === '#cosmic') openCosmic();
+  else if (cosmicOpen) closeCosmic(true);
+});
+if (location.hash === '#cosmic') requestAnimationFrame(openCosmic);
+
+// ────────────────────────────────────────────── claude · developing now
+function fmtCompact(n) {
+  if (n == null) return '—';
+  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(n >= 1e4 ? 0 : 1) + 'k';
+  return String(n);
+}
+
+async function loadClaude() {
+  if (!CLAUDE_PROXY_URL) return;
+  try {
+    const sep = CLAUDE_PROXY_URL.includes('?') ? '&' : '?';
+    const d = await fetch(CLAUDE_PROXY_URL + sep + 'source=claude', { cache: 'no-store' }).then(r => r.json());
+    if (!d || d.error) return;
+    renderClaude(d);
+  } catch (err) {
+    console.error('claude status', err);
+  }
+}
+
+function renderClaude(d) {
+  const block = document.getElementById('claude-block');
+  const card = document.getElementById('claude-card');
+  block.hidden = false;
+
+  const live = !!d.activeNow;
+  card.classList.toggle('live', live);
+  document.getElementById('claude-state').textContent =
+    live ? 'coding right now'
+         : (d.lastActiveAt ? 'last active ' + relTime(d.lastActiveAt) : 'idle');
+
+  document.getElementById('claude-tok-today').textContent = fmtCompact(d.tokens && d.tokens.today);
+  document.getElementById('claude-tok-week').textContent  = fmtCompact(d.tokens && d.tokens.week);
+  document.getElementById('claude-sess-week').textContent = fmt(d.sessions && d.sessions.week);
+}
+
+// ────────────────────────────────────────────── boot
+load();
+loadClaude();
+setInterval(loadClaude, 60 * 1000);   // keep the live dot honest
+</script>
+<script async src="https://sankhacooray.com/js/sankha-analytics.js"></script>
+
+  <!-- Shared network footer · cdn.sankhacooray.com (auto-themes to this page) -->
+  <div id="scn-footer"></div>
+  <script async src="https://cdn.sankhacooray.com/js/sankha-footer.js?v=20260901"
+          data-site="dev.sankhacooray.com"></script>
+</body>
+</html>

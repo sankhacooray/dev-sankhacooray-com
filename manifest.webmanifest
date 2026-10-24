@@ -1,18 +1,19 @@
 {
-  "name": "dev — Sankha Cooray",
+  "id": "/",
+  "name": "dev — Sankha Cooray · developer tools",
   "short_name": "dev",
-  "description": "A small private lab — a 365-day contribution canvas, the daily rhythm of commits, and a 360° cosmos of every repo, built from the GitHub API.",
+  "description": "Developer tools by Sankha Cooray: Chrome extensions, a Claude usage meter, Shotlink, MCP servers and the shared plumbing behind sankhacooray.com.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "theme_color": "#0d0c0a",
-  "background_color": "#0d0c0a",
+  "theme_color": "#0c1411",
+  "background_color": "#0c1411",
   "lang": "en",
   "categories": ["developer", "productivity"],
   "icons": [
-    { "src": "assets/icon.svg",         "sizes": "any",     "type": "image/svg+xml" },
-    { "src": "assets/icon-192.png",     "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "assets/icon-512.png",     "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
