@@ -7,9 +7,9 @@
   "groups": [
     {
       "id": "extensions",
-      "title": "Browser extensions",
-      "lede": "Side panels and one-click helpers for browser chores.",
-      "context": "Chrome · Manifest V3",
+      "title": "In the browser",
+      "lede": "Side panels and one-click helpers for browser chores, plus a bench for testing passkeys.",
+      "context": "Chrome · Manifest V3 · WebAuthn",
       "projects": [
         {
           "name": "Config Copilot",
@@ -32,13 +32,35 @@
           "url": "https://github.com/bsc2fast/tab-export-mv3",
           "urlLabel": "GitHub",
           "years": "2026"
+        },
+        {
+          "name": "Passkey",
+          "desc": "Register a passkey with Touch ID, Face ID or Windows Hello, then sign back in with a biometric.",
+          "plat": [
+            "web"
+          ],
+          "role": "mine",
+          "thumb": "passkey.jpg",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Passkey demo",
+              "kind": "WebAuthn page, vanilla JS",
+              "repo": "passkey-html5"
+            },
+            {
+              "name": "HTTPS server",
+              "kind": "Node, self-signed cert for localhost",
+              "repo": "passkey-server"
+            }
+          ]
         }
       ]
     },
     {
       "id": "tools",
       "title": "Mac, Android & MCP",
-      "lede": "Small native utilities and MCP servers that put the right data next to Claude.",
+      "lede": "Small native utilities, local apps and MCP servers that put the right data next to Claude.",
       "context": "Swift · Kotlin · Node",
       "projects": [
         {
@@ -102,6 +124,39 @@
           ],
           "role": "mine",
           "thumb": "outlook-mcp.jpg",
+          "years": "2026"
+        },
+        {
+          "name": "Skilldex",
+          "desc": "Every Claude skill on this Mac in one searchable page, read straight from ~/.claude/skills.",
+          "plat": [
+            "web",
+            "term"
+          ],
+          "role": "mine",
+          "thumb": "skilldex.jpg",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Skilldex",
+              "kind": "Static page, vanilla JS",
+              "repo": "skilldex-html5"
+            },
+            {
+              "name": "Skills API",
+              "kind": "Node + Express, reads ~/.claude/skills",
+              "repo": "skilldex-server"
+            }
+          ]
+        },
+        {
+          "name": "ShopScout",
+          "desc": "LLM-researched shopping options from favourite vendors, compared on price and shipping to Singapore.",
+          "plat": [
+            "web"
+          ],
+          "role": "mine",
+          "thumb": "shopscout.jpg",
           "years": "2026"
         }
       ]
@@ -226,6 +281,6 @@
     }
   ],
   "excluded": "Left out on purpose: Concur Copilot (expense claims), OTP Courier (bank OTPs from a personal mailbox), Nest Skim (home camera), Lookout and the auth gate (personal accounts, admin console), Doctor Lanka (medical), ytvault (private playlists, local only), shake-fixer (AHLab concept deck).",
-  "thumbsNote": "No Worker here (GitHub Pages), so thumbnails are files in thumbs/: live og:images for Claude Meter, Shotlink, cdn and meta; a store screenshot for Export Tabs; designed cards from thumbs-src/ for Config Copilot, Outlook MCP and the visitor badge; screenshots of /activity/ for the activity cards.",
+  "thumbsNote": "No Worker here (GitHub Pages), so thumbnails are files in thumbs/: live og:images for Claude Meter, Shotlink, cdn and meta; a store screenshot for Export Tabs; designed cards from thumbs-src/ for Config Copilot, Outlook MCP and the visitor badge; screenshots of /activity/ for the activity cards. ShopScout and Passkey reuse the retired lab hub's thumbnails; Skilldex is a fresh 2x shot of skilldex-html5 over a sample skills list (the lab one showed a load error).",
   "cardsNote": "Cards show only things people use. Backends and helper repos are listed as parts of their product (hover the parts chip)."
 }

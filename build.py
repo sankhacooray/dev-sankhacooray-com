@@ -93,7 +93,7 @@ for i, row in enumerate(rows):
             f'<div class="cards">{"".join(card(p) for p in g["projects"])}</div></div>' for g in row)
         groups.append(f'  <section class="{cls} row-group"><div class="wrap"><div class="row" style="grid-template-columns:{cols}">{subs}</div></div>\n{FOOTER if last else ""}  </section>')
 
-NAV = {"extensions": "Extensions", "tools": "Mac & MCP", "network": "Network", "activity": "Activity"}
+NAV = {"extensions": "Browser", "tools": "Mac & MCP", "network": "Network", "activity": "Activity"}
 nav = "".join(f'<a href="#{g["id"]}">{NAV.get(g["id"], g["title"])}</a>' for g in data["groups"])
 
 desc = ("Developer tools by Sankha Cooray: Chrome extensions, a Claude usage meter, Shotlink and MCP servers, "
