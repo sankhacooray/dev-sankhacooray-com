@@ -88,6 +88,31 @@
           ]
         },
         {
+          "name": "Heirloom",
+          "desc": "Restores scanned family prints: grain removed, faces rebuilt, print-ready sizes. Runs on your own machine, no cloud AI.",
+          "plat": [
+            "web",
+            "mac"
+          ],
+          "role": "mine",
+          "thumb": "heirloom.jpg",
+          "url": "https://heirloom.sankhacooray.com/",
+          "urlLabel": "Request access",
+          "years": "2026",
+          "parts": [
+            {
+              "name": "Heirloom Studio",
+              "kind": "Local web app, Python + PyTorch (GFPGAN, Real-ESRGAN)",
+              "repo": "private"
+            },
+            {
+              "name": "heirloom",
+              "kind": "Landing page on a Cloudflare Worker",
+              "repo": "heirloom-sankhacooray-com"
+            }
+          ]
+        },
+        {
           "name": "Shotlink",
           "desc": "Phone screenshots reach the Mac in seconds, encrypted, ready for Claude over MCP.",
           "plat": [
