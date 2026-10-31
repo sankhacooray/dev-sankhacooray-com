@@ -31,7 +31,10 @@ def plats(ps):
 
 
 def card(p):
-    art = f'<div class="art"><img src="/thumbs/{e(p["thumb"])}" alt="{e(p["name"])}" loading="lazy" width="800" height="420"></div>'
+    stem = p["thumb"].rsplit(".", 1)[0]
+    src = (f'src="/thumbs/{e(stem)}.webp" srcset="/thumbs/{e(stem)}-400.webp 400w, /thumbs/{e(stem)}.webp 800w" sizes="(max-width: 600px) 92vw, 380px"'
+           if os.path.exists(os.path.join(HERE, "thumbs", stem + ".webp")) else f'src="/thumbs/{e(p["thumb"])}"')
+    art = f'<div class="art"><img {src} alt="{e(p["name"])}" loading="lazy" width="800" height="420"></div>'
     if p.get("years"):
         art = art.replace('">', f'"><span class="yrs" title="Active years, from the project\'s commit history">{e(p["years"])}</span>', 1)
     parts = ""

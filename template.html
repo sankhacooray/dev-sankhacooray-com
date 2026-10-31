@@ -35,7 +35,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <script>(function(){try{var t=localStorage.getItem("sc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <style>
 /* Terminal palette: near-black green app bar, cool paper page, one phosphor-green accent */
@@ -230,7 +230,7 @@ h1 .dot{color:var(--accent);animation:blink 1.1s steps(1) infinite}
 <body>
 <canvas id="bg" aria-hidden="true"></canvas>
 <header class="topbar"><div class="wrap">
-  <a class="brand" href="/" aria-label="dev, developer tools"><span class="hubchip">~/dev</span><span class="lbl">Developer tools</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"/></svg></a>
+  <a class="brand" href="/"><span class="hubchip">~/dev</span> <span class="lbl">Developer tools</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"/></svg></a>
   <nav class="nav" aria-label="Sections">{{NAV}}</nav>
   <div class="spacer"></div>
   <button class="iconbtn" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme"><svg class="ico-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ico-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg></button>
@@ -248,10 +248,10 @@ h1 .dot{color:var(--accent);animation:blink 1.1s steps(1) infinite}
     </div>
     <div>
       <div class="collage">
-        <figure class="shot"><img src="/thumbs/claude-meter.jpg" alt="Claude Meter in the Mac menu bar" width="800" height="420"></figure>
-        <figure class="shot"><img src="/thumbs/shotlink.jpg" alt="Shotlink, phone screenshots on the Mac" width="800" height="420"></figure>
-        <figure class="shot"><img src="/thumbs/config-copilot.jpg" alt="Config Copilot side panel" width="800" height="420"></figure>
-        <figure class="shot"><img src="/thumbs/tab-export.jpg" alt="Export Tabs as Shortcuts" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/claude-meter-400.webp" srcset="/thumbs/claude-meter-400.webp 400w, /thumbs/claude-meter.webp 800w" sizes="(max-width: 600px) 46vw, 280px" alt="Claude Meter in the Mac menu bar" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/shotlink-400.webp" srcset="/thumbs/shotlink-400.webp 400w, /thumbs/shotlink.webp 800w" sizes="(max-width: 600px) 46vw, 280px" alt="Shotlink, phone screenshots on the Mac" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/config-copilot-400.webp" srcset="/thumbs/config-copilot-400.webp 400w, /thumbs/config-copilot.webp 800w" sizes="(max-width: 600px) 46vw, 280px" alt="Config Copilot side panel" width="800" height="420"></figure>
+        <figure class="shot"><img src="/thumbs/tab-export-400.webp" srcset="/thumbs/tab-export-400.webp 400w, /thumbs/tab-export.webp 800w" sizes="(max-width: 600px) 46vw, 280px" alt="Export Tabs as Shortcuts" width="800" height="420"></figure>
       </div>
       <div class="strip" aria-label="How Shotlink gets a phone screenshot to Claude">
         <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2"/><path d="M10.5 18.5h3"/></svg><span>Screenshot</span></div>
